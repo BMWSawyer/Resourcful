@@ -55,7 +55,18 @@ app.use("/api/widgets", widgetsRoutes(db));
 // Separate them into separate routes files (see above).
 
 app.get("/", (req, res) => {
-  res.render("index");
+  const userId = req.session.user_id; //*** Depending on what the variable is named in the routes this may have to change.
+
+  if(userId) {
+    db.query(`SELECT * FROM users WHERE id = $1`, [userId])
+    .then(data => {
+      console.log(data.rows[0]);
+      res.render("index");
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
 });
 
 app.listen(PORT, () => {
