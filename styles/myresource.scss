@@ -1,0 +1,44 @@
+.myResViewContain{
+  display: flex;
+  justify-content: space-between;
+}
+
+.imgRankingscontainer{
+width: 40%
+}
+
+.myResForm{
+width: 60%;
+}
+
+.myResImg{
+display: flex;
+justify-content: center;
+align-content: center;
+flex-wrap: wrap;
+}
+
+.ratingIndividualView{
+  display: flex wrap;
+  justify-self: center;
+  align-self: center;
+}
+
+.favourite{
+  width: 100%;
+  justify-self: center;
+  align-self: center;
+}
+
+.ratingTotal{
+  display: flex;
+  margin-left: 1em;
+}
+
+#formDescInput{
+  height: 5em;
+}
+
+.myResourceForm{
+  font-size: 14px;
+}
