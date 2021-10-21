@@ -27,3 +27,19 @@ justify-content: space-between;
 float: right;
 vertical-align: top;
 }
+
+.image {
+  position: relative;
+  align-items:center;
+  width: 17em;
+  height: 10em;
+}
+
+.bi-arrow-up-right-square-fill {
+  position: absolute;
+  font-size: 28px;
+  right: 0.3em;
+  z-index: 1;
+  color: orange;
+  cursor: pointer;
+}
