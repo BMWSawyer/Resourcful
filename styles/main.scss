@@ -1,17 +1,48 @@
 body {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+  // justify-content: center;
+  // align-items: center;
+  // min-height: 100vh;
 
-  background: rgb(163, 208, 219);
-  background: linear-gradient(
-    227deg,
-    rgba(163, 208, 219, 1) 0%,
-    rgba(163, 176, 219, 1) 20%,
-    rgba(163, 173, 219, 1) 34%,
-    rgba(163, 219, 208, 1) 59%,
-    rgba(163, 208, 219, 1) 74%,
-    rgba(163, 208, 219, 1) 100%
-  );
+  // background: rgb(163, 208, 219);
+  // background: linear-gradient(
+  //   227deg,
+  //   rgba(163, 208, 219, 1) 0%,
+  //   rgba(163, 176, 219, 1) 20%,
+  //   rgba(163, 173, 219, 1) 34%,
+  //   rgba(163, 219, 208, 1) 59%,
+  //   rgba(163, 208, 219, 1) 74%,
+  //   rgba(163, 208, 219, 1) 100%
+  // );
+  main{
+    display: flex column;
+  }
+
+  .LogoFont{
+    font-size: large;
+    align-self: center;
+    color: rgb(83, 83, 83);
+  }
+  .logo{
+    font-size: x-large;
+    margin-right: 0.2em;
+    color: rgb(3, 35, 175);
+  }
+  .userName{
+    margin-right: 0.5em;
+  }
+
+  .bi-person-circle{
+    font-size: x-large;
+  }
+
+  .searchBar{
+    margin-bottom: 2em;
+  }
+
+  .resourceSingle{
+    margin: 0.5em;
+  }
 }
+
+
