@@ -34,7 +34,30 @@
         </div>
 
         <ul class="nav">
-          <li class="nav-item"><a href="#" class="nav-link link-dark px-2 button">Login</a></li>
+          <li class="nav-item">
+
+            <div class="dropdown text-end signIn">
+              <a href="#" class="link-dark text-decoration-none dropdown-toggle signInToggle" id="dropUserMenu"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <div>Sign in</div>
+              </a>
+
+              <!-- Sign in form -->
+              <ul class="dropdown-menu text-small signInForm" aria-labelledby="dropUserMenu">
+                <div class="form-group">
+                  <label for="exampleDropdownFormEmail2">Email address</label>
+                  <input type="email" class="form-control" id="exampleDropdownFormEmail2"
+                    placeholder="hello@example.com">
+                </div>
+                <div class="form-group">
+                  <label for="exampleDropdownFormPassword2">Password</label>
+                  <input type="password" class="form-control" id="exampleDropdownFormPassword2" placeholder="password">
+                </div>
+                <button type="submit" class="btn btn-primary">Sign in</button>
+                </form>
+
+            </div>
+          </li>
           <li class="nav-item"><a href="#" class="nav-link link-dark px-2 button">Sign up</a></li>
         </ul>
       </div>

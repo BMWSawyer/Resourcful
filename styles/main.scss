@@ -29,4 +29,24 @@ body {
     margin-bottom: 2em;
   }
 
+  .nav-item{
+    display: flex;
+    align-content: center;
+  }
+
+  .signIn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1em;
+    }
+
+  .signInToggle::after {
+    content: none;
+}
+
+.signInForm{
+  padding: 2em;
+}
+
 }
