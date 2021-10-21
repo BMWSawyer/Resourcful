@@ -7,6 +7,10 @@ body {
     display: flex column;
   }
 
+  input{
+    margin-bottom: 0.5em;
+  }
+
   .LogoFont{
     font-size: large;
     align-self: center;
@@ -46,7 +50,12 @@ body {
 }
 
 .signInForm{
-  padding: 2em;
+  padding: 0.5em;
+  font-size: 14px;
+}
+
+.form-control{
+  font-size: 14px;
 }
 
 }
