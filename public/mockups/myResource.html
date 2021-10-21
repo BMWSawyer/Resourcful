@@ -53,69 +53,54 @@
       </div>
     </div>
 
-    <!-- Search bar -->
-    <div class="container">
-      <form class="w-100 me-3 searchBar">
-        <input type="search" class="form-control" placeholder="Search Resources" aria-label="Search">
-      </form>
-    </div>
+    <div class="container myResViewContain">
+      <div class="row justify-content-md-center">
 
-    <!-- Add new resource
-    This is collapsable using $('.collapse').collapse() -->
-    <p>
-      <a class="btn btn-outline-success addResButton" data-toggle="collapse" href="#" role="button" aria-expanded="false"
-        aria-controls="collapseResouceAdd">
-        <!-- switch expanded to false -->
-        + New Resource
-      </a>
-    </p>
-    <div class="collapse newResourceInput" id="collapseResouceAdd">
-      <!-- add collapse to class above this line -->
-      <form id="resourceAddForm">
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Resource URL">
-          <div class="input-group-append">
-            <button type="submit" class="input-group-text btn btn-secondary" form="resourceAddForm" value="Submit" id="createResBut">Create Resource</span>
+
+        <div class="col col-lg-4 myResImg">
+          <div class="bg-light border rounded-3 resourceSingle">
+            <img class="resourceImg" src="mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg">
           </div>
-      </form>
-    </div>
-    </div>
-
-    <!-- Resources board -->
-    <div class="container pb-3 resourceWall">
-      <div class="d-grid gap-3" style="grid-template-columns: 1fr 1fr 1fr;">
-        <div class="bg-light border rounded-3 resourceSingle">
-          <img class="resourceImg" src="mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg">
-          <div class='resInfo'>
-            <div>Sample Title</div>
-            <div class="rating">
-              <i class="bi bi-star-fill"></i>
-              <i class="bi bi-star-fill"></i>
-              <i class="bi bi-star-fill"></i>
-              <i class="bi bi-star-fill"></i>
-              <i class="bi bi-star"></i>
-            </div>
+          <div class="favourite">
+            Add to favourites
+            <i class="bi bi-heart"></i>
+            <!-- add code to toggle to <i class="bi bi-heart-fill"></i> -->
+          </div>
+          <div class="ratingIndividualView">
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star"></i>
+            <div class="ratingTotal">4.5 / 5</div>
           </div>
         </div>
-        <div class="bg-light border rounded-3 resourceSingle"></div>
-        <div class="bg-light border rounded-3 resourceSingle"></div>
-        <div class="bg-light border rounded-3 resourceSingle"></div>
-        <div class="bg-light border rounded-3 resourceSingle"></div>
-        <div class="bg-light border rounded-3 resourceSingle">
-          <img class="resourceImg" src="mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg">
-          <div class='resInfo'>
-            <div>Sample Title</div>
-            <div class="rating">
-              <i class="bi bi-star-fill"></i>
-              <i class="bi bi-star-fill"></i>
-              <i class="bi bi-star-fill"></i>
-              <i class="bi bi-star-fill"></i>
-              <i class="bi bi-star"></i>
+
+        <div class="col-7 myResForm">
+          <form class = "myResourceForm">
+            <div class="mb-3">
+              <label for="formTitleInput" class="form-label">Title</label>
+              <input type="text" class="form-control" id="formTitleInput" placeholder="Example Title">
             </div>
-          </div>
+            <div class="mb-3">
+              <label for="formTopicInput" class="form-label">Topic</label>
+              <input type="text" class="form-control" id="formTopicInput" placeholder="Example Topic">
+            </div>
+            <div class="mb-3">
+              <label for="formDescInput" class="form-label">Description</label>
+              <input type="text" class="form-control" id="formDescInput" placeholder="Description">
+            </div>
+            <div class="mb-3">
+              <input type="text" class="form-control" id="formURLInput" placeholder="http://www.example.com">
+            <button>hi there</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
+
+
+
 
   </main>
 
