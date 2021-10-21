@@ -4,17 +4,18 @@
 
 const express = require('express');
 const router  = express.Router();
+const bcrypt = require('bcrypt');
 
 module.exports = (db) => {
-  router.get("/register", (req, res) => {
+  router.get("/", (req, res) => {
     req.session.user_id = req.params.id;
-    res.render("/register");
+    res.render("register");
   });
 
-  router.post('/', (req, res) => {
+  router.post("/", (req, res) => {
     const user = req.body;
     user.password = bcrypt.hashSync(user.password, 12);
-    database.addUser(user) // MAKE SURE TO CORRECT LINK TO database
+    database.addUser(user)
     .then(user => {
       if (!user) {
         res.send({error: "error"});
