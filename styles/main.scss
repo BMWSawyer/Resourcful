@@ -1,5 +1,6 @@
 @import 'resourcesWall';
 
+
 body {
   display: flex;
 
@@ -56,6 +57,21 @@ body {
 
 .form-control{
   font-size: 14px;
+}
+
+.form-outline{
+  width: 70%;
+}
+
+#createResBut{
+  font-size: 14px;
+}
+
+.addResButton{
+  margin-top: 0em;
+  margin-left: 1.5em;
+  width: 30%;
+  font-size: 13px;
 }
 
 }

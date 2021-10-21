@@ -56,8 +56,29 @@
     <!-- Search bar -->
     <div class="container">
       <form class="w-100 me-3 searchBar">
-        <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+        <input type="search" class="form-control" placeholder="Search Resources" aria-label="Search">
       </form>
+    </div>
+
+    <!-- Add new resource
+    This is collapsable using $('.collapse').collapse() -->
+    <p>
+      <a class="btn btn-outline-success addResButton" data-toggle="collapse" href="#" role="button" aria-expanded="false"
+        aria-controls="collapseResouceAdd">
+        <!-- switch expanded to false -->
+        + New Resource
+      </a>
+    </p>
+    <div class="collapse newResourceInput" id="collapseResouceAdd">
+      <!-- add collapse to class above this line -->
+      <form id="resourceAddForm">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Resource URL">
+          <div class="input-group-append">
+            <button type="submit" class="input-group-text btn btn-secondary" form="resourceAddForm" value="Submit" id="createResBut">Create Resource</span>
+          </div>
+      </form>
+    </div>
     </div>
 
     <!-- Resources board -->
