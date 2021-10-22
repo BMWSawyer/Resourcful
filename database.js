@@ -58,16 +58,16 @@ const getUserWithId = function (id, db) {
 };
 
 /**
- * Get all properties.
+ * Get all resources.
  * @param {{}} options An object containing query options.
  * @param {*} limit The number of results to return.
- * @return {Promise<[{}]>}  A promise to the properties.
+ * @return {Promise<[{}]>}  A promise to the resources.
  */
  const getAllResources = function (options, limit = 10, db) {
   const queryParams = [];
 
   let queryString = `
-    SELECT properties.*, avg(property_reviews.rating) as average_rating, count(property_reviews.rating) as review_count
+    SELECT resources.*, avg(property_reviews.rating) as average_rating, count(property_reviews.rating) as review_count
     FROM properties
     JOIN property_reviews ON properties.id = property_id
   `;
@@ -152,36 +152,23 @@ const getUserWithId = function (id, db) {
 };
 
 /**
- * Add a property to the database
+ * Add a resource to the database
  * @param {{}} property An object containing all of the property details.
- * @return {Promise<{}>} A promise to the property.
+ * @return {Promise<{}>} A promise to the resource.
  */
- const addResource = function (property, db) {
-  //const propertyId = Object.keys(properties).length + 1;
-  //property.id = propertyId;
-  // properties[propertyId] = property;
-  // return Promise.resolve(property);
+ const addResource = function (resource, db) {
+
   return db
     .query(
-      `INSERT INTO properties (owner_id, title, description, thumbnail_photo_url, cover_photo_url,
-      cost_per_night, parking_spaces, number_of_bathrooms, number_of_bedrooms, country, street, city, province, post_code)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+      `INSERT INTO resources (user_id, title, description, resource_url, image)
+      VALUES ($1, $2, $3, $4, $5)
       RETURNING *`,
       [
-        property.owner_id,
-        property.title,
-        property.description,
-        property.thumbnail_photo_url,
-        property.cover_photo_url,
-        property.cost_per_night,
-        property.parking_spaces,
-        property.number_of_bathrooms,
-        property.number_of_bedrooms,
-        property.country,
-        property.street,
-        property.city,
-        property.province,
-        property.post_code,
+        resource.owner_id,
+        resource.title,
+        resource.description,
+        resource.resource_url,
+        resource.image
       ]
     )
     .then((result) => {
@@ -193,29 +180,29 @@ const getUserWithId = function (id, db) {
 };
 
 //
-//  Updates an existing reservation with new information
+//  Updates an existing user with new information
 //
-const updateUser = function(newReservationData, db) {
-  let queryString = `UPDATE reservations SET `;
+const updateUser = function(userData, db) {
+  let queryString = `UPDATE users SET `;
 
   const queryParams = [];
-  console.log(newReservationData);
+  console.log(userData);
 
-  if (newReservationData.start_date) {
-    queryParams.push(newReservationData.start_date);
-    queryString += `start_date = $1`;
+  // if (userData.start_date) {
+  //   queryParams.push(newReservationData.start_date);
+  //   queryString += `start_date = $1`;
 
-    if (newReservationData.end_date) {
-      queryParams.push(newReservationData.end_date);
-      queryString += `, end_date = $2`;
-    }
+  //   if (userData.end_date) {
+  //     queryParams.push(newReservationData.end_date);
+  //     queryString += `, end_date = $2`;
+  //   }
 
-  } else {
-    queryParams.push(newReservationData.end_date);
-    queryString += `end_date = $1`;
-  }
+  // } else {
+  //   queryParams.push(userData.end_date);
+  //   queryString += `end_date = $1`;
+  // }
 
-  queryParams.push(newReservationData.reservation_id);
+  queryParams.push(userData.reservation_id);
   queryString += ` WHERE id = $${queryParams.length} RETURNING *;`
 
 
@@ -229,11 +216,11 @@ const updateUser = function(newReservationData, db) {
 }
 
 //
-//  Deletes an existing reservation
+//  Deletes an existing resource
 //
-const deleteResource = function(reservationId, db) {
-  const queryParams = [reservationId];
-  const queryString = `DELETE FROM reservations WHERE id = $1`;
+const deleteResource = function(resourceId, db) {
+  const queryParams = [resourceId];
+  const queryString = `DELETE FROM resources WHERE id = $1`;
 
   return db.query(queryString, queryParams)
   .then(() => console.log("Successfully deleted!"))
@@ -243,16 +230,16 @@ const deleteResource = function(reservationId, db) {
 //
 //  Gets an individual reservation
 //
-const getIndividualResource = function(reservationId, db) {
-  const queryString = `SELECT * FROM reservations WHERE reservations.id = $1`;
-  return db.query(queryString, [reservationId])
+const getIndividualResource = function(resourceId, db) {
+  const queryString = `SELECT * FROM resources WHERE resources.id = $1`;
+  return db.query(queryString, [resourceId])
     .then(res => res.rows[0]);
 }
 
 /*
  *  get reviews by property
  */
-const getReviewsByResource = function(propertyId, db) {
+const getReviewsByResource = function(resourceId, db) {
   const queryString = `
     SELECT property_reviews.id, property_reviews.rating AS review_rating, property_reviews.message AS review_text,
     users.name, properties.title AS property_title, reservations.start_date, reservations.end_date
@@ -264,7 +251,7 @@ const getReviewsByResource = function(propertyId, db) {
     ORDER BY reservations.start_date ASC;
   `;
 
-  const queryParams = [propertyId];
+  const queryParams = [resourceId];
   return db.query(queryString, queryParams).then(res => res.rows)
 }
 
@@ -284,6 +271,22 @@ const addComment = function (comment, db) {
   return db.query(queryString, queryParams).then(res => res.rows);
 }
 
+//
+//  Gets all comments for a resource
+//
+const getCommentsByResource = function (resourceId, db) {
+  const queryString = `
+  SELECT comments.id, comments.comment, comments.date, users.first_name, users.last_name
+  FROM comments
+  JOIN users ON users.id = user_id
+  WHERE resource_id = $1
+  ORDER BY comments.date;
+`;
+
+const queryParams = [resourceId];
+return db.query(queryString, queryParams).then(res => res.rows)
+}
+
 
 module.exports = {
   getUserWithEmail,
@@ -295,5 +298,6 @@ module.exports = {
   deleteResource,
   getIndividualResource,
   getReviewsByResource,
-  addComment
+  addComment,
+  getCommentsByResource
 }

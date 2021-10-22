@@ -5,24 +5,16 @@
 const express = require('express');
 const router  = express.Router();
 const bcrypt = require('bcrypt');
-const {
-
-} = require('../database');
+const { getUserWithEmail } = require('../database');
 
 module.exports = (db) => {
-  router.get("/:id", (req, res) => {
-    req.session.user_id = req.params.id;
-    res.render("/login");
-  });
-
   /**
    * Check if a user exists with a given username and password
    * @param {String} email
    * @param {String} password encrypted
-   */
-
+  **/
    const login =  function(email, password) {
-    return database.getUserWithEmail(email, db)
+    return getUserWithEmail(email, db)
     .then(user => {
       if (bcrypt.compareSync(password, user.password)) {
         return user;
@@ -30,7 +22,6 @@ module.exports = (db) => {
       return null;
     });
   }
-  exports.login = login;
 
   router.post('/', (req, res) => {
     const {email, password} = req.body;
@@ -40,7 +31,7 @@ module.exports = (db) => {
           res.send({error: "error"});
           return;
         }
-        req.session.userId = user.id;
+        req.session.user_id = user.id;
         res.send({user: {name: user.name, email: user.email, id: user.id}});
       })
       .catch(error => res.send(error));
