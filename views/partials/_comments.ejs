@@ -1,0 +1,42 @@
+
+<div class="comments-head">Comments</div>
+
+<div class="row d-flex justify-content-center">
+  <div class="card">
+
+    <!-- Only display ability to add comments if you are logged in -->
+    <% if(typeof user==="undefined" ){ %>
+    <form class="url-input hstack gap-3">
+      <input type="text" class="form-control comment-field" placeholder="Join the conversation on this resource...">
+      <button class="btn btn-primary post-comment">Post</button>
+    </form>
+    <% } %>
+
+    <div class="comment-widgets">
+
+      <div class="d-flex flex-row comment-row m-t-0 border-bottom">
+        <div class="comment-text">
+          <h6 class="font-medium">Isabelle Ringing</h6>
+          <span class="d-block">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+            tempor incididunt ut labore et dolore magna aliqua.</span>
+        </div>
+      </div>
+
+      <div class="d-flex flex-row comment-row border-bottom">
+        <div class="comment-text active">
+          <h6 class="font-medium">Skye Blue</h6> <span class="d-block">Lorem ipsum dolor sit amet,
+            consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+            aliqua.</span>
+        </div>
+      </div>
+
+      <div class="d-flex flex-row comment-row border-bottom">
+        <div class="comment-text">
+          <h6 class="font-medium">U.R. Nice</h6> <span class="d-block">Lorem ipsum dolor sit amet,
+            consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+            aliqua.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
