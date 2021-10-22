@@ -34,10 +34,14 @@
         <h4> Create Your Account</h4>
         <p> ... and get started on organising your personal resources</p>
 
+        <!-- Error display -->
+        <% if(typeof error != "undefined"){ %>
+          <p class="font-weight-bold" style = "margin-top: 10px; color: red"><%= error %></p>
+        <% } %>
+
         <!-- Register Forms -->
-        <!--Add form actions-->
         <div class="container">
-          <form class="w-75 me-3 text">
+          <form class="w-75 me-3 text"action="/register" method="POST">
             <input type="text" class="form-control" placeholder="First Name" aria-label="firstName">
             <input type="text" class="form-control" placeholder="Last Name" aria-label="lastName">
             <input type="email" class="form-control" placeholder="user@example.com" aria-label="Email">
