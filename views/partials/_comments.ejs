@@ -5,7 +5,7 @@
   <div class="card">
 
     <!-- Only display ability to add comments if you are logged in -->
-    <% if(typeof user==="undefined" ){ %>
+    <% if(typeof user !== "undefined" ){ %>
     <form class="url-input hstack gap-3">
       <input type="text" class="form-control comment-field" placeholder="Join the conversation on this resource...">
       <button class="btn btn-primary post-comment">Post</button>
