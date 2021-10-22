@@ -5,6 +5,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <title>Home Page</title>
+
   <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
   <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
   <link rel="stylesheet" href="/styles/main.css" type="text/css" />
@@ -21,16 +23,45 @@
     integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
     crossorigin="anonymous"></script>
   <script type="text/javascript" src="/scripts/app.js"></script>
-
-  <title>Home Page</title>
-
 </head>
 
 <body>
   <main class="container">
 
-    <%- include('partials/_header') %>
+    <div class="container mainNav py-3 mb-4 border-bottom">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <div class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <i class="bi bi-file-earmark-check logo"></i>
+          <div class="LogoFont">ResourSave</div>
+        </div>
 
+        <ul class="nav">
+          <li class="nav-item">
+
+            <div class="dropdown text-end signIn">
+              <a href="#" class="link-dark text-decoration-none dropdown-toggle signInToggle" id="dropUserMenu"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <div>Sign in</div>
+              </a>
+
+              <!-- Sign in form -->
+              <ul class="dropdown-menu text-small signInForm" aria-labelledby="dropUserMenu">
+                <div class="form-group">
+                  <label for="DropdownFormEmail">Email</label>
+                  <input type="email" class="form-control" id="DropdownFormEmail" placeholder="hello@example.com">
+                </div>
+                <div class="form-group">
+                  <label for="DropdownFormPassword">Password</label>
+                  <input type="password" class="form-control" id="DropdownFormPassword" placeholder="password">
+                </div>
+                <button type="submit" class="btn btn-primary">Sign in</button>
+                </form>
+
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
     <section id="registration">
       <h4> Create Your Account</h4>
       <p> ... and get started on organising your personal resources</p>
