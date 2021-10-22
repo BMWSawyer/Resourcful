@@ -188,19 +188,20 @@ const updateUser = function(userData, db) {
   const queryParams = [];
   console.log(userData);
 
-  // if (userData.start_date) {
-  //   queryParams.push(newReservationData.start_date);
-  //   queryString += `start_date = $1`;
+  if (userData.first_name) {
+    queryParams.push(newReservationData.start_date);
+    queryString += `start_date = $${queryParams.length}`;
+  }
 
-  //   if (userData.end_date) {
-  //     queryParams.push(newReservationData.end_date);
-  //     queryString += `, end_date = $2`;
-  //   }
+  if (userData.last_name) {
+      queryParams.push(userData.last_name);
+      queryString += `, last_name = $2`;
+  }
 
-  // } else {
-  //   queryParams.push(userData.end_date);
-  //   queryString += `end_date = $1`;
-  // }
+  if (userData.email) {
+    queryParams.push(userData.end_date);
+    queryString += `end_date = $1`;
+  }
 
   queryParams.push(userData.reservation_id);
   queryString += ` WHERE id = $${queryParams.length} RETURNING *;`
@@ -228,7 +229,7 @@ const deleteResource = function(resourceId, db) {
 }
 
 //
-//  Gets an individual reservation
+//  Gets an individual resource
 //
 const getIndividualResource = function(resourceId, db) {
   const queryString = `SELECT * FROM resources WHERE resources.id = $1`;
@@ -237,18 +238,13 @@ const getIndividualResource = function(resourceId, db) {
 }
 
 /*
- *  get reviews by property
+ *  Gets ratings by resource
  */
-const getReviewsByResource = function(resourceId, db) {
+const getRatingsByResource = function(resourceId, db) {
   const queryString = `
-    SELECT property_reviews.id, property_reviews.rating AS review_rating, property_reviews.message AS review_text,
-    users.name, properties.title AS property_title, reservations.start_date, reservations.end_date
-    FROM property_reviews
-    JOIN reservations ON reservations.id = property_reviews.reservation_id
-    JOIN properties ON properties.id = property_reviews.property_id
-    JOIN users ON users.id = reservations.guest_id
-    WHERE properties.id = $1
-    ORDER BY reservations.start_date ASC;
+    SELECT id, resource_id, AVG(rating), COUNT(like)
+    FROM resource_ratings
+    WHERE resource_id = $1;
   `;
 
   const queryParams = [resourceId];
@@ -297,7 +293,7 @@ module.exports = {
   updateUser,
   deleteResource,
   getIndividualResource,
-  getReviewsByResource,
+  getRatingsByResource,
   addComment,
   getCommentsByResource
 }

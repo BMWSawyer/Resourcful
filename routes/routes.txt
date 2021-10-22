@@ -4,10 +4,12 @@
 Search - GET /search
 Search page - GET /search/:query
 
-Login - POST /login
+Login - POST /login -- DONE
 
-Registration page - GET /register
-Register - POST /register
+Logout - POST /logout -- DONE
+
+Registration page - GET /register -- DONE
+Register - POST /register -- DONE
 
 Update profile page - GET /profile
 Update profile - PUT /profile

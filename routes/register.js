@@ -5,11 +5,10 @@
 const express = require('express');
 const router  = express.Router();
 const bcrypt = require('bcrypt');
-const { addUser } = require('../database');
+const { addUser, getUserWithId } = require('../database');
 
 module.exports = (db) => {
   router.get("/", (req, res) => {
-    req.session.user_id = req.params.id;
     res.render("register");
   });
 
@@ -22,8 +21,7 @@ module.exports = (db) => {
         res.send({error: "error"});
         return;
       }
-      req.session.user_id = user.id;
-      res.send("🤗");
+      res.redirect("/");
     })
     .catch(error => res.send(error));
   });

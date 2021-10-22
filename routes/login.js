@@ -32,7 +32,7 @@ module.exports = (db) => {
           return;
         }
         req.session.user_id = user.id;
-        res.send({user: {name: user.name, email: user.email, id: user.id}});
+        res.render("/my-resources", resources)
       })
       .catch(error => res.send(error));
   });
