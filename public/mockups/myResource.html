@@ -92,14 +92,16 @@
               <input type="text" class="form-control" id="formDescInput" placeholder="Description">
             </div>
 
-            <div class="mb-2 url-input hstack gap-3">
+            <div class="mb-2 rating-input hstack gap-3">
               <label for="my-resource-rating" class="form-label">Resource Rating</label>
               <input type="number" id="my-resource-rating" min="1" max="5">
               </div>
 
             <div class="mb-2 url-input hstack gap-3">
               <input type="text" class="form-control" id="formURLInput" placeholder="http://www.example.com">
-              <i class="my-resource-url-arrow bi bi-arrow-up-right-square-fill"></i>
+              <span class="url-input-btn">
+                <i class="my-resource-url-arrow bi bi-arrow-up-right-square-fill" type = "button"></i>
+              </span>
             </div>
 
             <button type="submit" class="btn btn-success">Save Resource</button>

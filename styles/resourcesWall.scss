@@ -36,11 +36,26 @@ vertical-align: top;
 }
 
 .bi-arrow-up-right-square-fill {
+  font-size: 28px;
+  z-index: 1;
+  outline: rgb(94, 61, 0);
+  color: rgb(255, 145, 0);
+  cursor: pointer;
+}
+
+.go-to-url-wall{
+  right: 0.3em;
+  top: 4em;
+  position: absolute;
+}
+
+.is-favourite{
   position: absolute;
   font-size: 28px;
+  font-weight: bolder;
   right: 0.3em;
   z-index: 1;
-  color: orange;
+  color: rgb(233, 61, 133);
   cursor: pointer;
 }
 
