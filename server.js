@@ -44,7 +44,7 @@ app.use(express.static("public"));
 const registerRoutes = require("./routes/register");
 const loginRoutes = require("./routes/login");
 const logoutRoute = require("./routes/logout");
-const usersRoutes = require("./routes/users");
+//const usersRoutes = require("./routes/users");
 
 
 // Mount all resource routes
@@ -52,7 +52,7 @@ const usersRoutes = require("./routes/users");
 app.use("/api/register", registerRoutes(db));
 app.use("/api/login", loginRoutes(db));
 app.use("/api/logout", logoutRoute(db));
-app.use("/api/users", usersRoutes(db));
+//app.use("/api/users", usersRoutes(db));
 // Note: mount other resources here, using the same pattern above
 
 // Home page
@@ -62,6 +62,8 @@ app.use("/api/users", usersRoutes(db));
 
 app.get("/", (req, res) => {
   const userId = req.session.user_id; //*** Depending on what the variable is named in the routes this may have to change.
+
+  res.render("register");
 
   if(userId) {
     db.query(`SELECT * FROM users WHERE id = $1`, [userId])
