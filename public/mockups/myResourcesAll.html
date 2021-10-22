@@ -33,32 +33,23 @@
           <div class="LogoFont">ResourSave</div>
         </div>
 
-        <ul class="nav">
-          <li class="nav-item">
+        <!-- User name and drop down menu -->
+        <div class="userName">John Doe</div>
 
-            <div class="dropdown text-end signIn">
-              <a href="#" class="link-dark text-decoration-none dropdown-toggle signInToggle" id="dropUserMenu"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                <div>Sign in</div>
-              </a>
-
-              <!-- Sign in form -->
-              <ul class="dropdown-menu text-small signInForm" aria-labelledby="dropUserMenu">
-                <div class="form-group">
-                  <label for="DropdownFormEmail">Email</label>
-                  <input type="email" class="form-control" id="DropdownFormEmail" placeholder="hello@example.com">
-                </div>
-                <div class="form-group">
-                  <label for="DropdownFormPassword">Password</label>
-                  <input type="password" class="form-control" id="DropdownFormPassword" placeholder="password">
-                </div>
-                <button type="submit" class="btn btn-primary">Sign in</button>
-                </form>
-
-            </div>
-          </li>
-          <li class="nav-item"><a href="#" class="nav-link link-dark px-2 button">Sign up</a></li>
-        </ul>
+        <div class="dropdown text-end">
+          <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropUserMenu"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle"></i>
+          </a>
+          <ul class="dropdown-menu text-small" aria-labelledby="dropUserMenu">
+            <li><a class="dropdown-item" href="#">My Resources</a></li>
+            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#">Sign out</a></li>
+          </ul>
+        </div>
       </div>
     </div>
 
@@ -72,14 +63,50 @@
       </form>
     </div>
 
+    <!-- Add new resource -->
+    <!-- Trigger with:
+    $('#myModal').on('shown.bs.modal', function () {
+      $('#myInput').trigger('focus')
+    }) -->
+
+      <i class="bi bi-plus-circle-fill newResourceButton" data-toggle="modal" data-target="#addURLModal"></i>
+
+      <div class="modal fade" id="addURLModal" tabindex="-1" role="dialog" aria-labelledby="newResourceModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Add a New Resource</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="addResForm">
+                <div class="mb-2">
+                  <input type="text" class="form-control" id="addResURLInput" placeholder="Add your resource URL">
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" form="addResForm" value="Submit" class="btn btn-primary">Save Resource</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
     <!-- Resources board -->
     <div class="container pb-3 resourceWall">
+
+      <!-- Right now this is set up for creating a new group of the items below for each category -->
+      <h3 class="titleName">Example Title</div>
+
       <div class="d-grid gap-3" style="grid-template-columns: 1fr 1fr 1fr;">
 
         <div class="bg-light border rounded-3 resourceSingle">
           <div class="image">
             <div class="overlay">
-              <i class="bi bi-arrow-up-right-square-fill go-to-url-wall"></i>
+              <i class="bi bi-arrow-up-right-square-fill"></i>
             </div>
             <img class="resourceImg" src="mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg">
           </div>
@@ -100,11 +127,10 @@
         <div class="bg-light border rounded-3 resourceSingle"></div>
         <div class="bg-light border rounded-3 resourceSingle"></div>
 
-
         <div class="bg-light border rounded-3 resourceSingle">
           <div class="image">
             <div class="overlay">
-              <i class="bi bi-arrow-up-right-square-fill go-to-url-wall"></i>
+              <i class="bi bi-arrow-up-right-square-fill"></i>
             </div>
             <img class="resourceImg" src="mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg">
           </div>

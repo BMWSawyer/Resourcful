@@ -1,0 +1,61 @@
+<header>
+  <div class="container mainNav py-3 mb-4 border-bottom">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <div class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <i class="bi bi-file-earmark-check logo"></i>
+        <a class="LogoFont" href="/home">ResourSave</a>
+      </div>
+
+      <!-- If not logged in -->
+      <% if(typeof user==="undefined" ){ %>
+        <ul class="nav">
+          <li class="nav-item">
+            <div class="dropdown text-end signIn">
+              <a href="#" class="link-dark text-decoration-none dropdown-toggle signInToggle" id="dropUserMenu"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <div>Sign in</div>
+              </a>
+
+              <!-- Sign in form -->
+              <ul class="dropdown-menu text-small signInForm" aria-labelledby="dropUserMenu">
+                <div class="form-group">
+                  <label for="DropdownFormEmail">Email</label>
+                  <input type="email" class="form-control" id="DropdownFormEmail" placeholder="hello@example.com">
+                </div>
+                <div class="form-group">
+                  <label for="DropdownFormPassword">Password</label>
+                  <input type="password" class="form-control" id="DropdownFormPassword" placeholder="password">
+                </div>
+                <button type="submit" class="btn btn-primary">Sign in</button>
+                </form>
+              </ul>
+
+            </div>
+          </li>
+        </ul>
+        <% } %>
+
+          <!-- If there is a user logged in -->
+          <% if(typeof user !="undefined" ){ %>
+            <!-- User name and drop down menu -->
+            <div class="userName">John Doe</div>
+
+            <div class="dropdown text-end">
+              <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropUserMenu"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle"></i>
+              </a>
+              <ul class="dropdown-menu text-small" aria-labelledby="dropUserMenu">
+                <li><a class="dropdown-item" href="#">My Resources</a></li>
+                <li><a class="dropdown-item" href="#">Profile</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="#">Sign out</a></li>
+              </ul>
+            </div>
+            <% }
+
+    </div>
+  </div>
+</header>
