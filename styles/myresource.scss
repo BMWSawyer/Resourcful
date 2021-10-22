@@ -61,10 +61,18 @@ align-items: center;
     margin-top:-5px;
     }
 
+    #my-resource-rating{
+      width:3em;
+    }
+
+    #my-rating-form{
+      float:right;
+    }
+
 // comments section
 
 .comments-head{
-  margin-top: 2em;
+  margin-top: 3em;
   margin-bottom: .5em;
 }
 
@@ -127,3 +135,5 @@ height: 3.2em;
 .comment-widgets .comment-row:hover {
     background: rgba(0, 0, 0, 0.05)
 }
+
+

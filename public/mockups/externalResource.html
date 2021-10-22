@@ -76,34 +76,25 @@
           </div>
         </div>
 
-        <!-- Add/update URL form -->
+        <!-- View Only Resource -->
         <div class="col-7 myResForm">
-          <form class="myResourceForm">
+          <div class ="view-only-resource">
             <div class="mb-3">
-              <label for="formTitleInput" class="form-label">Title</label>
-              <input type="text" class="form-control" id="formTitleInput" placeholder="Example Title">
-            </div>
-            <div class="mb-3">
-              <label for="formTopicInput" class="form-label">Topic</label>
-              <input type="text" class="form-control" id="formTopicInput" placeholder="Example Topic">
-            </div>
-            <div class="mb-3">
-              <label for="formDescInput" class="form-label">Description</label>
-              <input type="text" class="form-control" id="formDescInput" placeholder="Description">
-            </div>
+              <h3 class="title-name">Title</h2>
+              <h5 class="topic-names">Topic Names</h2>
+              <p class = "resource-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
-            <div class="mb-2 url-input hstack gap-3">
-              <label for="my-resource-rating" class="form-label">Resource Rating</label>
-              <input type="number" id="my-resource-rating" min="1" max="5">
+              <div class="mb-2 url-input hstack gap-3">
+                <a href = "#" class= "url-no-edit">http://www.example.com</a>
               </div>
 
-            <div class="mb-2 url-input hstack gap-3">
-              <input type="text" class="form-control" id="formURLInput" placeholder="http://www.example.com">
-              <i class="my-resource-url-arrow bi bi-arrow-up-right-square-fill"></i>
-            </div>
-
-            <button type="submit" class="btn btn-success">Save Resource</button>
-          </form>
+              <form id = "my-rating-form">
+                <div class="mb-2 url-input hstack gap-3">
+                  <label for="my-resource-rating" class="form-label">Resource Rating</label>
+                  <input type="number" id="my-resource-rating" min="1" max="5">
+                </div>
+              </form>
+          </div>
 
           <!-- Comments section -->
           <div class = "comments-head">Comments</div>
