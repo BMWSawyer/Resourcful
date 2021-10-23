@@ -49,7 +49,7 @@ const widgetsRoutes = require("./routes/widgets");
 
 //API routes not needed
 // app.use("/api/users", usersRoutes(db));
-// app.use("/api/widgets", widgetsRoutes(db));
+app.use("/", require("./routes/dummy-routes")());
 
 // Note: mount other resources here, using the same pattern above
 
