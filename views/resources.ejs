@@ -35,7 +35,7 @@
 
           <div class="col col-lg-5 myResImg">
             <div class="bg-light border rounded-3 resourceSingle">
-              <img class="resourceImg" src="<%= resource.imgURL %>">
+              <img class="resourceImg" src="<%= resource.photoUrl %>">
             </div>
 
             <!-- Only display the ability to like a resource if logged in -->
@@ -44,27 +44,27 @@
                 Add to favourites
 
                 <!-- toggles the liked heart -->
-                <%- (resource_ratings.liked === true) ? "<i class='bi bi-heart-fill'></i>": "<i class='bi bi-heart'></i>" %>
+                <%- (resource.resourceRating.liked === true) ? "<i class='bi bi-heart-fill'></i>": "<i class='bi bi-heart'></i>" %>
 
               </div>
               <hr class = "favourite-hr">
               <% } %>
 
                 <div class="ratingIndividualView">
-                  <%- ((Math.round(ratingsTotal * 100) / 100) >=0.5) ? "<i class='bi bi-star-fill'></i>": "<i class='bi bi-star'></i>" %>
-                  <%- ((Math.round(ratingsTotal * 100) / 100) >=1.5) ? "<i class='bi bi-star-fill'></i>": "<i class='bi bi-star'></i>" %>
-                  <%- ((Math.round(ratingsTotal * 100) / 100) >=2.5) ? "<i class='bi bi-star-fill'></i>": "<i class='bi bi-star'></i>" %>
-                  <%- ((Math.round(ratingsTotal * 100) / 100) >=3.5) ? "<i class='bi bi-star-fill'></i>": "<i class='bi bi-star'></i>" %>
-                  <%- ((Math.round(ratingsTotal * 100) / 100) >=4.5) ? "<i class='bi bi-star-fill'></i>": "<i class='bi bi-star'></i>" %>
+                  <%- ((Math.round(resource.averageRating * 100) / 100) >=0.5) ? "<i class='bi bi-star-fill'></i>": "<i class='bi bi-star'></i>" %>
+                  <%- ((Math.round(resource.averageRating * 100) / 100) >=1.5) ? "<i class='bi bi-star-fill'></i>": "<i class='bi bi-star'></i>" %>
+                  <%- ((Math.round(resource.averageRating * 100) / 100) >=2.5) ? "<i class='bi bi-star-fill'></i>": "<i class='bi bi-star'></i>" %>
+                  <%- ((Math.round(resource.averageRating * 100) / 100) >=3.5) ? "<i class='bi bi-star-fill'></i>": "<i class='bi bi-star'></i>" %>
+                  <%- ((Math.round(resource.averageRating * 100) / 100) >=4.5) ? "<i class='bi bi-star-fill'></i>": "<i class='bi bi-star'></i>" %>
 
-                  <div class="ratingTotal"><%= ratingsTotal %> / 5</div>
+                  <div class="ratingTotal"><%= resource.averageRating %> / 5</div>
                 </div>
           </div>
 
           <div class="col-7 myResForm">
 
             <!-- View Only Resource -->
-            <% if((typeof user==="undefined") || (resource.ownerID !== user.id) ){ %>
+            <% if((typeof user==="undefined") || (resource.creatorId !== user.id) ){ %>
               <!-- Add to line above OR if the user is not the owner -->
               <div class="view-only-resource">
                 <div class="mb-3">
@@ -108,13 +108,13 @@
 
                   <div class="mb-2 rating-input hstack gap-3">
                     <label for="my-resource-rating" class="form-label">Resource Rating</label>
-                    <input type="number" id="my-resource-rating" min="1" max="5" value="<%= resource_ratings.rating %>">
+                    <input type="number" id="my-resource-rating" min="1" max="5" value="<%= resource.resourceRating.rating %>">
                   </div>
 
                   <div class="mb-2 url-input hstack gap-3">
-                    <input type="text" class="form-control" id="formURLInput" placeholder="<%= resource.URL %>">
+                    <input type="text" class="form-control" id="formURLInput" placeholder="<%= resource.resourceUrl %>">
                     <span class="url-input-btn">
-                      <a href="<%= resource.URL %>"><i class="my-resource-url-arrow bi bi-arrow-up-right-square-fill" type="button"></i></a>
+                      <a href="<%= resource.resourceUrl %>"><i class="my-resource-url-arrow bi bi-arrow-up-right-square-fill" type="button"></i></a>
                     </span>
                   </div>
 
