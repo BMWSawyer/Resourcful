@@ -35,8 +35,8 @@ module.exports = () => {
         creatorId: 1,
         title: "More Stuff",
         description: "read all this",
-        resourceUrl: "http://...",
-        photoUrl: "http://...",
+        resourceUrl: "http://www.amazon.ca",
+        photoUrl: "/mockups/mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg",
         resourceRating: {
           liked: true,
           rating: 4,
@@ -51,26 +51,72 @@ module.exports = () => {
         },
         ],
       },
+    });
+  });
 
-      // resource:{title:"Sample Title",
-      // id: "2",
-      // imgURL: "/mockups/mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg",
-      // description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      // URL: "http://www.amazon.ca",
-      // topic: "Fast food",
-      // ownerID: "2"},
-
-      // user:{id:"2", firstName:"Test", lastName:"McTester", email:"mctester@fakeemail.com"},
-
-      // resource_ratings:{
-      //   id: "1",
-      //   user_id: "1",
-      //   resource_id: "2",
-      //   rating: "2",
-      //   liked: true
-      // },
-
-      // ratingsTotal:3.2
+  router.get("/my-resources/", (req, res) => {
+    res.render('my-resources', {
+      user: {
+        id: 1,
+        firstName: "Test",
+        lastName: "McTester",
+        email: "mctester@fakeemail.com",
+      },
+      topics: [{
+        name: "Literature",
+        resources: [{
+          id: 4,
+          creatorId: 1,
+          title: "Historic Reads",
+          description: "Reading about history",
+          resourceUrl: "http://www.example.com",
+          photoUrl: "/mockups/mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg",
+          resourceRating: {
+            liked: false,
+            rating: 5,
+          },
+          averageRating: 4.3,
+        }, {
+          id: 1,
+          creatorId: 2,
+          title: "Great Reads",
+          description: "Books and stuff...",
+          resourceUrl: "http://www...",
+          photoUrl: "/mockups/mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg",
+          resourceRating: {
+            liked: true,
+            rating: 5,
+          },
+          averageRating: 3.3,
+        }],
+      }, {
+        name: "Science Hacks",
+        resources: [{
+          id: 2,
+          creatorId: 1,
+          title: "Science Stuff",
+          description: "read all this",
+          resourceUrl: "http://...",
+          photoUrl: "/mockups/mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg",
+          resourceRating: {
+            liked: true,
+            rating: null,
+          },
+          averageRating: 2.6,
+        }, {
+          id: 1,
+          creatorId: 2,
+          title: "More Stuff",
+          description: "read all this",
+          resourceUrl: "http://...",
+          photoUrl: "/mockups/mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg",
+          resourceRating: {
+            liked: false,
+            rating: 4,
+          },
+          averageRating: null,
+        }],
+      }],
     });
   });
 
