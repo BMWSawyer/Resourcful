@@ -11,7 +11,7 @@ const router = express.Router();
 module.exports = () => {
   router.get("/register", (req, res) => {
     res.render('register', {
-      error:"Please enter a valid email address",
+      // error:"Please enter a valid email address",
     });
   });
 
@@ -32,7 +32,7 @@ module.exports = () => {
       description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
       URL: "http://www.amazon.ca",
       topic: "Fast food",
-      ownerID: "1"},
+      ownerID: "2"},
 
       user:{id:"2", firstName:"Test", lastName:"McTester", email:"mctester@fakeemail.com"},
 
