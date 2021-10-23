@@ -25,3 +25,170 @@ View resource - GET /resources/:resourceid
 Click URL - Render url in button on generating the page. No route needed
 
 Like/Unlike - POST/PUT  /resources/:resourceID/ratings - Use JS to make a request
+
+
+
+# Objects to pass into each page
+
+Error object (if one is generated) is a common object to each page
+
+# Register
+
+No data required.
+
+# Profile (for updating profile)
+
+User object
+
+    {
+      user: {
+        id:"1",
+        firstName:"Test",
+        lastName:"McTester",
+        email:"mctester@fakeemail.com"
+      }
+    }
+
+## Resources
+
+User object, resource object, resource_rating object, (average overall rating), array of
+comment objects.
+
+    {
+      user: {
+        id:"1",
+        firstName:"Test",
+        lastName:"McTester",
+        email:"mctester@fakeemail.com"
+      },
+      resource: {
+        id: 1,
+        creatorId: 2,
+        title: "More Stuff",
+        description: "read all this",
+        resourceUrl: "http://...",
+        photoUrl: "http://...",
+        resourceRating: {
+          liked: false,
+          rating: 4,
+        },
+        averageRating: null,
+        comments: [{
+          id: 1,
+          firstName: "Isabelle",
+          lastName: "Ringing",
+          comment: "This was a great resource!",
+          date: "2019-09-07T15:50+00Z"
+        },
+        //more comments
+        ],
+      },
+    }
+
+## Search
+
+User object, array of resource objects, resource_rating object, (average overall rating).
+
+{
+  user: {
+    id:"1",
+    firstName:"Test",
+    lastName:"McTester",
+    email:"mctester@fakeemail.com"
+  },
+  resources: [{
+    id: 2,
+    creatorId: 1,
+    title: "Science Stuff",
+    description: "read all this",
+    resourceUrl: "http://...",
+    photoUrl: "http://...",
+    resourceRating: {
+      liked: true,
+      rating: null,
+    },
+    averageRating: 2.6,
+  }, {
+    id: 1,
+    creatorId: 2,
+    title: "More Stuff",
+    description: "read all this",
+    resourceUrl: "http://...",
+    photoUrl: "http://...",
+    resourceRating: {
+      liked: false,
+      rating: 4,
+    },
+    averageRating: null,
+  }],
+  },
+}
+
+## My Resources
+
+User object and an array of topics that contains an array of resource objects that user
+liked or created (see below). This also must include the overall average rating.
+
+    {
+      user: {
+        id: 1,
+        firstName: "Test",
+        lastName: "McTester",
+        email: "mctester@fakeemail.com",
+      },
+      topics: [{
+        name: "Literature",
+        resources: [{
+          id: 4,
+          creatorId: 1,
+          title: "Historic Reads",
+          description: "Reading about history",
+          resourceUrl: "http://www.example.com",
+          photoUrl: "http://www.picture.com",
+          resourceRating: {
+            liked: false,
+            rating: 5,
+          },
+          averageRating: 4.3,
+        }, {
+          id: 1,
+          creatorId: 2,
+          title: "Great Reads",
+          description: "Books and stuff...",
+          resourceUrl: "http://www...",
+          photoUrl: "http://www.photolink...",
+          resourceRating: {
+            liked: true,
+            rating: 5,
+          },
+          averageRating: 3.3,
+        }],
+      }, {
+        name: "Science Hacks",
+        resources: [{
+          id: 2,
+          creatorId: 1,
+          title: "Science Stuff",
+          description: "read all this",
+          resourceUrl: "http://...",
+          photoUrl: "http://...",
+          resourceRating: {
+            liked: true,
+            rating: null,
+          },
+          averageRating: 2.6,
+        }, {
+          id: 1,
+          creatorId: 2,
+          title: "More Stuff",
+          description: "read all this",
+          resourceUrl: "http://...",
+          photoUrl: "http://...",
+          resourceRating: {
+            liked: false,
+            rating: 4,
+          },
+          averageRating: null,
+        }],
+      }],
+    }
