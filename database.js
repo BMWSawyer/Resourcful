@@ -295,8 +295,6 @@ return db.query(queryString, queryParams).then(res => res.rows)
 const likingAResource = function (userId, resourceId, db) {
   let queryString = `UPDATE resource_ratings SET `;
 
-  console.log(newReservationData);
-
   const subQuery = db.query(`
   SELECT like
   FROM resource_ratings
