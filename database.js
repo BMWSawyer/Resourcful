@@ -1,3 +1,8 @@
+//
+// NEED TO ADD A FUNCTION TO GET ALL RESOURCES A USER HAS LIKED!!
+// NEED TO ADD A FUNCTION TO GET ALL RESOURCES A USER HAS CREATED!!
+//
+
 /**
  * Get a single user from the database given their email.
  * @param {String} email The email of the user.
@@ -284,6 +289,36 @@ return db.query(queryString, queryParams).then(res => res.rows)
 }
 
 
+//
+//  Likes or Unlikes a resource
+//
+const likingAResource = function (userId, resourceId, db) {
+  let queryString = `UPDATE resource_ratings SET `;
+
+  console.log(newReservationData);
+
+  const subQuery = db.query(`
+  SELECT like
+  FROM resource_ratings
+  WHERE user_id = $${userId}
+  AND resource_id = $${resourceId}`);
+
+  if (subQuery) {
+    queryString += `like = FALSE`;
+
+  } else {
+    queryString += `like = TRUE`;
+  }
+
+  queryString += ` WHERE user_id = $${userId} AND resource_id = $${resourceId} RETURNING *;`
+
+  console.log(queryString);
+
+  return db.query(queryString)
+  .then((res) => res.rows[0])
+  .catch((error) => console.error(error));
+}
+
 module.exports = {
   getUserWithEmail,
   getUserWithId,
@@ -295,5 +330,6 @@ module.exports = {
   getIndividualResource,
   getRatingsByResource,
   addComment,
-  getCommentsByResource
-}
+  getCommentsByResource,
+  likingAResource
+};

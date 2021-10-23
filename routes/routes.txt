@@ -18,11 +18,11 @@ My resources page - GET /my-resources
 
 Add resource - POST /resources/
 Rate resource - POST/PUT  /resources/:resourceID/ratings
-Comment - POST /resources/:resourceID/comments
+Comment - POST /resources/:resourceId/comments
 
-Update resource - PUT /resources/:resourceid
+Update resource - PUT /resources/:resourceId
 
-View resource - GET /resources/:resourceid
+View resource - GET /resources/:resourceId
 
 Click URL - Render url in button on generating the page. No route needed
 
