@@ -9,12 +9,14 @@ const { addResource } = require('../database');
 module.exports = (db) => {
 
   router.post('/', (req, res) => {
+    const userId = req.session.user_id
     const title = req.body.title;
     const description = req.body.description;
     const resource_url = req.body.resource_url;
     const image = req.body.image;
 
     const resource = {
+      userId,
       title,
       description,
       resource_url,
@@ -28,7 +30,7 @@ module.exports = (db) => {
           return;
         }
         // req.session.user_id = user.id;
-        res.render("/");
+        res.sned({ resource });
       })
       .catch(error => res.send(error));
   });

@@ -98,11 +98,11 @@ const getUserWithId = function (id, db) {
 
   return db
     .query(
-      `INSERT INTO resources (user_id, title, description, resource_url, image)
+      `INSERT INTO resources (creator_id, title, description, resource_url, image)
       VALUES ($1, $2, $3, $4, $5)
       RETURNING *`,
       [
-        resource.owner_id,
+        resource.userId,
         resource.title,
         resource.description,
         resource.resource_url,
@@ -127,12 +127,12 @@ const updateUser = function(userData, userId, db) {
   const queryParams = [];
   console.log(userData);
 
-  if (userData.first_name) {
+  if (userData.firstName) {
     queryParams.push(userData.first_name);
     queryString += `start_date = $${queryParams.length}`;
   }
 
-  if (userData.last_name) {
+  if (userData.lastName) {
       queryParams.push(userData.last_name);
       queryString += `, last_name = $2`;
   }
@@ -198,7 +198,7 @@ const addComment = function (comment, db) {
     RETURNING *;
   `;
 
-  const queryParams = [comment.user_id, comment.resource_id, comment.comment];
+  const queryParams = [comment.userId, comment.resourceId, comment.comment];
 
   return db.query(queryString, queryParams).then(res => res.rows);
 }

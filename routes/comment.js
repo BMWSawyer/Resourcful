@@ -4,19 +4,19 @@
 
 const express = require('express');
 const router  = express.Router();
-const { getUserWithEmail } = require('../database');
+const { addComment } = require('../database');
 
 module.exports = (db) => {
 
   router.post('/', (req, res) => {
-    const resource_id = req.body.resource_id;
-    const user_id = req.session.user_id;
+    const resourceId = req.body.resource_id;
+    const userId = req.session.user_id;
     const comment = req.body.comment;
     const date = Date.now();
 
     const comment = {
-      resource_id,
-      user_id,
+      resourceId,
+      userId,
       comment,
       date
     };
@@ -28,7 +28,7 @@ module.exports = (db) => {
           return;
         }
         // req.session.user_id = user.id;
-        res.render("/resource/:resourceId", comment);
+        res.send({ comment });
       })
       .catch(error => res.send(error));
   });
