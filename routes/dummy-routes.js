@@ -48,7 +48,25 @@ module.exports = () => {
           lastName: "Ringing",
           comment: "This was a great resource!",
           date: "2019-09-07T15:50+00Z"
-        },
+        }, {
+          id: 1,
+          firstName: "Skye",
+          lastName: "Blue",
+          comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          date: "2019-09-07T15:50+00Z"
+        }, {
+          id: 1,
+          firstName: "Al",
+          lastName: "Mosdead",
+          comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          date: "2019-09-07T15:50+00Z"
+        }, {
+          id: 1,
+          firstName: "John",
+          lastName: "Doe",
+          comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          date: "2019-09-07T15:50+00Z"
+        }
         ],
       },
     });

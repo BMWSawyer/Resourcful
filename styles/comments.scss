@@ -56,10 +56,16 @@ height: 3.2em;
 }
 
 .comment-text {
-    padding-left: 15px;
+    padding-left: 0px;
     padding-bottom: 10px;
+    width: 30em;
 }
 
 .comment-widgets .comment-row:hover {
     background: rgba(0, 0, 0, 0.05)
+}
+
+.date-time{
+  font-size: 12px;
+  margin-top: 0.5em;
 }
