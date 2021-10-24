@@ -44,40 +44,50 @@
                 Add to favourites
 
                 <!-- toggles the liked heart -->
-                <%- (resource.resourceRating.liked === true) ? "<i class='bi bi-heart-fill'></i>": "<i class='bi bi-heart'></i>" %>
+                <%- (resource.resourceRating.liked===true) ? "<i class='bi bi-heart-fill'></i>"
+                  : "<i class='bi bi-heart'></i>" %>
 
               </div>
-              <hr class = "favourite-hr">
+              <hr class="favourite-hr">
               <% } %>
 
                 <div class="ratingIndividualView">
-                  <%- ((Math.round(resource.averageRating * 100) / 100) >=0.5) ? "<i class='bi bi-star-fill'></i>": "<i class='bi bi-star'></i>" %>
-                  <%- ((Math.round(resource.averageRating * 100) / 100) >=1.5) ? "<i class='bi bi-star-fill'></i>": "<i class='bi bi-star'></i>" %>
-                  <%- ((Math.round(resource.averageRating * 100) / 100) >=2.5) ? "<i class='bi bi-star-fill'></i>": "<i class='bi bi-star'></i>" %>
-                  <%- ((Math.round(resource.averageRating * 100) / 100) >=3.5) ? "<i class='bi bi-star-fill'></i>": "<i class='bi bi-star'></i>" %>
-                  <%- ((Math.round(resource.averageRating * 100) / 100) >=4.5) ? "<i class='bi bi-star-fill'></i>": "<i class='bi bi-star'></i>" %>
 
-                  <div class="ratingTotal"><%= resource.averageRating %> / 5</div>
+                  <!-- Add the stars for the average overall rating -->
+                  <% for (let i=0; i < 5; i++) { %>
+                    <i class="bi
+                <%= resource.averageRating >= i+.5 ? 'bi-star-fill' : 'bi-star' %>"></i>
+                    <% } %>
+
+                      <div class="ratingTotal">
+                        <%= resource.averageRating %> / 5
+                      </div>
                 </div>
           </div>
 
           <div class="col-7 myResForm">
 
             <!-- View Only Resource -->
-            <% if((typeof user==="undefined") || (resource.creatorId !== user.id) ){ %>
+            <% if((typeof user==="undefined" ) || (resource.creatorId !==user.id) ){ %>
               <!-- Add to line above OR if the user is not the owner -->
               <div class="view-only-resource">
                 <div class="mb-3">
-                  <h3 class="title-name"><%= resource.title %></h3>
+                  <h3 class="title-name">
+                    <%= resource.title %>
+                  </h3>
                   <h5 class="topic-names">Topic Names</h5>
-                  <p class="resource-description"><%= resource.description %></p>
+                  <p class="resource-description">
+                    <%= resource.description %>
+                  </p>
 
                   <div class="mb-2 url-input hstack gap-3">
-                    <a href="#" class="url-no-edit"><%= resource.URL %></a>
+                    <a href="#" class="url-no-edit">
+                      <%= resource.URL %>
+                    </a>
                   </div>
 
                   <!-- Rating form if logged in, but not the resource owner -->
-                  <% if(typeof user!="undefined" && (resource.ownerID !== user.id)){ %>
+                  <% if(typeof user!="undefined" && (resource.ownerID !==user.id)){ %>
 
                     <form id="my-rating-form">
                       <div class="mb-2 url-input hstack gap-3">
@@ -103,18 +113,21 @@
                   </div>
                   <div class="mb-3">
                     <label for="formDescInput" class="form-label">Description</label>
-                    <input type="text" class="form-control" id="formDescInput" placeholder="<%= resource.description %>">
+                    <input type="text" class="form-control" id="formDescInput"
+                      placeholder="<%= resource.description %>">
                   </div>
 
                   <div class="mb-2 rating-input hstack gap-3">
                     <label for="my-resource-rating" class="form-label">Resource Rating</label>
-                    <input type="number" id="my-resource-rating" min="1" max="5" value="<%= resource.resourceRating.rating %>">
+                    <input type="number" id="my-resource-rating" min="1" max="5"
+                      value="<%= resource.resourceRating.rating %>">
                   </div>
 
                   <div class="mb-2 url-input hstack gap-3">
                     <input type="text" class="form-control" id="formURLInput" placeholder="<%= resource.resourceUrl %>">
                     <span class="url-input-btn">
-                      <a href="<%= resource.resourceUrl %>"><i class="my-resource-url-arrow bi bi-arrow-up-right-square-fill" type="button"></i></a>
+                      <a href="<%= resource.resourceUrl %>"><i
+                          class="my-resource-url-arrow bi bi-arrow-up-right-square-fill" type="button"></i></a>
                     </span>
                   </div>
 
@@ -122,14 +135,14 @@
                 </form>
                 <% } %>
 
-                <!-- Error display -->
-                <% if(typeof error !="undefined" ){ %>
-                <p class="font-weight-bold" style="margin-top: 10px; color: red">
-                  <%= error %>
-                </p>
-                <% } %>
+                  <!-- Error display -->
+                  <% if(typeof error !="undefined" ){ %>
+                    <p class="font-weight-bold" style="margin-top: 10px; color: red">
+                      <%= error %>
+                    </p>
+                    <% } %>
 
-                <%- include('partials/_comments') %>
+                      <%- include('partials/_comments') %>
 
           </div>
 
