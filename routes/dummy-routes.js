@@ -85,6 +85,30 @@ module.exports = () => {
           photoUrl: "/mockups/mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg",
           resourceRating: {
             liked: true,
+            rating: 4,
+          },
+          averageRating: 3.3,
+        }, {
+          id: 1,
+          creatorId: 2,
+          title: "True History",
+          description: "Books and stuff...",
+          resourceUrl: "http://www...",
+          photoUrl: "/mockups/mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg",
+          resourceRating: {
+            liked: false,
+            rating: 3,
+          },
+          averageRating: 3.3,
+        }, {
+          id: 1,
+          creatorId: 2,
+          title: "Love Literature",
+          description: "Books and stuff...",
+          resourceUrl: "http://www...",
+          photoUrl: "/mockups/mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg",
+          resourceRating: {
+            liked: true,
             rating: 5,
           },
           averageRating: 3.3,
@@ -116,6 +140,54 @@ module.exports = () => {
           },
           averageRating: null,
         }],
+      }],
+    });
+  });
+
+  router.get("/search/", (req, res) => {
+    res.render('search', {
+      user: {
+        id: "1",
+        firstName: "Test",
+        lastName: "McTester",
+        email: "mctester@fakeemail.com"
+      },
+      resources: [{
+        id: 2,
+        creatorId: 1,
+        title: "Science Stuff",
+        description: "read all this",
+        resourceUrl: "http://...",
+        photoUrl: "/mockups/mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg",
+        resourceRating: {
+          liked: true,
+          rating: null,
+        },
+        averageRating: 2.6,
+      }, {
+        id: 3,
+        creatorId: 1,
+        title: "Another Article",
+        description: "read all this",
+        resourceUrl: "http://...",
+        photoUrl: "/mockups/mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg",
+        resourceRating: {
+          liked: true,
+          rating: null,
+        },
+        averageRating: 4.8,
+      }, {
+        id: 1,
+        creatorId: 2,
+        title: "More Stuff",
+        description: "read all this",
+        resourceUrl: "http://...",
+        photoUrl: "/mockups/mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg",
+        resourceRating: {
+          liked: false,
+          rating: 4,
+        },
+        averageRating: null,
       }],
     });
   });
