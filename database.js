@@ -272,7 +272,9 @@ const searchResources = function (topic, db) {
   const queryString = `
     SELECT *
     FROM resources
-    WHERE topic LIKE (%$1%);
+    JOIN resource_categories ON resource_id = resources.id
+    JOIN categories ON categories.id = resource_categories.category_id
+    WHERE categories.category LIKE (%$1%);
   `;
 
   const queryParams = [topic];

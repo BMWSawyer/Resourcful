@@ -93,7 +93,7 @@ module.exports = (db) => {
   // Like a resource route
   router.post('/like/:resourceId', (req, res) => {
     const userId = req.session.user_id;
-    const { resourceId } = req.params.resourceId;
+    const resourceId = req.params.resourceId;
     likingAResource(userId, resourceId, db)
       .then(data => {
         if (!data) {
@@ -101,7 +101,7 @@ module.exports = (db) => {
           return;
         }
 
-        res.send({data: data})
+        res.send(data)
       })
       .catch(error => res.send(error));
   });
