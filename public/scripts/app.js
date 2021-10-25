@@ -16,7 +16,7 @@ $(function () {
     });
   };
 
-  //Add new resource button functionality
+  //Add new resource button functionality to populate resource page with iframely
   $('#urlSubmit').on('click', function (submitURL) {
     submitURL.preventDefault();
     console.log("click");
@@ -38,7 +38,19 @@ $(function () {
       .then((urlObj) => {
         window.location.replace(`/resources/new?title=${urlObj.title}&resourceUrl=${urlObj.resourceUrl}&description=${urlObj.description}&photoUrl=${urlObj.photoUrl}`);
       })
+      .catch((err) => {
+        console.log(err.message);
+      });
   });
 
+  //Resource view like toggle
+  $('#likeHeartButton').on('click', function () {
+    console.log("liked/unliked");
+  });
+
+  //change event for view only resource rating
+  $('#my-resource-rating').on('change', function (rating) {
+    console.log($('#my-resource-rating').val());
+  });
 
 });

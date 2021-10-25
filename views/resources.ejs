@@ -9,7 +9,7 @@
     <%- include('partials/_header') %>
 
       <div class="container myResViewContain">
-        <div class="row justify-content-md-center">
+        <div class="row justify-content-md-center contain-page-columns">
 
           <div class="col col-lg-5 myResImg">
             <div class="bg-light border rounded-3 resourceSingle">
@@ -22,8 +22,9 @@
                 Add to favourites
 
                 <!-- toggles the liked heart -->
-                <%- (resource.resourceRating.liked === true) ? "<i class='bi bi-heart-fill'></i>"
-                  : "<i class='bi bi-heart'></i>" %>
+                <i id = "likeHeartButton" class='bi
+                  <%- (resource.resourceRating.liked === true) ? " bi-heart-fill'>" : "bi-heart" %>'>
+                  </i>
 
               </div>
               <hr class="favourite-hr">
@@ -37,7 +38,8 @@
                 <%= (resource.averageRating >= i+.5) ? 'bi-star-fill' : 'bi-star' %>"></i>
                     <% } %>
 
-                    <%if(resource) {%>
+                    <!-- If there are ratings display average rating -->
+                    <%if(resource.averageRating) {%>
                       <div class="ratingTotal">
                         <%= resource.averageRating %> / 5
                       </div>
@@ -78,6 +80,7 @@
                     <% } %>
                 </div>
               </div>
+
               <% } else { %>
 
                 <!-- Display the edit resource view for resource owner -->
@@ -132,9 +135,7 @@
       </div>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-    crossorigin="anonymous"></script>
+    <%- include('partials/_foot') %>
 
 </body>
 

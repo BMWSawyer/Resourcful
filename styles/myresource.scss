@@ -1,5 +1,5 @@
 .myResViewContain{
-  display: flex;
+  // display: flex;
 }
 
 .imgRankingscontainer{
@@ -13,8 +13,15 @@ width: 40%
 width: 60%;
 }
 
+.contain-page-columns{
+  display: flex;
+  flex-direction:row;
+  justify-content: space-between;
+}
+
 .myResImg{
 justify-content: center;
+margin-right: 0;
 align-content: top;
 flex-wrap: wrap;
 align-items: center;
@@ -32,6 +39,10 @@ align-items: center;
   margin-top: 1em;
 }
 
+#likeHeartButton{
+  cursor: pointer;
+}
+
 .favourite-hr{
 width: 50%;
 margin-left: 1em;
@@ -39,9 +50,12 @@ margin-top:0.5;
 margin-bottom:0.5;
 }
 
+.ratingIndividualView{
+  margin-bottom:1em;
+}
+
 .ratingTotal{
   display: flex;
-  margin-bottom:1em;
   text-align: center;
 }
 
@@ -76,4 +90,6 @@ margin-bottom:0.5;
   #my-rating-form{
     float:right;
   }
+
+
 
