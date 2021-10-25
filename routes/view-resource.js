@@ -4,20 +4,20 @@
 
 const express = require('express');
 const router  = express.Router();
-const { getUserWithEmail } = require('../database');
+const { getIndividualResource } = require('../database');
 
 module.exports = (db) => {
 
-  router.post('/', (req, res) => {
-    const {email, password} = req.body;
-    login(email, password)
-      .then(user => {
-        if (!user) {
+  router.post('/:resourceId', (req, res) => {
+    const { resourceId } = req.params.resourceId;
+    getIndividualResource(resourceId, db)
+      .then(resource => {
+        if (!resource) {
           res.send({error: "error"});
           return;
         }
-        req.session.user_id = user.id;
-        res.render("/my-resources", resources)
+
+        res.send({resource: resource})
       })
       .catch(error => res.send(error));
   });

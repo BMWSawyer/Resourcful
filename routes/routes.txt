@@ -17,8 +17,8 @@ Update profile - PUT /profile
 My resources page - GET /my-resources
 
 Add resource - POST /resources/
-Rate resource - POST/PUT  /resources/:resourceID/ratings
-Comment - POST /resources/:resourceId/comments
+Rate resource - POST/PUT  /resources/ratings/:resourceID
+Comment - POST /resources/comments/:resourceId
 
 Update resource - PUT /resources/:resourceId
 

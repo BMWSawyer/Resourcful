@@ -248,6 +248,22 @@ const likingAResource = function (userId, resourceId, db) {
   .catch((error) => console.error(error));
 }
 
+//
+//  Rates a resource
+//
+const rateAResource = function (userId, resourceId, rating, db) {
+
+  const queryString = `
+    INSERT INTO resource_ratings (user_id, resource_id, rating)
+    VALUES ($1, $2, $3)
+    RETURNING *;
+  `;
+
+  const queryParams = [userId, resourceId, rating];
+
+  return db.query(queryString, queryParams).then(res => res.rows);
+}
+
 module.exports = {
   getUserWithEmail,
   getUserWithId,
@@ -260,5 +276,6 @@ module.exports = {
   getRatingsByResource,
   addComment,
   getCommentsByResource,
-  likingAResource
+  likingAResource,
+  rateAResource
 };
