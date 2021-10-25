@@ -8,7 +8,7 @@ const { getIndividualResource } = require('../database');
 
 module.exports = (db) => {
 
-  router.post('/:resourceId', (req, res) => {
+  router.get('/:resourceId', (req, res) => {
     const { resourceId } = req.params.resourceId;
     getIndividualResource(resourceId, db)
       .then(resource => {

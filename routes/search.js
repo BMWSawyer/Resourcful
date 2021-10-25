@@ -4,20 +4,20 @@
 
 const express = require('express');
 const router  = express.Router();
-const { getUserWithEmail } = require('../database');
+const { searchResources } = require('../database');
 
 module.exports = (db) => {
 
-  router.post('/', (req, res) => {
-    const {email, password} = req.body;
-    login(email, password)
-      .then(user => {
-        if (!user) {
+  router.get('/:query', (req, res) => {
+    const topic = req.params.query;
+    searchResources(topic, db)
+      .then(resources => {
+        if (!resources) {
           res.send({error: "error"});
           return;
         }
-        req.session.user_id = user.id;
-        res.render("/my-resources", resources)
+
+        res.send(resources);
       })
       .catch(error => res.send(error));
   });

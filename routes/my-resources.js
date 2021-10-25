@@ -8,7 +8,7 @@ const { getUserWithEmail } = require('../database');
 
 module.exports = (db) => {
 
-  router.post('/', (req, res) => {
+  router.get('/', (req, res) => {
     const {email, password} = req.body;
     login(email, password)
       .then(user => {

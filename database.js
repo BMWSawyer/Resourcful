@@ -264,6 +264,22 @@ const rateAResource = function (userId, resourceId, rating, db) {
   return db.query(queryString, queryParams).then(res => res.rows);
 }
 
+//
+//  Searches all resources based on the topic
+//
+const searchResources = function (topic, db) {
+
+  const queryString = `
+    SELECT *
+    FROM resources
+    WHERE topic LIKE (%$1%);
+  `;
+
+  const queryParams = [topic];
+
+  return db.query(queryString, queryParams).then(res => res.rows);
+}
+
 module.exports = {
   getUserWithEmail,
   getUserWithId,
@@ -277,5 +293,6 @@ module.exports = {
   addComment,
   getCommentsByResource,
   likingAResource,
-  rateAResource
+  rateAResource,
+  searchResources
 };

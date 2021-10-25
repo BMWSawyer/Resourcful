@@ -17,10 +17,10 @@ Update profile - PUT /profile
 My resources page - GET /my-resources
 
 Add resource - POST /resources/
-Rate resource - POST/PUT  /resources/ratings/:resourceID
+Rate resource - POST/PUT  /resources/ratings/:resourceId
 Comment - POST /resources/comments/:resourceId
 
-Update resource - PUT /resources/:resourceId
+Update resource - PUT /resources/:resourceId -- (BMW) LET'S MAKE THIS A STRECTH
 
 View resource - GET /resources/:resourceId
 
