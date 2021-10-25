@@ -28,9 +28,9 @@
  * @param {string} id The id of the user.
  * @return {Promise<{}>} A promise to the user.
  */
-const getUserWithId = function (id, db) {
+const getUserWithId = function (userId, db) {
   return db
-    .query(`SELECT * FROM users WHERE id = $1`, [id])
+    .query(`SELECT * FROM users WHERE id = $1`, [userId])
     .then((result) => {
       if (!result.rows.length) {
         return null;
@@ -51,8 +51,8 @@ const getUserWithId = function (id, db) {
  const addUser = function (user, db) {
   return db
     .query(
-      `INSERT INTO users (name, email, password) VALUES ($1, $2, $3)  RETURNING *`,
-      [user.name, user.email, user.password]
+      `INSERT INTO users (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)  RETURNING *`,
+      [user.firstName, user.lastName, user.email, user.password]
     )
     .then((result) => {
       return result.rows[0];
@@ -68,17 +68,18 @@ const getUserWithId = function (id, db) {
  * @param {*} limit The number of results to return.
  * @return {Promise<[{}]>}  A promise to the resources.
  */
- const getAllResources = function (category, limit = 10, db) {
+ const getAllResources = function (db, limit = 10) {
   const queryParams = [];
 
   let queryString = `
-    SELECT * FROM resources
+    SELECT *
+    FROM resources
     `;
 
-  if (category) {
-    queryParams.push(`%${category}%`);
-    queryString += `WHERE category = $${queryParams.length} `;
-  }
+  // if (category) {
+  //   queryParams.push(`%${category}%`);
+  //   queryString += `WHERE category = $${queryParams.length} `;
+  // }
 
   queryParams.push(limit);
   queryString += `

@@ -43,6 +43,7 @@ app.use(express.static("public"));
 // Separated Routes for each Resource
 const usersRoutes = require("./routes/users");
 const resourcesRoutes = require("./routes/resources");
+const { getAllResources } = require("./database");
 
 
 // Mount all resource routes
@@ -52,20 +53,28 @@ app.use("/api/resources", resourcesRoutes(db));
 
 // Home page
 app.get("/", (req, res) => {
-  const userId = req.session.user_id; //*** Depending on what the variable is named in the routes this may have to change.
+  getAllResources(db)
+  .then(resources => {
+    res.render("search", {resources: resources});
+  })
+  .catch(err => {
+    console.log(err);
+  });
 
-  res.render("register");
+  // const userId = req.session.user_id; //*** Depending on what the variable is named in the routes this may have to change.
 
-  if(userId) {
-    db.query(`SELECT * FROM users WHERE id = $1`, [userId])
-    .then(data => {
-      console.log(data.rows[0]);
-      res.render("index");
-    })
-    .catch(err => {
-      console.log(err);
-    });
-  }
+  // res.render("search");
+
+  // if(userId) {
+  //   db.query(`SELECT * FROM users WHERE id = $1`, [userId])
+  //   .then(data => {
+  //     console.log(data.rows[0]);
+  //     res.render("index");
+  //   })
+  //   .catch(err => {
+  //     console.log(err);
+  //   });
+  //}
 });
 
 

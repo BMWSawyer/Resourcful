@@ -45,7 +45,8 @@ module.exports = (db) => {
 
   // My resources route  /// NEEDS WORK
   router.get('/my-resources', (req, res) => {
-    const {email, password} = req.body;
+    const userId = req.session.user_id;
+
     //login(email, password)
       // .then(user => {
       //   if (!user) {
@@ -76,6 +77,22 @@ module.exports = (db) => {
   });
 
   // Search resources route
+  router.get('/search', (req, res) => {
+
+    getAllResources(db)
+      .then(resources => {
+        if (!resources) {
+          res.send({error: "error"});
+          return;
+        }
+
+        res.render("search");
+      })
+      .catch(error => {
+        res.send(error);
+      });
+  });
+
   router.get('/search/:query', (req, res) => {
     const topic = req.params.query;
     searchResources(topic, db)

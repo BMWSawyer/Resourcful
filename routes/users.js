@@ -28,14 +28,16 @@ module.exports = (db) => {
 
   router.post('/login', (req, res) => {
     const {email, password} = req.body;
+
     login(email, password)
       .then(user => {
         if (!user) {
           res.send({error: "error"});
           return;
         }
+
         req.session.user_id = user.id;
-        res.render("/my-resources", resources)
+        res.render("/my-resources")
       })
       .catch(error => res.send(error));
   });
@@ -55,6 +57,7 @@ module.exports = (db) => {
 
   router.post("/register", (req, res) => {
     const user = req.body;
+
     user.password = bcrypt.hashSync(user.password, 12);
     addUser(user, db)
     .then(user => {
@@ -69,7 +72,21 @@ module.exports = (db) => {
 
 
   // Update profile route
-  router.post('/profile', (req, res) => {
+  router.get("/profile", (req, res) => {
+    const userId = req.session.user_id;
+
+    getUserWithId(userId, db)
+    .then(user => {
+      if (!user) {
+        res.send({error: "error"});
+        return;
+      }
+      res.render("profile", {user: user});
+    })
+    .catch(error => res.send(error));
+  });
+
+  router.post('/profile/update', (req, res) => {
     const userId = req.session.user_id
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
@@ -87,7 +104,7 @@ module.exports = (db) => {
           res.send({error: "error"});
           return;
         }
-        res.send({ user })
+        res.send(user)
       })
       .catch(error => res.send(error));
   });
