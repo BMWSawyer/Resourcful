@@ -105,16 +105,16 @@
                 <form class="myResourceForm">
                   <div class="mb-3">
                     <label for="formTitleInput" class="form-label">Title</label>
-                    <input type="text" class="form-control" id="formTitleInput" placeholder="<%= resource.title %>">
+                    <input type="text" class="form-control" id="formTitleInput" value="<%= resource.title %>">
                   </div>
                   <div class="mb-3">
                     <label for="formTopicInput" class="form-label">Topic</label>
-                    <input type="text" class="form-control" id="formTopicInput" placeholder="<%= resource.topic %>">
+                    <input type="text" class="form-control" id="formTopicInput" value="<%= resource.topic %>">
                   </div>
                   <div class="mb-3">
                     <label for="formDescInput" class="form-label">Description</label>
                     <input type="text" class="form-control" id="formDescInput"
-                      placeholder="<%= resource.description %>">
+                    value="<%= resource.description %>">
                   </div>
 
                   <div class="mb-2 rating-input hstack gap-3">
@@ -124,7 +124,7 @@
                   </div>
 
                   <div class="mb-2 url-input hstack gap-3">
-                    <input type="text" class="form-control" id="formURLInput" placeholder="<%= resource.resourceUrl %>">
+                    <input type="text" class="form-control" id="formURLInput" value="<%= resource.resourceUrl %>">
                     <span class="url-input-btn">
                       <a href="<%= resource.resourceUrl %>"><i
                           class="my-resource-url-arrow bi bi-arrow-up-right-square-fill" type="button"></i></a>
