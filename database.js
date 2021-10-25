@@ -168,9 +168,9 @@ const deleteResource = function(resourceId, db) {
 //  Gets an individual resource
 //
 const getIndividualResource = function(resourceId, db) {
-  const queryString = `SELECT * FROM resources WHERE resources.id = $1`;
+  const queryString = `SELECT * FROM resources WHERE id = $1`;
   return db.query(queryString, [resourceId])
-    .then(res => res.rows[0]);
+  .then(res => res.rows[0]);
 }
 
 /*
@@ -198,7 +198,7 @@ const addComment = function (comment, db) {
     RETURNING *;
   `;
 
-  const queryParams = [comment.userId, comment.resourceId, comment.comment];
+  const queryParams = [comment.userId, comment.resourceId, comment.text];
 
   return db.query(queryString, queryParams).then(res => res.rows);
 }
