@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <%- include('partials/_head') %>
+
+<body>
+  <main class="container">
+
+    <%- include('partials/_header') %>
+
+      <%- include('partials/_search-bar') %>
+
+        <%- include('partials/_newResBut') %>
+
+          <!-- Resources board -->
+          <div class="container pb-3 resourceWall">
+
+            <!-- Right now this is set up for creating a new group of the items below for each category -->
+            <% for (const topic of topics) { %>
+              <div class="topicTitle">
+                <h3 class="titleName">
+                  <%=topic.name%>
+                </h3>
+                <hr class="topic-break">
+              </div>
+              <br>
+
+              <div class="d-grid gap-3" style="grid-template-columns: 1fr 1fr 1fr;">
+
+                <% for (const resource of topic.resources) { %>
+
+                  <div class="bg-light border rounded-3 resourceSingle">
+                    <div class="image">
+
+                      <div class="overlay">
+                        <a href="<%= resource.resourceUrl %>"><i
+                            class="bi bi-arrow-up-right-square-fill go-to-url-wall"></i></a>
+                        <%- (resource.resourceRating.liked===true) ? "<i class='bi bi-heart-fill is-favourite'></i>"
+                          : "<i class='bi bi-heart is-favourite'></i>" %>
+                      </div>
+
+                      <img class="resourceImg" src="<%= resource.photoUrl %>">
+                    </div>
+                    <div class='resInfo'>
+                      <div>
+                        <%= resource.title %>
+                      </div>
+                      <div class="rating">
+
+                        <!-- Check if the user has rated a resource and use that, otherwise default to the average rating -->
+                        <% let rating=resource.resourceRating.rating ? resource.resourceRating.rating :
+                          resource.averageRating; %>
+
+                          <% for (let i=0; i < 5; i++) { %>
+                            <i class="bi
+                        <%= rating >= i+.5 ? 'bi-star-fill' : 'bi-star' %>
+                        <%= resource.resourceRating.rating ? 'text-warning' : '' %>"></i>
+                            <% } %>
+
+                      </div>
+                    </div>
+                  </div>
+
+                  <% } %>
+              </div>
+              <% } %>
+
+  </main>
+
+    <%- include('partials/_foot') %>
+
+</body>
+
+</html>
