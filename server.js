@@ -39,41 +39,18 @@ app.use(
 
 app.use(express.static("public"));
 
+
 // Separated Routes for each Resource
-// Note: Feel free to replace the example routes below with your own
-const registerRoutes = require("./routes/register");
-const loginRoutes = require("./routes/login");
-const logoutRoute = require("./routes/logout");
-const addResourceRoute = require("./routes/add-resource");
-const commentsRoute = require("./routes/comment");
-const likingRoute = require("./routes/like-unlike");
-const myResourcesRoute = require("./routes/my-resources");
-const rateResourceRoute = require("./routes/rate-resource");
-const updateProfileRoute = require("./routes/update-profile");
-const viewResourceRoute = require("./routes/view-resource");
-const searchRoute = require("./routes/search");
+const usersRoutes = require("./routes/users");
+const resourcesRoutes = require("./routes/resources");
 
 
 // Mount all resource routes
-// Note: Feel free to replace the example routes below with your own
-app.use("/api/register", registerRoutes(db));
-app.use("/api/login", loginRoutes(db));
-app.use("/api/logout", logoutRoute(db));
-app.use("/api/resources", addResourceRoute(db));
-app.use("/api/comment/:resourceId", commentsRoute(db));
-app.use("/api/resources/like/:resourceID", likingRoute(db));
-app.use("/api/my-resources", myResourcesRoute(db));
-app.use("/api/resources/rating/:resourceId", rateResourceRoute(db));
-app.use("/api/profile", updateProfileRoute(db));
-app.use("/api/resources/:resourceId", viewResourceRoute(db));
-app.use("/api/search/:query", searchRoute(db));
-// Note: mount other resources here, using the same pattern above
+app.use("/api/users", usersRoutes(db));
+app.use("/api/resources", resourcesRoutes(db));
+
 
 // Home page
-// Warning: avoid creating more routes in this file!
-// Separate them into separate routes files (see above).
-
-
 app.get("/", (req, res) => {
   const userId = req.session.user_id; //*** Depending on what the variable is named in the routes this may have to change.
 
