@@ -22,6 +22,30 @@ module.exports = () => {
     });
   });
 
+  router.get("/resources/new", (req, res) => {
+    const newResource = {
+      title: req.query.title,
+      description: req.query.description,
+      resourceUrl: req.query.resourceUrl,
+      photoUrl: req.query.photoUrl,
+      resourceRating: {
+        liked: null,
+        rating: null,
+      },
+      averageRating: null,
+      comments: [],
+    };
+    res.render('resources', {
+      user: {
+        id: 1,
+        firstName: "Test",
+        lastName: "McTester",
+        email: "mctester@fakeemail.com"
+      },
+      resource: newResource,
+    });
+  });
+
   router.get("/resources/:id", (req, res) => {
     res.render('resources', {
       user: {

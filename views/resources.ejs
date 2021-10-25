@@ -13,7 +13,7 @@
 
           <div class="col col-lg-5 myResImg">
             <div class="bg-light border rounded-3 resourceSingle">
-              <img class="resourceImg" src="<%= resource.photoUrl %>">
+              <img class="resourceImg" src="<%= resource.photoUrl ? resource.photoUrl : "/mockups/mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg" %>">
             </div>
 
             <!-- Only display the ability to like a resource if logged in -->
@@ -22,7 +22,7 @@
                 Add to favourites
 
                 <!-- toggles the liked heart -->
-                <%- (resource.resourceRating.liked===true) ? "<i class='bi bi-heart-fill'></i>"
+                <%- (resource.resourceRating.liked === true) ? "<i class='bi bi-heart-fill'></i>"
                   : "<i class='bi bi-heart'></i>" %>
 
               </div>
@@ -34,19 +34,21 @@
                   <!-- Add the stars for the average overall rating -->
                   <% for (let i=0; i < 5; i++) { %>
                     <i class="bi
-                <%= resource.averageRating >= i+.5 ? 'bi-star-fill' : 'bi-star' %>"></i>
+                <%= (resource.averageRating >= i+.5) ? 'bi-star-fill' : 'bi-star' %>"></i>
                     <% } %>
 
+                    <%if(resource) {%>
                       <div class="ratingTotal">
                         <%= resource.averageRating %> / 5
                       </div>
+                      <%} %>
                 </div>
           </div>
 
           <div class="col-7 myResForm">
 
             <!-- View Only Resource -->
-            <% if((typeof user==="undefined" ) || (resource.creatorId !==user.id) ){ %>
+            <% if((resource.id) && ((typeof user === "undefined" ) || (resource.creatorId !== user.id))){ %>
               <!-- Add to line above OR if the user is not the owner -->
               <div class="view-only-resource">
                 <div class="mb-3">
