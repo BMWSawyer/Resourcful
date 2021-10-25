@@ -1,6 +1,3 @@
-.myResViewContain{
-  display: flex;
-}
 
 .imgRankingscontainer{
   vertical-align: top;
@@ -13,8 +10,15 @@ width: 40%
 width: 60%;
 }
 
+.contain-page-columns{
+  display: flex;
+  flex-direction:row;
+  justify-content: space-between;
+}
+
 .myResImg{
 justify-content: center;
+margin-right: 0;
 align-content: top;
 flex-wrap: wrap;
 align-items: center;
@@ -22,19 +26,34 @@ align-items: center;
 
 .ratingIndividualView{
   display: flex wrap;
-  justify-self: center;
-  align-self: center;
+  margin-left: 1em;
 }
 
 .favourite{
   width: 100%;
   justify-self: center;
+  margin-left: 1em;
+  margin-top: 1em;
+}
+
+#likeHeartButton{
+  cursor: pointer;
+}
+
+.favourite-hr{
+width: 50%;
+margin-left: 1em;
+margin-top:0.5;
+margin-bottom:0.5;
+}
+
+.ratingIndividualView{
+  margin-bottom:1em;
 }
 
 .ratingTotal{
   display: flex;
-  margin-left: 1em;
-  margin-bottom:1em;
+  text-align: center;
 }
 
 .myResourceForm{
@@ -54,19 +73,20 @@ align-items: center;
   flex-direction: row;
   }
 
-  .my-resource-url-arrow{
-    z-index:1;
-    position: relative;
-    font-size: 35px;
-    margin-top:-5px;
-    }
+.my-resource-url-arrow{
+  z-index:1;
+  position: relative;
+  font-size: 35px;
+  margin-top:-5px;
+  }
 
-    #my-resource-rating{
-      width:3em;
-    }
+  #my-resource-rating{
+    width:3em;
+  }
 
-    #my-rating-form{
-      float:right;
-    }
+  #my-rating-form{
+    float:right;
+  }
+
 
 
