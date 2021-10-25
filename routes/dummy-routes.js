@@ -23,6 +23,7 @@ module.exports = () => {
   });
 
   router.get("/resources/new", (req, res) => {
+    console.log(`********* this is the photourl ${req.query.photoUrl}`);
     const newResource = {
       title: req.query.title,
       description: req.query.description,
@@ -35,6 +36,7 @@ module.exports = () => {
       averageRating: null,
       comments: [],
     };
+    console.log(newResource);
     res.render('resources', {
       user: {
         id: 1,

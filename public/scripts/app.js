@@ -36,7 +36,7 @@ $(function () {
         return urlObj;
       })
       .then((urlObj) => {
-        window.location.replace(`/resources/new?title=${urlObj.title}&resourceUrl=${urlObj.resourceUrl}&description=${urlObj.description}&photoUrl=${urlObj.photoUrl}`);
+        window.location.replace(`/resources/new?title=${urlObj.title}&photoUrl=${urlObj.photoUrl}&resourceUrl=${urlObj.resourceUrl}&description=${urlObj.description}`);
       })
       .catch((err) => {
         console.log(err.message);
