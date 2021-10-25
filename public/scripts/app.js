@@ -49,7 +49,7 @@ $(function () {
   });
 
   //change event for view only resource rating
-  $('#my-resource-rating').on('change', function (rating) {
+  $('#my-resource-rating').on('change', function () {
     console.log($('#my-resource-rating').val());
   });
 
