@@ -17,8 +17,8 @@ Update profile - PUT /profile
 My resources page - GET /my-resources
 
 Add resource - POST /resources/
-Rate resource - POST/PUT  /resources/ratings/:resourceId
-Comment - POST /resources/comments/:resourceId
+Rate resource - POST/PUT  /resources/rating/:resourceId
+Comment - POST /resources/comment/:resourceId
 
 Update resource - PUT /resources/:resourceId -- (BMW) LET'S MAKE THIS A STRECTH
 
@@ -26,7 +26,7 @@ View resource - GET /resources/:resourceId
 
 Click URL - Render url in button on generating the page. No route needed
 
-Like/Unlike - POST/PUT  /resources/:resourceID/ratings - Use JS to make a request
+Like/Unlike - POST/PUT  /resources/like/:resourceID - Use JS to make a request
 
 
 
