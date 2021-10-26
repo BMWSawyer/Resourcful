@@ -10,7 +10,8 @@ const {
   searchResources,
   likingAResource,
   rateAResource,
-  addComment
+  addComment,
+  getCommentsByResource
 } = require('../database');
 
 module.exports = (db) => {
@@ -61,7 +62,10 @@ module.exports = (db) => {
 
   // View individual resource route
   router.get('/:resourceId', (req, res) => {
+
     const resourceId = req.params.resourceId;
+    const comments = getCommentsByResource(resourceId, db);
+
     getIndividualResource(resourceId, db)
       .then(resource => {
         console.log(resource);
@@ -71,7 +75,9 @@ module.exports = (db) => {
           return;
         }
 
-        res.send(resource);
+        console.log(comments);
+
+        res.render("resources", {resource: resource, comments: comments});
       })
       .catch(error => res.send(error));
   });
