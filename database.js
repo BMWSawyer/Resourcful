@@ -302,9 +302,17 @@ const getRatingByUser = function(userId, resourceId, db) {
 //  Gets an all resources for a user
 //
 const getResourcesForUser = function(userId, db) {
-
-  //   db.query(`SELECT category FROM categories;`)
-
+// new block
+  SELECT resources.*, resource_ratings.liked as like, resource_ratings.rating as rating, categories.category,
+  AVG(resource_ratings.rating) as average_rating
+  FROM resources
+  JOIN resource_ratings ON resources.id = resource_ratings.resource_id
+  JOIN resource_categories ON resources.id = resource_categories.resource_id
+  JOIN categories ON resource_categories.category_id = categories.id
+  WHERE resource_ratings.user_id = 1
+  OR resources.creator_id = 1
+  GROUP BY resources.id, resource_ratings.liked, resource_ratings.rating, categories.category
+//
   //then loop to iterate over each category
 //  db.query(queryString, [userId, category])
 
