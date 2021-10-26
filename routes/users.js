@@ -44,7 +44,7 @@ module.exports = (db) => {
         }
 
         req.session.user_id = user.id;
-        res.render("/my-resources")
+        res.render("my-resources")
       })
       .catch(error => res.send(error));
   });
@@ -88,11 +88,6 @@ module.exports = (db) => {
           res.send({ error: "error" });
           return;
         }
-
-        //Convert object keys to camelcase
-        user = Object.fromEntries(
-          Object.entries(user)
-            .map(i => [camelCase(i[0]), i[1]]));
 
         res.render("profile", { user });
       })

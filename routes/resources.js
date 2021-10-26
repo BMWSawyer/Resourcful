@@ -52,33 +52,57 @@ module.exports = (db) => {
   // My resources route
   router.get('/my-resources', (req, res) => {
     const userId = req.session.user_id;
-    let user;
 
     getUserWithId(userId, db)
-      .then((userObj) => {
-        user = Object.fromEntries(
-          Object.entries(userObj)
-            .map(i => [camelCase(i[0]), i[1]]));
-        return;
-      })
-      .then(() => {
-        console.log(getResourcesForUser(userId, db)); //this function not working
-        return getResourcesForUser(userId, db)
-      })
-      .then(resource => {
-        console.log(resource); //here is where it breaks
+    .then((user) => {
+      getResourcesForUser(userId, db)
+      .then((data) => {
 
-        if (!resource) {
+        if (!data) {
           res.send({ error: "error" });
           return;
         }
 
-        console.log(user);
-        console.log(resource);
+        const topics = [];
 
-        res.render("my-resources", { user: user, resource: resource });
+        for (const resource of data) {
+
+          if (topics.length === 0) {
+            topics.push({
+              'name': resource.category,
+              'resources': [resource]
+            })
+          } // else {
+          //   for (const topic of topics) {
+          //     if (topic.name !== resource.category) {
+          //       for (let i = 0; i < topics.length; i++) {
+
+          //         if (topics[i].name !== resource.category) {
+          //           topics.push({
+          //             'name': resource.category,
+          //             'resources': [resource]
+          //           });
+          //         }
+          //       }
+          //     } else {
+          //       topic.resources.push(resource)
+          //     }
+          //   }
+          // }
+        };
+        console.log("---")
+        console.log(topics);
+
+        res.render("my-resources", { user: {
+          'userId': userId,
+          'firstName': user.firstname,
+          'lastName': user.lastname,
+        },
+        topics: topics});
       })
       .catch(error => res.send(error));
+    })
+    .catch(error => res.send(error));
   });
 
   // View individual resource route

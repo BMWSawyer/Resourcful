@@ -25,7 +25,8 @@
  */
 const getUserWithId = function (userId, db) {
   return db
-    .query(`SELECT * FROM users WHERE id = $1`, [userId])
+    .query(`SELECT users.first_name as firstName, users.last_name as lastName, users.email
+    FROM users WHERE id = $1`, [userId])
     .then((result) => {
       if (!result.rows.length) {
         return null;
@@ -302,32 +303,17 @@ const getRatingByUser = function(userId, resourceId, db) {
 //  Gets an all resources for a user
 //
 const getResourcesForUser = function(userId, db) {
-// new block
+
+  const queryString = `
   SELECT resources.*, resource_ratings.liked as like, resource_ratings.rating as rating, categories.category,
   AVG(resource_ratings.rating) as average_rating
   FROM resources
   JOIN resource_ratings ON resources.id = resource_ratings.resource_id
   JOIN resource_categories ON resources.id = resource_categories.resource_id
   JOIN categories ON resource_categories.category_id = categories.id
-  WHERE resource_ratings.user_id = 1
-  OR resources.creator_id = 1
-  GROUP BY resources.id, resource_ratings.liked, resource_ratings.rating, categories.category
-//
-  //then loop to iterate over each category
-//  db.query(queryString, [userId, category])
-
-  const queryString = `
-  SELECT resources.*,
-    (SELECT like FROM resource_ratings WHERE user_id = $1) as like,
-    (SELECT rating FROM resource_ratings WHERE user_id = $1) as rating,
-    AVG(resource_ratings.rating) as average_rating
-  FROM resources
-  JOIN resource_ratings ON resources.id = resource_ratings.resource_id
-  JOIN resource_categories ON resources.id = resource_categories.resource_id
-  JOIN categories ON resource_categories.category_id = categories.id
   WHERE resource_ratings.user_id = $1
   OR resources.creator_id = $1
-  GROUP BY categories.category
+  GROUP BY resources.id, resource_ratings.liked, resource_ratings.rating, categories.category;
   `;
 
   return db.query(queryString, [userId])
