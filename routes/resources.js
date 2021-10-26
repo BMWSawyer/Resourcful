@@ -3,7 +3,7 @@
  */
 
 const express = require('express');
-const router  = express.Router();
+const router = express.Router();
 const {
   addResource,
   getIndividualResource,
@@ -40,7 +40,7 @@ module.exports = (db) => {
     addResource(resource, db)
       .then(resource => {
         if (!resource) {
-          res.send({error: "error"});
+          res.send({ error: "error" });
           return;
         }
         // req.session.user_id = user.id;
@@ -52,24 +52,31 @@ module.exports = (db) => {
   // My resources route
   router.get('/my-resources', (req, res) => {
     const userId = req.session.user_id;
-    const user = getUserWithId(userId, db);
+    let user;
 
-    user = Object.fromEntries(
-      Object.entries(user)
-        .map(i => [camelCase(i[0]), i[1]]));
-
-    getResourcesForUser(userId, db)
+    getUserWithId(userId, db)
+      .then((userObj) => {
+        user = Object.fromEntries(
+          Object.entries(userObj)
+            .map(i => [camelCase(i[0]), i[1]]));
+        return;
+      })
+      .then(() => {
+        console.log(getResourcesForUser(userId, db)); //this function not working
+        return getResourcesForUser(userId, db)
+      })
       .then(resource => {
+        console.log(resource); //here is where it breaks
 
         if (!resource) {
-          res.send({error: "error"});
+          res.send({ error: "error" });
           return;
         }
 
         console.log(user);
         console.log(resource);
 
-        res.render("my-resources", {user: user, resource: resource});
+        res.render("my-resources", { user: user, resource: resource });
       })
       .catch(error => res.send(error));
   });
@@ -92,7 +99,7 @@ module.exports = (db) => {
       .then(resource => {
 
         if (!resource) {
-          res.send({error: "error"});
+          res.send({ error: "error" });
           return;
         }
 
@@ -104,7 +111,7 @@ module.exports = (db) => {
         console.log(resource);
         console.log(comments);
 
-        res.render("resources", {user: user, resource: resource});
+        res.render("resources", { user: user, resource: resource });
       })
       .catch(error => res.send(error));
   });
@@ -115,11 +122,11 @@ module.exports = (db) => {
     getAllResources(db)
       .then(resources => {
         if (!resources) {
-          res.send({error: "error"});
+          res.send({ error: "error" });
           return;
         }
 
-        res.render("search", {resources: resources});
+        res.render("search", { resources: resources });
       })
       .catch(error => {
         res.send(error);
@@ -140,7 +147,7 @@ module.exports = (db) => {
     searchResources(topic, db)
       .then(resources => {
         if (!resources) {
-          res.send({error: "error"});
+          res.send({ error: "error" });
           return;
         }
 
@@ -160,7 +167,7 @@ module.exports = (db) => {
     likingAResource(userId, resourceId, db)
       .then(data => {
         if (!data) {
-          res.send({error: "error"});
+          res.send({ error: "error" });
           return;
         }
 
@@ -178,7 +185,7 @@ module.exports = (db) => {
     rateAResource(userId, resourceId, rating, db)
       .then(data => {
         if (!data) {
-          res.send({error: "error"});
+          res.send({ error: "error" });
           return;
         }
 
@@ -204,7 +211,7 @@ module.exports = (db) => {
     addComment(comment, db)
       .then(comment => {
         if (!comment) {
-          res.send({error: "error"});
+          res.send({ error: "error" });
           return;
         }
 

@@ -302,6 +302,12 @@ const getRatingByUser = function(userId, resourceId, db) {
 //  Gets an all resources for a user
 //
 const getResourcesForUser = function(userId, db) {
+
+  //   db.query(`SELECT category FROM categories;`)
+
+  //then loop to iterate over each category
+//  db.query(queryString, [userId, category])
+
   const queryString = `
   SELECT resources.*,
     (SELECT like FROM resource_ratings WHERE user_id = $1) as like,
