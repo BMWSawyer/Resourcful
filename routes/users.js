@@ -5,11 +5,14 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
-const { addUser, getUserWithId, getUserWithEmail, updateUser } = require('../database');
+const {
+  addUser,
+  getUserWithId,
+  getUserWithEmail,
+  updateUser,
+  camelCase
+} = require('../database');
 
-const camelCase = (str) => {
-  return str.replace(/(_\w)/g, (k) => k[1].toUpperCase());
-};
 
 module.exports = (db) => {
 

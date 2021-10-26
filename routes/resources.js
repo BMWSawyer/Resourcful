@@ -11,7 +11,12 @@ const {
   likingAResource,
   rateAResource,
   addComment,
-  getCommentsByResource
+  getCommentsByResource,
+  camelCase,
+  getAverageRatingByResource,
+  getRatingByUser,
+  getUserWithId,
+  getResourcesForUser
 } = require('../database');
 
 module.exports = (db) => {
@@ -39,45 +44,67 @@ module.exports = (db) => {
           return;
         }
         // req.session.user_id = user.id;
-        res.sned({ resource });
+        res.send({ resource });
       })
       .catch(error => res.send(error));
   });
 
-  // My resources route  /// NEEDS WORK
+  // My resources route
   router.get('/my-resources', (req, res) => {
     const userId = req.session.user_id;
+    const user = getUserWithId(userId, db);
 
-    //login(email, password)
-      // .then(user => {
-      //   if (!user) {
-      //     res.send({error: "error"});
-      //     return;
-      //   }
-      //   req.session.user_id = user.id;
-      //   res.render("/my-resources", resources)
-      // })
-      // .catch(error => res.send(error));
-  });
+    user = Object.fromEntries(
+      Object.entries(user)
+        .map(i => [camelCase(i[0]), i[1]]));
 
-  // View individual resource route
-  router.get('/:resourceId', (req, res) => {
-
-    const resourceId = req.params.resourceId;
-    const comments = getCommentsByResource(resourceId, db);
-
-    getIndividualResource(resourceId, db)
+    getResourcesForUser(userId, db)
       .then(resource => {
-        console.log(resource);
 
         if (!resource) {
           res.send({error: "error"});
           return;
         }
 
+        console.log(user);
+        console.log(resource);
+
+        res.render("my-resources", {user: user, resource: resource});
+      })
+      .catch(error => res.send(error));
+  });
+
+  // View individual resource route
+  router.get('/:resourceId', (req, res) => {
+    const userId = req.session.user_id;
+    const user = getUserWithId(userId, db);
+    const resourceId = req.params.resourceId;
+    const comments = getCommentsByResource(resourceId, db);
+    const averageRating = getAverageRatingByResource(resourceId, db);
+    const resourceRating = getRatingByUser(userId, resourceId, db);
+
+
+    user = Object.fromEntries(
+      Object.entries(user)
+        .map(i => [camelCase(i[0]), i[1]]));
+
+    getIndividualResource(resourceId, db)
+      .then(resource => {
+
+        if (!resource) {
+          res.send({error: "error"});
+          return;
+        }
+
+        resource['resourceRating'] = resourceRating;
+        resource['averageRating'] = averageRating;
+        resource['comments'] = comments;
+
+        console.log(user);
+        console.log(resource);
         console.log(comments);
 
-        res.render("resources", {resource: resource, comments: comments});
+        res.render("resources", {user: user, resource: resource});
       })
       .catch(error => res.send(error));
   });
@@ -92,7 +119,7 @@ module.exports = (db) => {
           return;
         }
 
-        res.render("search");
+        res.render("search", {resources: resources});
       })
       .catch(error => {
         res.send(error);
@@ -100,13 +127,25 @@ module.exports = (db) => {
   });
 
   router.get('/search/:query', (req, res) => {
+    const userId = req.session.user_id;
+    const user = getUserWithId(userId, db);
     const topic = req.params.query;
+    const averageRating = getAverageRatingByResource(resourceId, db);
+    const resourceRating = getRatingByUser(userId, resourceId, db);
+
+    user = Object.fromEntries(
+      Object.entries(user)
+        .map(i => [camelCase(i[0]), i[1]]));
+
     searchResources(topic, db)
       .then(resources => {
         if (!resources) {
           res.send({error: "error"});
           return;
         }
+
+        resources['resourceRating'] = resourceRating;
+        resources['averageRating'] = averageRating;
 
         res.send(resources);
       })
@@ -117,6 +156,7 @@ module.exports = (db) => {
   router.post('/like/:resourceId', (req, res) => {
     const userId = req.session.user_id;
     const resourceId = req.params.resourceId;
+
     likingAResource(userId, resourceId, db)
       .then(data => {
         if (!data) {
@@ -167,8 +207,8 @@ module.exports = (db) => {
           res.send({error: "error"});
           return;
         }
-        // req.session.user_id = user.id;
-        res.send({ comment });
+
+        res.send(comment);
       })
       .catch(error => res.send(error));
   });

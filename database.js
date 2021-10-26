@@ -1,8 +1,3 @@
-//
-// NEED TO ADD A FUNCTION TO GET ALL RESOURCES A USER HAS LIKED!!
-// NEED TO ADD A FUNCTION TO GET ALL RESOURCES A USER HAS CREATED!!
-//
-
 /**
  * Get a single user from the database given their email.
  * @param {String} email The email of the user.
@@ -154,38 +149,35 @@ const updateUser = function(userData, userId, db) {
 }
 
 //
-//  Deletes an existing resource
+//  Deletes an existing resource -- THIS IS A STRETCH GOAL
 //
-const deleteResource = function(resourceId, db) {
-  const queryParams = [resourceId];
-  const queryString = `DELETE FROM resources WHERE id = $1`;
+// const deleteResource = function(resourceId, db) {
+//   const queryParams = [resourceId];
+//   const queryString = `DELETE FROM resources WHERE id = $1`;
 
-  return db.query(queryString, queryParams)
-  .then(() => console.log("Successfully deleted!"))
-  .catch((error) => console.error(error));
-}
+//   return db.query(queryString, queryParams)
+//   .then(() => console.log("Successfully deleted!"))
+//   .catch((error) => console.error(error));
+// }
 
 //
 //  Gets an individual resource
 //
 const getIndividualResource = function(resourceId, db) {
   const queryString = `SELECT * FROM resources WHERE id = $1`;
+
   return db.query(queryString, [resourceId])
   .then(res => res.rows[0]);
 }
 
 /*
- *  Gets ratings by resource
+ *  Gets average rating by resource
  */
-const getRatingsByResource = function(resourceId, db) {
-  const queryString = `
-    SELECT id, resource_id, AVG(rating), COUNT(like)
-    FROM resource_ratings
-    WHERE resource_id = $1;
-  `;
+const getAverageRatingByResource = function(resourceId, db) {
+  const queryString = `SELECT AVG(rating) FROM resource_ratings WHERE resource_id = $1`;
 
   const queryParams = [resourceId];
-  return db.query(queryString, queryParams).then(res => res.rows)
+  return db.query(queryString, queryParams).then(res => res.rows[0]);
 }
 
 //
@@ -201,7 +193,7 @@ const addComment = function (comment, db) {
 
   const queryParams = [comment.userId, comment.resourceId, comment.text];
 
-  return db.query(queryString, queryParams).then(res => res.rows);
+  return db.query(queryString, queryParams).then(res => res.rows[0]);
 }
 
 //
@@ -275,12 +267,57 @@ const searchResources = function (topic, db) {
     FROM resources
     JOIN resource_categories ON resource_id = resources.id
     JOIN categories ON categories.id = resource_categories.category_id
-    WHERE categories.category LIKE (%$1%);
+    WHERE resources.title LIKE (%$1%)
+    OR categories.category LIKE (%$1%)
   `;
 
   const queryParams = [topic];
 
   return db.query(queryString, queryParams).then(res => res.rows);
+}
+
+//
+//  Change to camel case
+//
+const camelCase = (str) => {
+  return str.replace(/(_\w)/g, (k) => k[1].toUpperCase());
+};
+
+//
+//  Gets an individual resource rating by a user
+//
+const getRatingByUser = function(userId, resourceId, db) {
+  const queryString = `
+  SELECT like, rating
+  FROM resource_ratings
+  WHERE user_id = $1
+  AND resource_id = $2
+  `;
+
+  return db.query(queryString, [userId, resourceId])
+  .then(res => res.rows[0]);
+}
+
+//
+//  Gets an all resources for a user
+//
+const getResourcesForUser = function(userId, db) {
+  const queryString = `
+  SELECT resources.*,
+    (SELECT like FROM resource_ratings WHERE user_id = $1) as like,
+    (SELECT rating FROM resource_ratings WHERE user_id = $1) as rating,
+    AVG(resource_ratings.rating) as average_rating
+  FROM resources
+  JOIN resource_ratings ON resources.id = resource_ratings.resource_id
+  JOIN resource_categories ON resources.id = resource_categories.resource_id
+  JOIN categories ON resource_categories.category_id = categories.id
+  WHERE resource_ratings.user_id = $1
+  OR resources.creator_id = $1
+  GROUP BY categories.category
+  `;
+
+  return db.query(queryString, [userId])
+  .then(res => res.rows);
 }
 
 module.exports = {
@@ -290,12 +327,14 @@ module.exports = {
   getAllResources,
   addResource,
   updateUser,
-  deleteResource,
   getIndividualResource,
-  getRatingsByResource,
+  getAverageRatingByResource,
   addComment,
   getCommentsByResource,
   likingAResource,
   rateAResource,
-  searchResources
+  searchResources,
+  camelCase,
+  getRatingByUser,
+  getResourcesForUser
 };
