@@ -154,7 +154,7 @@ module.exports = (db) => {
         resources['resourceRating'] = resourceRating;
         resources['averageRating'] = averageRating;
 
-        res.send(resources);
+        res.render("search", {resources: resources});
       })
       .catch(error => res.send(error));
   });
