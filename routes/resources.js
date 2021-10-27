@@ -115,8 +115,15 @@ module.exports = (db) => {
             res.send({ error: "error no resources found" });
             return;
           }
-
-          res.render("search", {user, resources: resources});
+          console.log(resources);
+          res.render("search", {
+            user: {
+              'userId': userId,
+              'firstName': user.firstname,
+              'lastName': user.lastname,
+            },
+            resources: resources
+          });
         })
         .catch(error => res.send(error + "this page won't load******"));
 

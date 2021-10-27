@@ -20,13 +20,13 @@
                 <div class="image">
 
                   <div class="overlay">
-                    <a href="<%= resource.resourceUrl %>"><i
+                    <a href="<%= resource.resource_url %>"><i
                         class="bi bi-arrow-up-right-square-fill go-to-url-wall"></i></a>
                     <%- (resource.like===true) ? "<i class='bi bi-heart-fill is-favourite'></i>"
                       : "<i class='bi bi-heart is-favourite'></i>" %>
                   </div>
 
-                  <img class="resourceImg" src="<%= resource.photoUrl %>">
+                  <img class="resourceImg" src="<%= resource.photo_url %>">
                 </div>
                 <div class='resInfo'>
                   <div>
@@ -36,7 +36,7 @@
 
                     <!-- Check if the user has rated a resource and use that, otherwise default to the average rating -->
                     <% let rating=resource.rating ? resource.rating :
-                      resource.averageRating; %>
+                      resource.avg_rating; %>
 
                       <% for (let i=0; i < 5; i++) { %>
                         <i class="bi
