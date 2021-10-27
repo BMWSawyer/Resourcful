@@ -16,7 +16,10 @@ const {
   getAverageRatingByResource,
   getRatingByUser,
   getUserWithId,
-  getResourcesForUser
+  getResourcesForUser,
+  getResourceCategory,
+  updateResource,
+  getResourceCategoryByName
 } = require('../database');
 
 module.exports = (db) => {
@@ -114,14 +117,16 @@ module.exports = (db) => {
       getIndividualResource(resourceId, db),
       getCommentsByResource(resourceId, db),
       getAverageRatingByResource(resourceId, db),
-      getRatingByUser(userId, resourceId, db)
+      getRatingByUser(userId, resourceId, db),
+      getResourceCategory(resourceId, db)
     ])
-      .then(([user, resource, comments, averageRating, resourceRating]) => {
+      .then(([user, resource, comments, averageRating, resourceRating, category]) => {
         resource.comments = comments;
         console.log(resource.comments[0]);
         resource.averageRating = parseFloat(averageRating.avg).toFixed(1);
         console.log(averageRating);
         resource.resourceRating = resourceRating;
+        resource.category = category.category;
         console.log({ user, resource });
         res.render("resources", { user, resource });
       })
@@ -150,8 +155,8 @@ module.exports = (db) => {
     const userId = req.session.user_id;
     const user = getUserWithId(userId, db);
     const topic = req.params.query;
-   // const averageRating = getAverageRatingByResource(resourceId, db); // THIS NEEDS TO BE FIXED - NO RESOURCE ID
-   // const resourceRating = getRatingByUser(userId, resourceId, db); // THIS NEEDS TO BE FIXED - NO RESOURCE ID
+    // const averageRating = getAverageRatingByResource(resourceId, db); // THIS NEEDS TO BE FIXED - NO RESOURCE ID
+    // const resourceRating = getRatingByUser(userId, resourceId, db); // THIS NEEDS TO BE FIXED - NO RESOURCE ID
 
 
     searchResources(topic, db)
@@ -164,11 +169,13 @@ module.exports = (db) => {
         resources['resourceRating'] = resourceRating;
         resources['averageRating'] = averageRating;
 
-        res.render("search", { user: {
-          'userId': userId,
-          'firstName': user.firstname,
-          'lastName': user.lastname,
-        }, resources: resources});
+        res.render("search", {
+          user: {
+            'userId': userId,
+            'firstName': user.firstname,
+            'lastName': user.lastname,
+          }, resources: resources
+        });
       })
       .catch(error => res.send(error));
   });
@@ -219,7 +226,7 @@ module.exports = (db) => {
       userId,
       text
     };
-console.log(comment);
+
     addComment(comment, db)
       .then(comment => {
         if (!comment) {
@@ -233,21 +240,49 @@ console.log(comment);
   });
 
   // Update a resource route -- This is a stretch if we get to it
-  /*
-  router.post('/update', (req, res) => {
-    const {email, password} = req.body;
-    login(email, password)
-      .then(user => {
-        if (!user) {
-          res.send({error: "error"});
+
+  router.post('/update/:resourceId', (req, res) => {
+    const resourceId = req.params.resourceId;
+    const userId = req.session.user_id;
+
+    const title = req.body.title;
+    const category = req.body.category;
+    const description = req.body.description;
+    const rating = req.body.rating;
+    const url = req.body.url;
+
+    const resource = {
+      title,
+      category,
+      description,
+      rating,
+      url
+    };
+
+    Promise.all([
+      updateResource(resource, resourceId, db),
+      getResourceCategoryByName(resource.category, db),
+      rateAResource(userId, resourceId, resource.rating, db)
+    ])
+      .then(([resource, category, rating]) => {
+
+        if (!resource) {
+          res.send({ error: "error with resource" });
           return;
         }
-        req.session.user_id = user.id;
-        res.render("/my-resources", resources)
+        if (!category) {
+          res.send({ error: "this category doesn't exist" });
+          return;
+        }
+        if (!rating) {
+          res.send({ error: "rating failed" });
+          return;
+        }
+        res.redirect(`/api/resources/${resourceId}`);
       })
       .catch(error => res.send(error));
   });
-  */
+
 
   return router;
 };

@@ -23,7 +23,7 @@
 
                 <!-- toggles the liked heart -->
                 <i id = "likeHeartButton" class='bi
-                  <%- (resource.resourceRating.like === true) ? " bi-heart-fill" : "bi-heart" %>'>
+                  <%- (resource.resourceRating ? resource.resourceRating.like === true : false) ? " bi-heart-fill" : "bi-heart" %>'>
                   </i>
 
               </div>
@@ -50,7 +50,7 @@
           <div class="col-7 myResForm">
 
             <!-- View Only Resource -->
-            <% if((resource.id) && ((typeof user === "undefined" ) || (resource.creatorId !== user.id))){ %>
+            <% if((resource.id) && ((typeof user === "undefined" ) || (resource.creator_id !== user.id))){ %>
               <!-- Add to line above OR if the user is not the owner -->
               <div class="view-only-resource">
                 <div class="mb-3">
@@ -85,31 +85,31 @@
 
                 <!-- Display the edit resource view for resource owner -->
                 <!-- Add/update URL form -->
-                <form class="myResourceForm">
+                <form class="myResourceForm" action="/api/resources/update/<%= resource.id %>" method="POST">
                   <div class="mb-3">
                     <label for="formTitleInput" class="form-label">Title</label>
-                    <input type="text" class="form-control" id="formTitleInput" value="<%= resource.title %>">
+                    <input type="text" class="form-control" name="title" id="formTitleInput" value="<%= resource.title %>">
                   </div>
                   <div class="mb-3">
                     <label for="formTopicInput" class="form-label">Topic</label>
-                    <input type="text" class="form-control" id="formTopicInput" value="<%= resource.topic %>">
+                    <input type="text" class="form-control" name="category" id="formTopicInput" value="<%= resource.category %>">
                   </div>
                   <div class="mb-3">
                     <label for="formDescInput" class="form-label">Description</label>
-                    <input type="text" class="form-control" id="formDescInput"
+                    <input type="text" class="form-control" name="description" id="formDescInput"
                     value="<%= resource.description %>">
                   </div>
 
                   <div class="mb-2 rating-input hstack gap-3">
                     <label for="my-resource-rating" class="form-label">Resource Rating</label>
-                    <input type="number" id="my-resource-rating" min="1" max="5"
-                      value="<%= resource.resourceRating.rating %>">
+                    <input type="number" name="rating" id="my-resource-rating" min="1" max="5"
+                      value="<%= resource.resourceRating ? resource.resourceRating.rating : "" %>">
                   </div>
 
                   <div class="mb-2 url-input hstack gap-3">
-                    <input type="text" class="form-control" id="formURLInput" value="<%= resource.resourceUrl %>">
+                    <input type="text" class="form-control" name="url" id="formURLInput" value="<%= resource.resource_url %>">
                     <span class="url-input-btn">
-                      <a href="<%= resource.resourceUrl %>"><i
+                      <a href="<%= resource.resource_url %>"><i
                           class="my-resource-url-arrow bi bi-arrow-up-right-square-fill" type="button"></i></a>
                     </span>
                   </div>
