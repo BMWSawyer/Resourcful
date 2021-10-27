@@ -202,11 +202,10 @@ const addComment = function (comment, db) {
 //
 const getCommentsByResource = function (resourceId, db) {
   const queryString = `
-  SELECT comments.id, comments.comment, comments.date, users.first_name, users.last_name
+  SELECT comments.id, comments.comment, users.first_name, users.last_name
   FROM comments
   JOIN users ON users.id = user_id
-  WHERE resource_id = $1
-  ORDER BY comments.date;
+  WHERE resource_id = $1;
 `;
 
 const queryParams = [resourceId];
@@ -289,7 +288,7 @@ const camelCase = (str) => {
 //
 const getRatingByUser = function(userId, resourceId, db) {
   const queryString = `
-  SELECT like, rating
+  SELECT liked, rating
   FROM resource_ratings
   WHERE user_id = $1
   AND resource_id = $2

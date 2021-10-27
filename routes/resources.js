@@ -91,50 +91,40 @@ module.exports = (db) => {
         console.log("---")
         console.log(topics);
 
-        res.render("my-resources", { user: {
-          'userId': userId,
-          'firstName': user.firstname,
-          'lastName': user.lastname,
-        },
-        topics: topics});
+        res.render("my-resources", {
+          user: {
+            'userId': userId,
+            'firstName': user.firstname,
+            'lastName': user.lastname,
+          },
+          topics: topics
+        });
       })
       .catch(error => res.send(error));
-    });
+  });
 
 
   // View individual resource route
   router.get('/:resourceId', (req, res) => {
     const userId = req.session.user_id;
-    const user = getUserWithId(userId, db);
     const resourceId = req.params.resourceId;
-    const comments = getCommentsByResource(resourceId, db);
-    const averageRating = getAverageRatingByResource(resourceId, db);
-    const resourceRating = getRatingByUser(userId, resourceId, db);
 
-
-    user = Object.fromEntries(
-      Object.entries(user)
-        .map(i => [camelCase(i[0]), i[1]]));
-
-    getIndividualResource(resourceId, db)
-      .then(resource => {
-
-        if (!resource) {
-          res.send({ error: "error" });
-          return;
-        }
-
-        resource['resourceRating'] = resourceRating;
-        resource['averageRating'] = averageRating;
-        resource['comments'] = comments;
-
-        console.log(user);
-        console.log(resource);
-        console.log(comments);
-
-        res.render("resources", { user: user, resource: resource });
+    Promise.all([
+      getUserWithId(userId, db),
+      getIndividualResource(resourceId, db),
+      getCommentsByResource(resourceId, db),
+      getAverageRatingByResource(resourceId, db),
+      getRatingByUser(userId, resourceId, db)
+    ])
+      .then(([user, resource, comments, averageRating, resourceRating]) => {
+        resource.comments = comments;
+        resource.averageRating = averageRating;
+        resource.resourceRating = resourceRating;
+        console.log({ user, resource });
+        res.render("resources", { user, resource });
       })
       .catch(error => res.send(error));
+
   });
 
   // Search resources route

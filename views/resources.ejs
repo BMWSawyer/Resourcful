@@ -41,7 +41,7 @@
                     <!-- If there are ratings display average rating -->
                     <%if(resource.averageRating) {%>
                       <div class="ratingTotal">
-                        <%= resource.averageRating %> / 5
+                        <%= Math.round(resource.averageRating.avg) %> / 5
                       </div>
                       <%} %>
                 </div>
