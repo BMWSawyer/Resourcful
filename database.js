@@ -67,15 +67,17 @@ const addUser = function (user, db) {
 const getAllResources = function (userId, db, limit = 10) {
   const queryParams = [];
 
-  //this isn't working yet
-
   let queryString = `
-    SELECT DISTINCT resources.*, resource_ratings.liked as like, resource_ratings.rating as rating,
-    AVG(resource_ratings.rating) as average_rating
-    FROM resources
-    LEFT OUTER JOIN resource_ratings ON resources.id = resource_ratings.resource_id
-    WHERE resource_ratings.user_id = 1
-    GROUP BY resources.id, resource_ratings.liked, resource_ratings.rating`;
+    SELECT r.*, rr.liked AS like, rr.rating AS rating, ar.avg_rating
+    FROM
+      resources r
+    LEFT JOIN
+      (SELECT * FROM resource_ratings rr2 WHERE rr2.user_id = $1) rr
+    ON rr.resource_id = r.id
+    JOIN
+      (SELECT resource_id, avg(rating) AS avg_rating FROM resource_ratings GROUP BY resource_id) ar
+    ON ar.resource_id = r.id
+    `;
   // queryParams.push(limit);
   // queryString += `
   //     LIMIT $${queryParams.length};
@@ -336,17 +338,8 @@ const rateAResource = function (userId, resourceId, rating, db) {
   const queryString1 = `
   INSERT INTO resource_ratings (user_id, resource_id, rating)
   VALUES ($1, $2, $3)
-  WHERE NOT EXISTS
-  (SELECT resource_ratings.id FROM resource_ratings
-  WHERE resource_ratings.user_id = $1 AND resource_ratings.resource_id = $2)
-  RETURNING *`
-
-  const queryString2 = `
-    UPDATE resource_ratings SET
-    resource_ratings.rating = $3
-    WHERE  resource_ratings.user_id = $1 AND resource_ratings.resource_id = $2
-    RETURNING *;
-  `;
+  ON CONFLICT (user_id, resource_id, rating)
+  DO UPDATE SET rating = $3 WHERE resource_ratings.user_id = $1 and resource_ratings.resource_id = $2`;
 
   // DO
   // BEGIN

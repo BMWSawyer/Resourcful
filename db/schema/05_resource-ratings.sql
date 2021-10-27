@@ -7,3 +7,5 @@ CREATE TABLE resource_ratings (
   rating SMALLINT NOT NULL DEFAULT 0,
   liked BOOLEAN NOT NULL DEFAULT FALSE
 );
+
+CREATE UNIQUE INDEX resource_ratings_user_id_resource_id_rating ON resource_ratings (user_id, resource_id, rating);
