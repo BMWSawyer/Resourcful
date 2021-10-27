@@ -12,7 +12,6 @@ const {
   rateAResource,
   addComment,
   getCommentsByResource,
-  camelCase,
   getAverageRatingByResource,
   getRatingByUser,
   getUserWithId,
@@ -46,8 +45,8 @@ module.exports = (db) => {
           res.send({ error: "error" });
           return;
         }
-        // req.session.user_id = user.id;
-        res.send({ resource });
+
+        res.render("my-resources", { resource }); // -- NEED TO UPDATE THIS WITH INDIVDUAL RESOURCE PAGE
       })
       .catch(error => res.send(error));
   });
@@ -94,14 +93,7 @@ module.exports = (db) => {
         console.log("---")
         console.log(topics);
 
-        res.render("my-resources", {
-          user: {
-            'userId': userId,
-            'firstName': user.firstname,
-            'lastName': user.lastname,
-          },
-          topics: topics
-        });
+        res.render("my-resources", {user, topics: topics});
       })
       .catch(error => res.send(error));
   });
