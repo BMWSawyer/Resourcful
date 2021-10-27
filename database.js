@@ -68,23 +68,20 @@ const getAllResources = function (db, limit = 10) {
   const queryParams = [];
 
   let queryString = `
-    SELECT *
+    SELECT DISTINCT ON (resources.id) resources.*, resource_ratings.liked as like, resource_ratings.rating as rating,
+    AVG(resource_ratings.rating) as average_rating
     FROM resources
-    `;
+    JOIN resource_ratings ON resources.id = resource_ratings.resource_id
+    GROUP BY resources.id, resource_ratings.liked, resource_ratings.rating`;
 
-  // if (category) {
-  //   queryParams.push(`%${category}%`);
-  //   queryString += `WHERE category = $${queryParams.length} `;
-  // }
-
-  queryParams.push(limit);
-  queryString += `
-    LIMIT $${queryParams.length};
-  `;
-
-  return db.query(queryString, queryParams)
-    .then((res) => res.rows);
-};
+  // queryParams.push(limit);
+  // queryString += `
+  //     LIMIT $${queryParams.length};
+  //   `;
+console.log(queryString);
+  return db.query(queryString, [userId])
+    .then(res => res.rows);
+}
 
 /**
  * Add a resource to the database
@@ -348,7 +345,7 @@ const rateAResource = function (userId, resourceId, rating, db) {
   const queryParams = [userId, resourceId, rating];
 
   return db.query(queryString, queryParams).then(res => res.rows);
-  }
+}
 
 //
 //  Searches all resources based on the topic

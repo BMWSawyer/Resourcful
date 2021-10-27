@@ -19,7 +19,8 @@ const {
   getResourcesForUser,
   getResourceCategory,
   updateResource,
-  getResourceCategoryByName
+  getResourceCategoryByName,
+  getAllResources
 } = require('../database');
 
 module.exports = (db) => {
@@ -136,15 +137,28 @@ module.exports = (db) => {
 
   // Search resources route
   router.get('/search', (req, res) => {
+    const userId = req.session.user_id;
 
-    getAllResources(db)
-      .then(resources => {
+    console.log('searching');
+
+    Promise.all([
+      getUserWithId(userId, db),
+      getAllResources(db)
+    ])
+      .then(([user, resources]) => {
         if (!resources) {
-          res.send({ error: "error" });
+          res.send({ error: "error no resources found" });
           return;
         }
 
-        res.render("search", { resources: resources });
+        res.render("search", {
+          user: {
+            'userId': userId,
+            'firstName': user.firstname,
+            'lastName': user.lastname,
+          },
+          resources: resources
+        });
       })
       .catch(error => {
         res.send(error);
