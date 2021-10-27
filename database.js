@@ -67,14 +67,15 @@ const addUser = function (user, db) {
 const getAllResources = function (userId, db, limit = 10) {
   const queryParams = [];
 
+  //this isn't working yet
+
   let queryString = `
-    SELECT DISTINCT ON (resources.id) resources.*, resource_ratings.liked as like, resource_ratings.rating as rating,
+    SELECT DISTINCT resources.*, resource_ratings.liked as like, resource_ratings.rating as rating,
     AVG(resource_ratings.rating) as average_rating
     FROM resources
-    JOIN resource_ratings ON resources.id = resource_ratings.resource_id
-    WHERE resource_ratings.user_id = $1
+    LEFT OUTER JOIN resource_ratings ON resources.id = resource_ratings.resource_id
+    WHERE resource_ratings.user_id = 1
     GROUP BY resources.id, resource_ratings.liked, resource_ratings.rating`;
-
   // queryParams.push(limit);
   // queryString += `
   //     LIMIT $${queryParams.length};
@@ -89,7 +90,7 @@ const getAllGuestResources = function (db, limit = 10) {
   const queryParams = [];
 
   let queryString = `
-    SELECT DISTINCT ON (resources.id) resources.*,  AVG(resource_ratings.rating) as average_rating
+    SELECT DISTINCT resources.*,  AVG(resource_ratings.rating) as average_rating
     FROM resources
     JOIN resource_ratings ON resources.id = resource_ratings.resource_id
     GROUP BY resources.id`;
