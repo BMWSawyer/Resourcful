@@ -13,7 +13,7 @@
 
           <div class="col col-lg-5 myResImg">
             <div class="bg-light border rounded-3 resourceSingle">
-              <img class="resourceImg" src="<%= resource.photoUrl ? resource.photoUrl : "/mockups/mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg" %>">
+              <img class="resourceImg" src="<%= resource.photo_url ? resource.photo_url : "/mockups/mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg" %>">
             </div>
 
             <!-- Only display the ability to like a resource if logged in -->
@@ -41,7 +41,7 @@
                     <!-- If there are ratings display average rating -->
                     <%if(resource.averageRating) {%>
                       <div class="ratingTotal">
-                        <%= Math.round(resource.averageRating.avg) %> / 5
+                        <%= resource.averageRating %> / 5
                       </div>
                       <%} %>
                 </div>

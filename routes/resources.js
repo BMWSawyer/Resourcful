@@ -118,7 +118,9 @@ module.exports = (db) => {
     ])
       .then(([user, resource, comments, averageRating, resourceRating]) => {
         resource.comments = comments;
-        resource.averageRating = averageRating;
+        console.log(resource.comments[0]);
+        resource.averageRating = parseFloat(averageRating.avg).toFixed(1);
+        console.log(averageRating);
         resource.resourceRating = resourceRating;
         console.log({ user, resource });
         res.render("resources", { user, resource });
@@ -207,19 +209,17 @@ module.exports = (db) => {
   });
 
   // Comment on a resource route
-  router.post('/comment/resourceId', (req, res) => {
+  router.post('/comment/:resourceId', (req, res) => {
     const resourceId = req.params.resourceId;
     const userId = req.session.user_id;
     const text = req.body.comment;
-    const date = Date.now();
 
     const comment = {
       resourceId,
       userId,
-      text,
-      date
+      text
     };
-
+console.log(comment);
     addComment(comment, db)
       .then(comment => {
         if (!comment) {
@@ -227,7 +227,7 @@ module.exports = (db) => {
           return;
         }
 
-        res.send(comment);
+        res.redirect(`/api/resources/${resourceId}`);
       })
       .catch(error => res.send(error));
   });

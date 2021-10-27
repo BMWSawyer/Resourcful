@@ -193,7 +193,6 @@ const addComment = function (comment, db) {
   `;
 
   const queryParams = [comment.userId, comment.resourceId, comment.text];
-
   return db.query(queryString, queryParams).then(res => res.rows[0]);
 }
 
@@ -202,10 +201,11 @@ const addComment = function (comment, db) {
 //
 const getCommentsByResource = function (resourceId, db) {
   const queryString = `
-  SELECT comments.id, comments.comment, users.first_name, users.last_name
+  SELECT comments.id, comments.comment, comments.comment_date as date, users.first_name, users.last_name
   FROM comments
   JOIN users ON users.id = user_id
-  WHERE resource_id = $1;
+  WHERE resource_id = $1
+  ORDER BY comments.comment_date DESC;
 `;
 
 const queryParams = [resourceId];
