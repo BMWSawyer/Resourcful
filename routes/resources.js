@@ -20,7 +20,8 @@ const {
   getResourceCategory,
   updateResource,
   getResourceCategoryByName,
-  getAllResources
+  getAllResources,
+  getAllGuestResources
 } = require('../database');
 
 module.exports = (db) => {
@@ -107,62 +108,44 @@ module.exports = (db) => {
       .catch(error => res.send(error));
   });
 
-
-  // View individual resource route
-  router.get('/:resourceId', (req, res) => {
-    const userId = req.session.user_id;
-    const resourceId = req.params.resourceId;
-
-    Promise.all([
-      getUserWithId(userId, db),
-      getIndividualResource(resourceId, db),
-      getCommentsByResource(resourceId, db),
-      getAverageRatingByResource(resourceId, db),
-      getRatingByUser(userId, resourceId, db),
-      getResourceCategory(resourceId, db)
-    ])
-      .then(([user, resource, comments, averageRating, resourceRating, category]) => {
-        resource.comments = comments;
-        console.log(resource.comments[0]);
-        resource.averageRating = parseFloat(averageRating.avg).toFixed(1);
-        console.log(averageRating);
-        resource.resourceRating = resourceRating;
-        resource.category = category.category;
-        console.log({ user, resource });
-        res.render("resources", { user, resource });
-      })
-      .catch(error => res.send(error));
-
-  });
-
   // Search resources route
   router.get('/search', (req, res) => {
     const userId = req.session.user_id;
 
-    console.log('searching');
+    //issue of logged in versus not logged in. If there is no user and it expects one the call break
+    if (userId) {
+      Promise.all([
+        getUserWithId(userId, db),
+        getAllResources(userId, db)
+      ])
+        .then(([user, resources]) => {
+          if (!resources) {
+            res.send({ error: "error no resources found" });
+            return;
+          }
+          res.render("search", {
+            user: {
+              'userId': userId,
+              'firstName': user.firstname,
+              'lastName': user.lastname,
+            },
+            resources: resources
+          });
+        })
+        .catch(error => res.send(error + "this page won't load******"));
 
-    Promise.all([
-      getUserWithId(userId, db),
-      getAllResources(db)
-    ])
-      .then(([user, resources]) => {
-        if (!resources) {
-          res.send({ error: "error no resources found" });
-          return;
-        }
+    } else {
 
-        res.render("search", {
-          user: {
-            'userId': userId,
-            'firstName': user.firstname,
-            'lastName': user.lastname,
-          },
-          resources: resources
-        });
-      })
-      .catch(error => {
-        res.send(error);
-      });
+      getAllGuestResources(db)
+        .then((resources) => {
+          if (!resources) {
+            res.send({ error: "error no resources found" });
+            return;
+          }
+          res.render("search", { resources: resources });
+        })
+        .catch(error => res.send(error + "this page won't load******"));
+    }
   });
 
   router.get('/search/:query', (req, res) => {
@@ -192,6 +175,33 @@ module.exports = (db) => {
         });
       })
       .catch(error => res.send(error));
+  });
+
+  // View individual resource route
+  router.get('/:resourceId', (req, res) => {
+    const userId = req.session.user_id;
+    const resourceId = req.params.resourceId;
+
+    Promise.all([
+      getUserWithId(userId, db),
+      getIndividualResource(resourceId, db),
+      getCommentsByResource(resourceId, db),
+      getAverageRatingByResource(resourceId, db),
+      getRatingByUser(userId, resourceId, db),
+      getResourceCategory(resourceId, db)
+    ])
+      .then(([user, resource, comments, averageRating, resourceRating, category]) => {
+        resource.comments = comments;
+        console.log(resource.comments[0]);
+        resource.averageRating = parseFloat(averageRating.avg).toFixed(1);
+        console.log(averageRating);
+        resource.resourceRating = resourceRating;
+        resource.category = category.category;
+        console.log({ user, resource });
+        res.render("resources", { user, resource });
+      })
+      .catch(error => res.send(error));
+
   });
 
   // Like a resource route

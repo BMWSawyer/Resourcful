@@ -64,7 +64,7 @@ const addUser = function (user, db) {
  * @param {*} limit The number of results to return.
  * @return {Promise<[{}]>}  A promise to the resources.
  */
-const getAllResources = function (db, limit = 10) {
+const getAllResources = function (userId, db, limit = 10) {
   const queryParams = [];
 
   let queryString = `
@@ -72,15 +72,21 @@ const getAllResources = function (db, limit = 10) {
     AVG(resource_ratings.rating) as average_rating
     FROM resources
     JOIN resource_ratings ON resources.id = resource_ratings.resource_id
+    WHERE resource_ratings.user_id = $1
     GROUP BY resources.id, resource_ratings.liked, resource_ratings.rating`;
 
   // queryParams.push(limit);
   // queryString += `
   //     LIMIT $${queryParams.length};
   //   `;
+
 console.log(queryString);
   return db.query(queryString, [userId])
     .then(res => res.rows);
+}
+
+const getAllGuestResources = function (db, limit = 10) {
+
 }
 
 /**
@@ -428,5 +434,6 @@ module.exports = {
   getResourcesForUser,
   getResourceCategory,
   updateResource,
-  getResourceCategoryByName
+  getResourceCategoryByName,
+  getAllGuestResources
 };
