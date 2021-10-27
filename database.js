@@ -80,13 +80,28 @@ const getAllResources = function (userId, db, limit = 10) {
   //     LIMIT $${queryParams.length};
   //   `;
 
-console.log(queryString);
+  console.log(queryString);
   return db.query(queryString, [userId])
     .then(res => res.rows);
 }
 
 const getAllGuestResources = function (db, limit = 10) {
+  const queryParams = [];
 
+  let queryString = `
+    SELECT DISTINCT ON (resources.id) resources.*,  AVG(resource_ratings.rating) as average_rating
+    FROM resources
+    JOIN resource_ratings ON resources.id = resource_ratings.resource_id
+    GROUP BY resources.id`;
+
+  // queryParams.push(limit);
+  // queryString += `
+  //     LIMIT $${queryParams.length};
+  //   `;
+
+  console.log(queryString);
+  return db.query(queryString)
+    .then(res => res.rows);
 }
 
 /**
