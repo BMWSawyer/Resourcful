@@ -64,27 +64,46 @@ const addUser = function (user, db) {
  * @param {*} limit The number of results to return.
  * @return {Promise<[{}]>}  A promise to the resources.
  */
-const getAllResources = function (db, limit = 10) {
+const getAllResources = function (userId, db, limit = 10) {
+  const queryParams = [];
+
+  //this isn't working yet
+
+  let queryString = `
+    SELECT DISTINCT resources.*, resource_ratings.liked as like, resource_ratings.rating as rating,
+    AVG(resource_ratings.rating) as average_rating
+    FROM resources
+    LEFT OUTER JOIN resource_ratings ON resources.id = resource_ratings.resource_id
+    WHERE resource_ratings.user_id = 1
+    GROUP BY resources.id, resource_ratings.liked, resource_ratings.rating`;
+  // queryParams.push(limit);
+  // queryString += `
+  //     LIMIT $${queryParams.length};
+  //   `;
+
+  console.log(queryString);
+  return db.query(queryString, [userId])
+    .then(res => res.rows);
+}
+
+const getAllGuestResources = function (db, limit = 10) {
   const queryParams = [];
 
   let queryString = `
-    SELECT *
+    SELECT DISTINCT resources.*,  AVG(resource_ratings.rating) as average_rating
     FROM resources
-    `;
+    JOIN resource_ratings ON resources.id = resource_ratings.resource_id
+    GROUP BY resources.id`;
 
-  // if (category) {
-  //   queryParams.push(`%${category}%`);
-  //   queryString += `WHERE category = $${queryParams.length} `;
-  // }
+  // queryParams.push(limit);
+  // queryString += `
+  //     LIMIT $${queryParams.length};
+  //   `;
 
-  queryParams.push(limit);
-  queryString += `
-    LIMIT $${queryParams.length};
-  `;
-
-  return db.query(queryString, queryParams)
-    .then((res) => res.rows);
-};
+  console.log(queryString);
+  return db.query(queryString)
+    .then(res => res.rows);
+}
 
 /**
  * Add a resource to the database
@@ -348,7 +367,7 @@ const rateAResource = function (userId, resourceId, rating, db) {
   const queryParams = [userId, resourceId, rating];
 
   return db.query(queryString, queryParams).then(res => res.rows);
-  }
+}
 
 //
 //  Searches all resources based on the topic
@@ -431,5 +450,6 @@ module.exports = {
   getResourcesForUser,
   getResourceCategory,
   updateResource,
-  getResourceCategoryByName
+  getResourceCategoryByName,
+  getAllGuestResources
 };
