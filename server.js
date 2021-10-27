@@ -47,8 +47,8 @@ const { getAllResources } = require("./database");
 
 
 // Mount all resource routes
-app.use("/api/users", usersRoutes(db));
-app.use("/api/resources", resourcesRoutes(db));
+app.use("/users", usersRoutes(db));
+app.use("/resources", resourcesRoutes(db));
 
 
 // Home page

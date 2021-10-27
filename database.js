@@ -64,25 +64,21 @@ const addUser = function (user, db) {
  * @param {*} limit The number of results to return.
  * @return {Promise<[{}]>}  A promise to the resources.
  */
-const getAllResources = function (userId, db, limit = 10) {
-  const queryParams = [];
-
-  //this isn't working yet
+const getAllResources = function (db) {
+  //const queryParams = [];
 
   let queryString = `
-    SELECT DISTINCT resources.*, resource_ratings.liked as like, resource_ratings.rating as rating,
-    AVG(resource_ratings.rating) as average_rating
+    SELECT DISTINCT resources.*, AVG(resource_ratings.rating) as average_rating
     FROM resources
-    LEFT OUTER JOIN resource_ratings ON resources.id = resource_ratings.resource_id
-    WHERE resource_ratings.user_id = 1
-    GROUP BY resources.id, resource_ratings.liked, resource_ratings.rating`;
+    JOIN resource_ratings ON resources.id = resource_ratings.resource_id
+    GROUP BY resources.id
+    `;
   // queryParams.push(limit);
   // queryString += `
   //     LIMIT $${queryParams.length};
   //   `;
 
-  console.log(queryString);
-  return db.query(queryString, [userId])
+  return db.query(queryString)
     .then(res => res.rows);
 }
 

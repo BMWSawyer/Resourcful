@@ -108,21 +108,15 @@ module.exports = (db) => {
     if (userId) {
       Promise.all([
         getUserWithId(userId, db),
-        getAllResources(userId, db)
+        getAllResources(db),
       ])
         .then(([user, resources]) => {
           if (!resources) {
             res.send({ error: "error no resources found" });
             return;
           }
-          res.render("search", {
-            user: {
-              'userId': userId,
-              'firstName': user.firstname,
-              'lastName': user.lastname,
-            },
-            resources: resources
-          });
+
+          res.render("search", {user, resources: resources});
         })
         .catch(error => res.send(error + "this page won't load******"));
 
