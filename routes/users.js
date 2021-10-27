@@ -89,7 +89,12 @@ module.exports = (db) => {
           return;
         }
 
-        res.render("profile", { user });
+        res.render("profile", { user: {
+          'userId': userId,
+          'firstName': user.firstname,
+          'lastName': user.lastname,
+          'email': user.email
+        }});
       })
       .catch(error => res.send(error));
   });

@@ -158,12 +158,9 @@ module.exports = (db) => {
     const userId = req.session.user_id;
     const user = getUserWithId(userId, db);
     const topic = req.params.query;
-    const averageRating = getAverageRatingByResource(resourceId, db);
-    const resourceRating = getRatingByUser(userId, resourceId, db);
+   // const averageRating = getAverageRatingByResource(resourceId, db); // THIS NEEDS TO BE FIXED - NO RESOURCE ID
+   // const resourceRating = getRatingByUser(userId, resourceId, db); // THIS NEEDS TO BE FIXED - NO RESOURCE ID
 
-    user = Object.fromEntries(
-      Object.entries(user)
-        .map(i => [camelCase(i[0]), i[1]]));
 
     searchResources(topic, db)
       .then(resources => {
@@ -175,7 +172,11 @@ module.exports = (db) => {
         resources['resourceRating'] = resourceRating;
         resources['averageRating'] = averageRating;
 
-        res.render("search", {resources: resources});
+        res.render("search", { user: {
+          'userId': userId,
+          'firstName': user.firstname,
+          'lastName': user.lastname,
+        }, resources: resources});
       })
       .catch(error => res.send(error));
   });
