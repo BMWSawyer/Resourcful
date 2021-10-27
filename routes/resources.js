@@ -52,44 +52,42 @@ module.exports = (db) => {
   // My resources route
   router.get('/my-resources', (req, res) => {
     const userId = req.session.user_id;
+    let user;
 
     getUserWithId(userId, db)
-    .then((user) => {
-      getResourcesForUser(userId, db)
-      .then((data) => {
+      .then((u) => {
+        user = u;
+        return getResourcesForUser(userId, db);
+      })
+      .then((usersResources) => {
 
-        if (!data) {
+        if (!usersResources) {
           res.send({ error: "error" });
           return;
         }
 
         const topics = [];
 
-        for (const resource of data) {
+        console.log(usersResources);
 
-          if (topics.length === 0) {
+        for (const resource of usersResources) {
+
+          let foundTopic = false;
+          for (const topic of topics) {
+            if (topic.name === resource.category) {
+              topic.resources.push(resource);
+              foundTopic = true;
+            }
+          }
+
+          if (!foundTopic) {
             topics.push({
               'name': resource.category,
               'resources': [resource]
-            })
-          } // else {
-          //   for (const topic of topics) {
-          //     if (topic.name !== resource.category) {
-          //       for (let i = 0; i < topics.length; i++) {
+            });
+          }
 
-          //         if (topics[i].name !== resource.category) {
-          //           topics.push({
-          //             'name': resource.category,
-          //             'resources': [resource]
-          //           });
-          //         }
-          //       }
-          //     } else {
-          //       topic.resources.push(resource)
-          //     }
-          //   }
-          // }
-        };
+        }
         console.log("---")
         console.log(topics);
 
@@ -101,9 +99,8 @@ module.exports = (db) => {
         topics: topics});
       })
       .catch(error => res.send(error));
-    })
-    .catch(error => res.send(error));
-  });
+    });
+
 
   // View individual resource route
   router.get('/:resourceId', (req, res) => {

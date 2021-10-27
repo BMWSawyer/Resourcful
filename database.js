@@ -305,7 +305,7 @@ const getRatingByUser = function(userId, resourceId, db) {
 const getResourcesForUser = function(userId, db) {
 
   const queryString = `
-  SELECT resources.*, resource_ratings.liked as like, resource_ratings.rating as rating, categories.category,
+  SELECT DISTINCT ON (resources.id) resources.*, resource_ratings.liked as like, resource_ratings.rating as rating, categories.category,
   AVG(resource_ratings.rating) as average_rating
   FROM resources
   JOIN resource_ratings ON resources.id = resource_ratings.resource_id
