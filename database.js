@@ -64,8 +64,7 @@ const addUser = function (user, db) {
  * @param {*} limit The number of results to return.
  * @return {Promise<[{}]>}  A promise to the resources.
  */
-const getAllResources = function (userId, db, limit = 10) {
-  const queryParams = [];
+const getAllResources = function (userId, db) {
 
   let queryString = `
     SELECT r.*, rr.liked AS like, rr.rating AS rating, ar.avg_rating
@@ -78,12 +77,8 @@ const getAllResources = function (userId, db, limit = 10) {
       (SELECT resource_id, avg(rating) AS avg_rating FROM resource_ratings GROUP BY resource_id) ar
     ON ar.resource_id = r.id
     `;
-  // queryParams.push(limit);
-  // queryString += `
-  //     LIMIT $${queryParams.length};
-  //   `;
 
-  return db.query(queryString)
+  return db.query(queryString, [userId])
     .then(res => res.rows);
 }
 
