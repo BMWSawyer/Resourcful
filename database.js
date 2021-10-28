@@ -102,6 +102,15 @@ const getAllGuestResources = function (db) {
  */
 const addResource = function (resource, db) {
 //needs to add adding a category here
+
+let categoryInsert = `INSERT INTO categories (category)
+      VALUES (${resource.category})
+      RETURNING *`;
+
+// let resourceCategoryInsert = `INSERT INTO resource_categories (resource_id, category_id)
+// VALUES (${resource.category})
+// RETURNING *`;
+
 console.log('************');
 console.log(resource);
   return db
