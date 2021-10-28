@@ -22,8 +22,9 @@
                 Add to favourites
 
                 <!-- toggles the liked heart -->
-                <i id = "likeHeartButton" class='bi
-                  <%- (resource.resourceRating ? resource.resourceRating.like === true : false) ? " bi-heart-fill" : "bi-heart" %>'>
+                <i id = "likeHeartButton" action = "/like/:<%= resource.id %>" method = 'POST'
+                  class='bi
+                  <%- (resource.resourceRating ? resource.resourceRating.liked === true : false) ? " bi-heart-fill" : "bi-heart" %>'>
                   </i>
 
               </div>
