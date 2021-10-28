@@ -161,7 +161,7 @@ module.exports = (db) => {
         })
         .catch(error => res.send(error));
 
-  //guest search mode
+      //guest search mode
     } else {
       guestSearch(topic, db)
         .then((resources) => {
@@ -181,26 +181,26 @@ module.exports = (db) => {
     const userId = req.session.user_id;
     const resourceId = req.params.resourceId;
 
-    if(userId){
-    Promise.all([
-      getUserWithId(userId, db),
-      getIndividualResource(resourceId, db),
-      getCommentsByResource(resourceId, db),
-      getAverageRatingByResource(resourceId, db),
-      getRatingByUser(userId, resourceId, db),
-      getResourceCategory(resourceId, db)
-    ])
-      .then(([user, resource, comments, averageRating, resourceRating, category]) => {
-        resource.comments = comments;
-        console.log(resource.comments[0]);
-        resource.averageRating = parseFloat(averageRating.avg).toFixed(1);
-        console.log(averageRating);
-        resource.resourceRating = resourceRating;
-        resource.category = category.category;
-        console.log({ user, resource });
-        res.render("resources", { user, resource });
-      })
-      .catch(error => res.send(error));
+    if (userId) {
+      Promise.all([
+        getUserWithId(userId, db),
+        getIndividualResource(resourceId, db),
+        getCommentsByResource(resourceId, db),
+        getAverageRatingByResource(resourceId, db),
+        getRatingByUser(userId, resourceId, db),
+        getResourceCategory(resourceId, db)
+      ])
+        .then(([user, resource, comments, averageRating, resourceRating, category]) => {
+          resource.comments = comments;
+          console.log(resource.comments[0]);
+          resource.averageRating = parseFloat(averageRating.avg).toFixed(1);
+          console.log(averageRating);
+          resource.resourceRating = resourceRating;
+          resource.category = category.category;
+          console.log({ user, resource });
+          res.render("resources", { user, resource });
+        })
+        .catch(error => res.send(error));
 
       //guest view
     } else {
