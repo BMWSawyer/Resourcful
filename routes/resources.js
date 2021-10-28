@@ -247,7 +247,7 @@ module.exports = (db) => {
   router.post('/rating/:resourceId', (req, res) => {
     const userId = req.session.user_id;
     const resourceId = req.params.resourceId;
-    const rating = req.body.rating
+    const rating = Number(req.body.rating);
 
     rateAResource(userId, resourceId, rating, db)
       .then(data => {
@@ -255,8 +255,8 @@ module.exports = (db) => {
           res.send({ error: "error" });
           return;
         }
+        res.redirect(`/resources/${resourceId}`);
 
-        res.send(data)
       })
       .catch(error => res.send(error));
   });

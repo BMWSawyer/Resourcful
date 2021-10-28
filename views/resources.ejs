@@ -72,10 +72,11 @@
                   <!-- Rating form if logged in, but not the resource owner -->
                   <% if(typeof user!="undefined" && (resource.ownerID !==user.id)){ %>
 
-                    <form id="my-rating-form">
+                    <form id="my-rating-form" action="/resources/rating/<%= resource.id %>" method="POST">
                       <div class="mb-2 url-input hstack gap-3">
                         <label for="my-resource-rating" class="form-label">Resource Rating</label>
-                        <input type="number" id="my-resource-rating" min="1" max="5">
+                        <input type="number" name = 'rating' id="my-resource-rating" min="1" max="5" value = <%= (resource.resourceRating.rating) ? resource.resourceRating.rating : '' %>>
+                        <button type="submit" class="btn btn-success">Save Rating</button>
                       </div>
                     </form>
                     <% } %>

@@ -9,3 +9,4 @@ CREATE TABLE resource_ratings (
 );
 
 CREATE UNIQUE INDEX resource_ratings_user_id_resource_id_rating ON resource_ratings (user_id, resource_id, rating);
+CREATE UNIQUE INDEX resource_ratings_user_id_resource_id ON resource_ratings (user_id, resource_id);

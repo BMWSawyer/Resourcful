@@ -300,7 +300,6 @@ console.log('database liked');
   // ON CONFLICT (user_id, resource_id, liked)
   // DO UPDATE SET liked = FALSE
   // WHERE resource_ratings.user_id = 1 and resource_ratings.resource_id = 37;
-
   // `;
 
   const subQuery = db.query(`
@@ -345,8 +344,9 @@ const rateAResource = function (userId, resourceId, rating, db) {
   const queryString = `
   INSERT INTO resource_ratings (user_id, resource_id, rating)
   VALUES ($1, $2, $3)
-  ON CONFLICT (user_id, resource_id, rating)
-  DO UPDATE SET rating = $3 WHERE resource_ratings.user_id = $1 and resource_ratings.resource_id = $2`;
+  ON CONFLICT (user_id, resource_id)
+  DO UPDATE SET rating = $3 WHERE resource_ratings.user_id = $1 and resource_ratings.resource_id = $2
+  RETURNING *`;
 
   const queryParams = [userId, resourceId, rating];
 
