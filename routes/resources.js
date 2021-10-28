@@ -33,6 +33,7 @@ module.exports = (db) => {
     const description = req.body.description;
     const resource_url = req.body.resource_url;
     const image = req.body.image;
+    let user;
 
     const resource = {
       userId,
@@ -42,14 +43,19 @@ module.exports = (db) => {
       image
     };
 
-    addResource(resource, db)
-      .then(resource => {
-        if (!resource) {
+    Promise.All([
+      getUserWithId(userId, db),
+      addResource(resource, db)])
+      .then(([userObj, resource]) => {
+        if (!resource || !userObj) {
           res.send({ error: "error" });
           return;
         }
 
-        res.render("my-resources", { resource }); // -- NEED TO UPDATE THIS WITH INDIVDUAL RESOURCE PAGE
+        user = userObj;
+        //res.render("resources", { user, resource });
+
+        res.render("my-resources", { user, resource }); // -- NEED TO UPDATE THIS WITH INDIVDUAL RESOURCE PAGE
       })
       .catch(error => res.send(error));
   });
