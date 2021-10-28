@@ -67,7 +67,8 @@ module.exports = (db) => {
       description,
       resource_url,
       photo_url,
-      category
+      category,
+      rating
     };
 
     console.log(resource);
