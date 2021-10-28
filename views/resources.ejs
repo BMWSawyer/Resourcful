@@ -13,7 +13,7 @@
 
           <div class="col col-lg-5 myResImg">
             <div class="bg-light border rounded-3 resourceSingle">
-              <img class="resourceImg" src="<%= resource.photo_url ? resource.photo_url : "/mockups/mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg" %>">
+              <img class="resourceImg" src="<%= resource.photo_url ? resource.photo_url : '/mockups/mockupResources/sharon-mccutcheon-tn57JI3CewI-unsplash.jpg' %>">
             </div>
 
             <!-- Only display the ability to like a resource if logged in -->
@@ -89,7 +89,11 @@
 
                 <!-- Display the edit resource view for resource owner -->
                 <!-- Add/update URL form -->
-                <form class="myResourceForm" action="/resources/update/<%= resource.id %>" method="POST">
+                <% if(!resource.id){ %>
+                  <form class="myResourceForm" action="/resources/new %>" method="POST">
+                <% } else { %>
+                  <form class="myResourceForm" action="/resources/update/<%= resource.id %>" method="POST">
+                <% } %>
                   <div class="mb-3">
                     <label for="formTitleInput" class="form-label">Title</label>
                     <input type="text" class="form-control" name="title" id="formTitleInput" value="<%= resource.title %>">

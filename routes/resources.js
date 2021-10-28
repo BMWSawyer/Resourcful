@@ -28,47 +28,60 @@ module.exports = (db) => {
 
   // Add resource route
   router.get("/new", (req, res) => {
-    const params = {
-      resource: {
+    const userId = req.session.user_id
+
+    console.log(req.query);
+
+    const resource = {
         title: req.query.title,
         description: req.query.description,
         resource_url: req.query.resourceUrl,
         photo_url: req.query.photoUrl,
         comments: [],
+      };
+
+
+    getUserWithId(userId, db)
+    .then(user => {
+      if (!user) {
+        res.send({ error: "error" });
+        return;
       }
-    };
-    req.query;
-    console.log(params);
-    res.render("resources", params);
+      res.render("resources", {user, resource});
+    })
+    .catch(error => res.send(error));
+
+
+    //req.query;
+    //console.log(params);
+    //res.render("resources", params);
   });
 
   router.post('/new', (req, res) => {
+
     const userId = req.session.user_id
     const title = req.body.title;
     const description = req.body.description;
     const resource_url = req.body.resource_url;
-    const image = req.body.image;
-    let user;
+    const photo_url = req.body.photo_url;
 
     const resource = {
       userId,
       title,
       description,
       resource_url,
-      image
+      photo_url
     };
 
-    Promise.All([
+    Promise.all([
       getUserWithId(userId, db),
-      addResource(resource, db)])
-      .then(([userObj, resource]) => {
-        if (!resource || !userObj) {
+      addResource(resource, db)
+    ])
+      .then(([user, resource]) => {
+        if (!resource || !user) {
           res.send({ error: "error" });
           return;
         }
-
-        user = userObj;
-        //res.render("resources", { user, resource });
 
         res.render("my-resources", { user, resource }); // -- NEED TO UPDATE THIS WITH INDIVDUAL RESOURCE PAGE
       })

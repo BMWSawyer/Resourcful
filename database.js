@@ -104,7 +104,7 @@ const addResource = function (resource, db) {
 
   return db
     .query(
-      `INSERT INTO resources (creator_id, title, description, resource_url, image)
+      `INSERT INTO resources (creator_id, title, description, resource_url, photo_url)
       VALUES ($1, $2, $3, $4, $5)
       RETURNING *`,
       [
