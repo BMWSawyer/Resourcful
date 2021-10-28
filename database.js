@@ -65,7 +65,6 @@ const addUser = function (user, db) {
  * @return {Promise<[{}]>}  A promise to the resources.
  */
 const getAllResources = function (userId, db) {
-  const queryParams = [];
 
   let queryString = `
     SELECT r.*, rr.liked AS like, rr.rating AS rating, ar.avg_rating
@@ -79,7 +78,6 @@ const getAllResources = function (userId, db) {
     ON ar.resource_id = r.id
     `;
 
-  console.log(queryString);
   return db.query(queryString, [userId])
     .then(res => res.rows);
 }
