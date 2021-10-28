@@ -175,6 +175,7 @@ module.exports = (db) => {
     const userId = req.session.user_id;
     const resourceId = req.params.resourceId;
 
+    if(userId){
     Promise.all([
       getUserWithId(userId, db),
       getIndividualResource(resourceId, db),
@@ -194,6 +195,26 @@ module.exports = (db) => {
         res.render("resources", { user, resource });
       })
       .catch(error => res.send(error));
+
+      //guest view
+    } else {
+      Promise.all([
+        getIndividualResource(resourceId, db),
+        getCommentsByResource(resourceId, db),
+        getAverageRatingByResource(resourceId, db),
+        getResourceCategory(resourceId, db)
+      ])
+        .then(([resource, comments, averageRating, category]) => {
+          resource.comments = comments;
+          console.log(resource.comments[0]);
+          resource.averageRating = parseFloat(averageRating.avg).toFixed(1);
+          console.log(averageRating);
+          resource.category = category.category;
+          console.log({ resource });
+          res.render("resources", { resource });
+        })
+        .catch(error => res.send(error));
+    }
 
   });
 
