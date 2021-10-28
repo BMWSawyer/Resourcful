@@ -60,6 +60,7 @@ module.exports = (db) => {
     const resource_url = req.body.resource_url;
     const photo_url = req.body.photo_url;
     const category = req.body.category;
+    const rating = req.body.rating;
 
     const resource = {
       userId,
