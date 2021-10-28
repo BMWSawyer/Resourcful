@@ -99,8 +99,13 @@
                     <input type="text" class="form-control" name="title" id="formTitleInput" value="<%= resource.title %>">
                   </div>
                   <div class="mb-3">
+                    <% if(!resource.id){ %>
                     <label for="formTopicInput" class="form-label">Topic</label>
                     <input type="text" class="form-control" name="category" id="formTopicInput" value="<%= resource.category %>">
+                    <% } else { %>
+                      <label for="formTopicInput" class="form-label">Topic: <%= resource.category %></label>
+                      <input type="hidden" class="form-control" name="category" id="formTopicInput" value="<%= resource.category %>">
+                      <% } %>
                   </div>
                   <div class="mb-3">
                     <label for="formDescInput" class="form-label">Description</label>

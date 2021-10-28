@@ -101,34 +101,55 @@ const getAllGuestResources = function (db) {
  * @return {Promise<{}>} A promise to the resource.
  */
 const addResource = function (resource, db) {
-  //add first rating using S{resource.rating}
-//needs to add adding a category here
+  const rating = resource.rating;
+  const category = resource.category;
 
-let categoryInsert = `INSERT INTO categories (category)
-      VALUES (${resource.category})
+  let queryParams = [
+    resource.userId,
+    resource.title,
+    resource.description,
+    resource.resource_url,
+    resource.photo_url,
+  ];
+
+  let insertResource =
+    `INSERT INTO resources (creator_id, title, description, resource_url, photo_url)
+      VALUES ($1, $2, $3, $4, $5)
       RETURNING *`;
 
-// let resourceCategoryInsert = `INSERT INTO resource_categories (resource_id, category_id)
-// VALUES (${resource.category})
-// RETURNING *`;
+  let insertCategory = `INSERT INTO categories (category)
+      VALUES ('${category}')
+      RETURNING *`;
 
-console.log('************');
-console.log(resource);
-  return db
-    .query(
-      `INSERT INTO resources (creator_id, title, description, resource_url, photo_url)
-      VALUES ($1, $2, $3, $4, $5)
-      RETURNING *`,
-      [
-        resource.userId,
-        resource.title,
-        resource.description,
-        resource.resource_url,
-        resource.photo_url,
-      ]
-    )
-    .then((result) => {
-      return result.rows[0];
+  let resourceId;
+  //add first rating using S{resource.rating}
+  //needs to add adding a category here
+
+  let resourceCategoryInsert = `INSERT INTO resource_categories (resource_id, category_id)
+  VALUES ($1, $2)
+  RETURNING *`;
+
+  let insertRating = `INSERT INTO resource_ratings (user_id, resource_id, rating)
+  VALUES (${resource.userId}, $1, ${rating})
+  RETURNING *`
+
+  return db.query(insertResource, queryParams)
+    .then((resource) => {
+      resourceId = resource.rows[0].id;
+      return db.query(insertCategory)
+    })
+    .then((category) => {
+      console.log(category.rows[0].id);
+      console.log(resourceId);
+      return db.query(resourceCategoryInsert, [resourceId, category.rows[0].id])
+    })
+    .then((res) => {
+      console.log(res);
+      return db.query(insertRating, [resourceId])
+    })
+    .then((rating) => {
+      console.log(rating);
+      return (rating);
     })
     .catch((err) => {
       console.log(err.message);
@@ -306,7 +327,7 @@ const getCommentsByResource = function (resourceId, db) {
 //
 const likingAResource = function (userId, resourceId, db) {
 
-const queryString = `
+  const queryString = `
   INSERT INTO resource_ratings (user_id, resource_id, liked)
   VALUES (${userId}, ${resourceId}, TRUE)
   ON CONFLICT (user_id, resource_id)
@@ -345,7 +366,7 @@ const queryString = `
   //   RETURNING *`;
   // }
 
-//queryString += ` WHERE user_id = $${userId} AND resource_id = $${resourceId} RETURNING *;`
+  //queryString += ` WHERE user_id = $${userId} AND resource_id = $${resourceId} RETURNING *;`
 
   return db.query(queryString)
     .then((res) => res.rows[0])

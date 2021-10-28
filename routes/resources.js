@@ -30,26 +30,24 @@ module.exports = (db) => {
   router.get("/new", (req, res) => {
     const userId = req.session.user_id
 
-    console.log(req.query);
-
     const resource = {
-        title: req.query.title,
-        description: req.query.description,
-        resource_url: req.query.resourceUrl,
-        photo_url: req.query.photoUrl,
-        comments: [],
-      };
+      title: req.query.title,
+      description: req.query.description,
+      resource_url: req.query.resourceUrl,
+      photo_url: req.query.photoUrl,
+      comments: [],
+    };
 
 
     getUserWithId(userId, db)
-    .then(user => {
-      if (!user) {
-        res.send({ error: "error" });
-        return;
-      }
-      res.render("resources", {user, resource});
-    })
-    .catch(error => res.send(error));
+      .then(user => {
+        if (!user) {
+          res.send({ error: "error" });
+          return;
+        }
+        res.render("resources", { user, resource });
+      })
+      .catch(error => res.send(error));
   });
 
   router.post('/new', (req, res) => {
@@ -72,51 +70,11 @@ module.exports = (db) => {
       rating
     };
 
-    console.log(resource);
-    Promise.all([
-      getUserWithId(userId, db),
-      addResource(resource, db),
-      getResourcesForUser(userId, db)
-    ])
-    .then(([user, resource, usersResources]) => {
-      if (!user || !resource || !usersResources) {
-        res.send({ error: "error" });
-        return;
-      }
-
-      const topics = [];
-
-      console.log(usersResources);
-
-      for (const resource of usersResources) {
-        let foundTopic = false;
-
-        for (const topic of topics) {
-          if (topic.name === resource.category) {
-            topic.resources.push(resource);
-            foundTopic = true;
-          }
-        }
-
-        if (!foundTopic) {
-          topics.push({
-            'name': resource.category,
-            'resources': [resource]
-          });
-        }
-
-      }
-
-      console.log("---")
-      console.log(topics);
-
-      res.render("my-resources", { user, topics: topics });
-    })
-    .catch(error => res.send(error));
-//do we need to run the function to grab the new resource object in order to get the id to reload the page?
-     //   res.render("my-resources", { user, resource }); // -- NEED TO UPDATE THIS WITH INDIVDUAL RESOURCE PAGE
-     // })
-     // .catch(error => res.send(error));
+      addResource(resource, db)
+      .then((addResource) => {
+        res.redirect("/resources/my-resources");
+      })
+      .catch(error => res.send(error));
   });
 
   // My resources route
