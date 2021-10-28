@@ -201,6 +201,8 @@ module.exports = (db) => {
   router.post('/like/:resourceId', (req, res) => {
     const userId = req.session.user_id;
     const resourceId = req.params.resourceId;
+console.log(req.paramas);
+    console.log('like post triggered');
 
     likingAResource(userId, resourceId, db)
       .then(data => {

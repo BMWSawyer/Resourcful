@@ -64,7 +64,7 @@ const addUser = function (user, db) {
  * @param {*} limit The number of results to return.
  * @return {Promise<[{}]>}  A promise to the resources.
  */
-const getAllResources = function (userId, db, limit = 10) {
+const getAllResources = function (userId, db) {
   const queryParams = [];
 
   let queryString = `
@@ -78,17 +78,13 @@ const getAllResources = function (userId, db, limit = 10) {
       (SELECT resource_id, avg(rating) AS avg_rating FROM resource_ratings GROUP BY resource_id) ar
     ON ar.resource_id = r.id
     `;
-  // queryParams.push(limit);
-  // queryString += `
-  //     LIMIT $${queryParams.length};
-  //   `;
 
   console.log(queryString);
   return db.query(queryString, [userId])
     .then(res => res.rows);
 }
 
-const getAllGuestResources = function (db, limit = 10) {
+const getAllGuestResources = function (db) {
   const queryParams = [];
 
   let queryString = `
@@ -96,11 +92,6 @@ const getAllGuestResources = function (db, limit = 10) {
     FROM resources
     JOIN resource_ratings ON resources.id = resource_ratings.resource_id
     GROUP BY resources.id`;
-
-  // queryParams.push(limit);
-  // queryString += `
-  //     LIMIT $${queryParams.length};
-  //   `;
 
   console.log(queryString);
   return db.query(queryString)
@@ -305,22 +296,41 @@ const getCommentsByResource = function (resourceId, db) {
 //  Likes or Unlikes a resource
 //
 const likingAResource = function (userId, resourceId, db) {
-  let queryString = `UPDATE resource_ratings SET `;
+console.log('database liked');
+  let queryString = "";
+  // INSERT INTO resource_ratings (user_id, resource_id, liked)
+  // VALUES (1, 37, TRUE)
+  // ON CONFLICT (user_id, resource_id, liked)
+  // DO UPDATE SET liked = FALSE
+  // WHERE resource_ratings.user_id = 1 and resource_ratings.resource_id = 37;
+
+  // `;
 
   const subQuery = db.query(`
-  SELECT like
+  SELECT liked
   FROM resource_ratings
   WHERE user_id = $${userId}
   AND resource_id = $${resourceId}`);
 
   if (subQuery) {
-    queryString += `like = FALSE`;
+    queryString += `UPDATE resource_ratings SET `;
+
+    if (subQuery === TRUE) {
+      queryString += `liked = FALSE`;
+    } else {
+      queryString += `liked = TRUE`;
+    }
+
+    queryString += ` WHERE resource_ratings.user_id = ${userId} AND resource_ratings.resource_id = ${resourceId}  RETURNING *`;
 
   } else {
-    queryString += `like = TRUE`;
+    queryString += `
+    INSERT INTO resource_ratings (user_id, resource_id, liked)
+    VALUES (${userId}, ${resourceId}, TRUE)
+    RETURNING *`;
   }
 
-  queryString += ` WHERE user_id = $${userId} AND resource_id = $${resourceId} RETURNING *;`
+//queryString += ` WHERE user_id = $${userId} AND resource_id = $${resourceId} RETURNING *;`
 
   console.log(queryString);
 
@@ -335,27 +345,11 @@ const likingAResource = function (userId, resourceId, db) {
 const rateAResource = function (userId, resourceId, rating, db) {
   //look for a rating by resourceid and userid and update it. If one doesn't exist, create a new one
 
-  const queryString1 = `
+  const queryString = `
   INSERT INTO resource_ratings (user_id, resource_id, rating)
   VALUES ($1, $2, $3)
   ON CONFLICT (user_id, resource_id, rating)
   DO UPDATE SET rating = $3 WHERE resource_ratings.user_id = $1 and resource_ratings.resource_id = $2`;
-
-  // DO
-  // BEGIN
-  // IF EXISTS(SELECT resource_ratings.id FROM resource_ratings
-  //   WHERE resource_ratings.user_id = 2 AND resource_ratings.resource_id = 9)
-
-  //   UPDATE resource_ratings SET
-  //   resource_ratings.rating = 5
-  //   WHERE  resource_ratings.user_id = 2 AND resource_ratings.resource_id = 9
-
-  //   ELSE
-  //   INSERT INTO resource_ratings (user_id, resource_id, rating)
-  // VALUES (2, 9, 5)
-  // RETURNING *
-  // END;
-
 
   const queryParams = [userId, resourceId, rating];
 
