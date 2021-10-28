@@ -46,8 +46,8 @@ $(function () {
   //Resource view like toggle
   $('#likeHeartButton').on('click', function () {
     console.log("liked/unliked");
-    //console.log($(this).attr('value'));
-   // const resourceAndUserIds = $(this).attr('value');
+    console.log($(this).attr('value'));
+    const resourceAndUserIds = $(this).attr('value');
 
     // $.post({'/update/:resourceId',
     // data: { resource_id: resourceAndUserIds[0], user_id: resourceAndUserIds[1] },

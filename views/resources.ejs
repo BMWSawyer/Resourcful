@@ -22,10 +22,11 @@
                 Add to favourites
 
                 <!-- toggles the liked heart -->
-                <i id = "likeHeartButton" action = "/like/:<%= resource.id %>" method = 'POST'
-                  class='bi
+                <form name = "likeForm" action = "/resources/like/<%= resource.id %>" method = 'POST'>
+                <i id = "likeHeartButton" onclick="likeForm.submit();" name = 'like' class='bi
                   <%- (resource.resourceRating ? resource.resourceRating.liked === true : false) ? " bi-heart-fill" : "bi-heart" %>'>
                   </i>
+                </form>
 
               </div>
               <hr class="favourite-hr">

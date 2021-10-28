@@ -227,9 +227,7 @@ module.exports = (db) => {
   // Like a resource route
   router.post('/like/:resourceId', (req, res) => {
     const userId = req.session.user_id;
-    const resourceId = req.params.resourceId;
-    console.log(req.paramas);
-    console.log('like post triggered');
+    const resourceId = Number(req.params.resourceId);
 
     likingAResource(userId, resourceId, db)
       .then(data => {
@@ -237,8 +235,7 @@ module.exports = (db) => {
           res.send({ error: "error" });
           return;
         }
-
-        res.send(data)
+        res.redirect(`/resources/${resourceId}`);
       })
       .catch(error => res.send(error));
   });

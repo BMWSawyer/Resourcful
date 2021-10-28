@@ -293,8 +293,15 @@ const getCommentsByResource = function (resourceId, db) {
 //  Likes or Unlikes a resource
 //
 const likingAResource = function (userId, resourceId, db) {
-console.log('database liked');
-  let queryString = "";
+
+const queryString = `
+  INSERT INTO resource_ratings (user_id, resource_id, liked)
+  VALUES (${userId}, ${resourceId}, TRUE)
+  ON CONFLICT (user_id, resource_id)
+  DO UPDATE SET liked = NOT resource_ratings.liked WHERE resource_ratings.user_id = ${userId} and resource_ratings.resource_id = ${resourceId}
+  RETURNING *`;
+
+  //let queryString = "";
   // INSERT INTO resource_ratings (user_id, resource_id, liked)
   // VALUES (1, 37, TRUE)
   // ON CONFLICT (user_id, resource_id, liked)
@@ -302,33 +309,31 @@ console.log('database liked');
   // WHERE resource_ratings.user_id = 1 and resource_ratings.resource_id = 37;
   // `;
 
-  const subQuery = db.query(`
-  SELECT liked
-  FROM resource_ratings
-  WHERE user_id = $${userId}
-  AND resource_id = $${resourceId}`);
+  // const subQuery = db.query(`
+  // SELECT liked
+  // FROM resource_ratings
+  // WHERE user_id = $${userId}
+  // AND resource_id = $${resourceId}`);
 
-  if (subQuery) {
-    queryString += `UPDATE resource_ratings SET `;
+  // if (subQuery) {
+  //   queryString += `UPDATE resource_ratings SET `;
 
-    if (subQuery === TRUE) {
-      queryString += `liked = FALSE`;
-    } else {
-      queryString += `liked = TRUE`;
-    }
+  //   if (subQuery === TRUE) {
+  //     queryString += `liked = FALSE`;
+  //   } else {
+  //     queryString += `liked = TRUE`;
+  //   }
 
-    queryString += ` WHERE resource_ratings.user_id = ${userId} AND resource_ratings.resource_id = ${resourceId}  RETURNING *`;
+  //   queryString += ` WHERE resource_ratings.user_id = ${userId} AND resource_ratings.resource_id = ${resourceId}  RETURNING *`;
 
-  } else {
-    queryString += `
-    INSERT INTO resource_ratings (user_id, resource_id, liked)
-    VALUES (${userId}, ${resourceId}, TRUE)
-    RETURNING *`;
-  }
+  // } else {
+  //   queryString += `
+  //   INSERT INTO resource_ratings (user_id, resource_id, liked)
+  //   VALUES (${userId}, ${resourceId}, TRUE)
+  //   RETURNING *`;
+  // }
 
 //queryString += ` WHERE user_id = $${userId} AND resource_id = $${resourceId} RETURNING *;`
-
-  console.log(queryString);
 
   return db.query(queryString)
     .then((res) => res.rows[0])
