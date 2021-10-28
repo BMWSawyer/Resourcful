@@ -27,6 +27,21 @@ const {
 module.exports = (db) => {
 
   // Add resource route
+  router.get("/new", (req, res) => {
+    const params = {
+      resource: {
+        title: req.query.title,
+        description: req.query.description,
+        resource_url: req.query.resourceUrl,
+        photo_url: req.query.photoUrl,
+        comments: [],
+      }
+    };
+    req.query;
+    console.log(params);
+    res.render("resources", params);
+  });
+
   router.post('/new', (req, res) => {
     const userId = req.session.user_id
     const title = req.body.title;

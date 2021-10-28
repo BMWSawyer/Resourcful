@@ -26,17 +26,17 @@ $(function () {
     getiFramely(urlInput)
       .then((res) => {
         console.log(res);
-        let urlObj = {
-          resourceUrl: res.url,
+        let resource = {
+          resource_url: res.url,
           title: res.title,
           description: res.description,
-          photoUrl: res.thumbnail_url,
+          photo_url: res.thumbnail_url,
         };
-        console.log(urlObj);
-        return urlObj;
+        console.log(resource);
+        return resource;
       })
-      .then((urlObj) => {
-        window.location.replace(`/resources/new?title=${urlObj.title}&photoUrl=${urlObj.photoUrl}&resourceUrl=${urlObj.resourceUrl}&description=${urlObj.description}`);
+      .then((resource) => {
+        window.location.replace(`/resources/new?title=${resource.title}&photoUrl=${resource.photo_url}&resourceUrl=${resource.resource_url}&description=${resource.description}`);
       })
       .catch((err) => {
         console.log(err.message);
