@@ -3,7 +3,7 @@
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
       <div class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
         <i class="bi bi-file-earmark-check logo"></i>
-        <a class="LogoFont" href="/api/resources/search">ResourSave</a>
+        <a class="LogoFont" href="/resources/search">ResourSave</a>
       </div>
 
       <!-- If not logged in -->
@@ -18,7 +18,7 @@
 
               <!-- Sign in form -->
               <ul class="dropdown-menu text-small signInForm" aria-labelledby="dropUserMenu">
-                <form action="/api/users/login" method="POST">
+                <form action="/users/login" method="POST">
                 <div class="form-group">
                   <label for="DropdownFormEmail">Email</label>
                   <input type="email" class="form-control" name="email" id="DropdownFormEmail" placeholder="hello@example.com">
@@ -41,7 +41,7 @@
 
             </div>
           </li>
-          <li class="nav-item"><a href="/api/users/register" class="nav-link link-dark px-2 button">Sign up</a></li>
+          <li class="nav-item"><a href="/users/register" class="nav-link link-dark px-2 button">Sign up</a></li>
         </ul>
         <% } %>
 
@@ -58,12 +58,12 @@
                 <i class="bi bi-person-circle"></i>
               </a>
               <ul class="dropdown-menu text-small" aria-labelledby="dropUserMenu">
-                <li><a class="dropdown-item" href="/api/resources/my-resources">My Resources</a></li>
-                <li><a class="dropdown-item" href="/api/users/profile">Profile</a></li>
+                <li><a class="dropdown-item" href="/resources/my-resources">My Resources</a></li>
+                <li><a class="dropdown-item" href="/users/profile">Profile</a></li>
                 <li>
                   <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item" href="/api/users/logout">Sign out</a></li>
+                <li><a class="dropdown-item" href="/users/logout">Sign out</a></li>
               </ul>
             </div>
             <% } %>

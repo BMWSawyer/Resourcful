@@ -82,21 +82,15 @@ const getAllResources = function (userId, db) {
     .then(res => res.rows);
 }
 
-const getAllGuestResources = function (db, limit = 10) {
-  const queryParams = [];
+const getAllGuestResources = function (db) {
 
   let queryString = `
-    SELECT DISTINCT resources.*,  AVG(resource_ratings.rating) as average_rating
+    SELECT DISTINCT resources.*,  AVG(resource_ratings.rating) as avg_rating
     FROM resources
     JOIN resource_ratings ON resources.id = resource_ratings.resource_id
-    GROUP BY resources.id`;
+    GROUP BY resources.id
+    `;
 
-  // queryParams.push(limit);
-  // queryString += `
-  //     LIMIT $${queryParams.length};
-  //   `;
-
-  console.log(queryString);
   return db.query(queryString)
     .then(res => res.rows);
 }
@@ -307,11 +301,11 @@ const likingAResource = function (userId, resourceId, db) {
   WHERE user_id = $${userId}
   AND resource_id = $${resourceId}`);
 
-  if (subQuery) {
-    queryString += `like = FALSE`;
+  if (subQuery === TRUE) {
+    queryString += `liked = FALSE`;
 
   } else {
-    queryString += `like = TRUE`;
+    queryString += `liked = TRUE`;
   }
 
   queryString += ` WHERE user_id = $${userId} AND resource_id = $${resourceId} RETURNING *;`
@@ -359,20 +353,26 @@ const rateAResource = function (userId, resourceId, rating, db) {
 //
 //  Searches all resources based on the topic
 //
-const searchResources = function (topic, db) {
+const searchResources = function (userId, topic, db) {
 
   const queryString = `
-    SELECT *
-    FROM resources
-    JOIN resource_categories ON resource_id = resources.id
+    SELECT r.*, rr.liked AS like, rr.rating AS rating, ar.avg_rating
+    FROM resources r
+    LEFT JOIN (SELECT * FROM resource_ratings rr2 WHERE rr2.user_id = ${userId}) rr
+    ON rr.resource_id = r.id
+    JOIN (SELECT resource_id, avg(rating) AS avg_rating FROM resource_ratings GROUP BY resource_id) ar
+    ON ar.resource_id = r.id
+    JOIN resource_categories ON resource_categories.resource_id = r.id
     JOIN categories ON categories.id = resource_categories.category_id
-    WHERE resources.title LIKE (%$1%)
-    OR categories.category LIKE (%$1%)
+    WHERE LOWER(r.title) LIKE LOWER('%${topic}%')
+    OR LOWER(categories.category) LIKE LOWER('%${topic}%')
   `;
 
-  const queryParams = [topic];
-
-  return db.query(queryString, queryParams).then(res => res.rows);
+  return db.query(queryString)
+    .then(res => res.rows)
+    .catch(error => {
+      console.log("Error:", error)
+    });
 }
 
 //

@@ -43,7 +43,7 @@ module.exports = (db) => {
         }
 
         req.session.user_id = user.id;
-        res.render("my-resources")
+        res.render("/")
       })
       .catch(error => res.send(error));
   });
