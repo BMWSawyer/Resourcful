@@ -27,6 +27,11 @@ const {
 module.exports = (db) => {
 
   // Add resource route
+  router.get("/new", (req, res) => {
+    res.render("resources");
+  });
+
+
   router.post('/new', (req, res) => {
     const userId = req.session.user_id
     const title = req.body.title;
