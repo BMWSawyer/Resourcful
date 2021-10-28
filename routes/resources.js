@@ -50,11 +50,6 @@ module.exports = (db) => {
       res.render("resources", {user, resource});
     })
     .catch(error => res.send(error));
-
-
-    //req.query;
-    //console.log(params);
-    //res.render("resources", params);
   });
 
   router.post('/new', (req, res) => {
@@ -64,15 +59,18 @@ module.exports = (db) => {
     const description = req.body.description;
     const resource_url = req.body.resource_url;
     const photo_url = req.body.photo_url;
+    const category = req.body.category;
 
     const resource = {
       userId,
       title,
       description,
       resource_url,
-      photo_url
+      photo_url,
+      category
     };
 
+    console.log(resource);
     Promise.all([
       getUserWithId(userId, db),
       addResource(resource, db)
@@ -82,7 +80,7 @@ module.exports = (db) => {
           res.send({ error: "error" });
           return;
         }
-
+//do we need to run the function to grab the new resource object in order to get the id to reload the page?
         res.render("my-resources", { user, resource }); // -- NEED TO UPDATE THIS WITH INDIVDUAL RESOURCE PAGE
       })
       .catch(error => res.send(error));

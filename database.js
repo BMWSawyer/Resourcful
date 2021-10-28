@@ -101,7 +101,9 @@ const getAllGuestResources = function (db) {
  * @return {Promise<{}>} A promise to the resource.
  */
 const addResource = function (resource, db) {
-
+//needs to add adding a category here
+console.log('************');
+console.log(resource);
   return db
     .query(
       `INSERT INTO resources (creator_id, title, description, resource_url, photo_url)
@@ -112,7 +114,7 @@ const addResource = function (resource, db) {
         resource.title,
         resource.description,
         resource.resource_url,
-        resource.image
+        resource.photo_url,
       ]
     )
     .then((result) => {

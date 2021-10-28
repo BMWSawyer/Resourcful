@@ -115,13 +115,13 @@
                   </div>
 
                   <div class="mb-2 url-input hstack gap-3">
-                    <input type="text" class="form-control" name="url" id="formURLInput" value="<%= resource.resource_url %>">
+                    <input type="text" class="form-control" name="resource_url" id="formURLInput" value="<%= resource.resource_url %>">
                     <span class="url-input-btn">
                       <a href="<%= resource.resource_url %>"><i
                           class="my-resource-url-arrow bi bi-arrow-up-right-square-fill" type="button"></i></a>
                     </span>
                   </div>
-
+                  <input type="hidden" id="photoUrl" name="photo_url" value="<%= resource.photo_url %>">
                   <button type="submit" class="btn btn-success">Save Resource</button>
                 </form>
                 <% } %>
