@@ -134,31 +134,22 @@ module.exports = (db) => {
     }
   });
 
-  router.get('/search/:query', (req, res) => {
+  router.get('/search/query/', (req, res) => {
+
     const userId = req.session.user_id;
-    const user = getUserWithId(userId, db);
-    const topic = req.params.query;
-    // const averageRating = getAverageRatingByResource(resourceId, db); // THIS NEEDS TO BE FIXED - NO RESOURCE ID
-    // const resourceRating = getRatingByUser(userId, resourceId, db); // THIS NEEDS TO BE FIXED - NO RESOURCE ID
+    const topic = req.query.query;
 
-
-    searchResources(topic, db)
-      .then(resources => {
+    Promise.all([
+      getUserWithId(userId, db),
+      searchResources(userId, topic, db)
+    ])
+      .then(([user, resources]) => {
         if (!resources) {
           res.send({ error: "error" });
           return;
         }
 
-        resources['resourceRating'] = resourceRating;
-        resources['averageRating'] = averageRating;
-
-        res.render("search", {
-          user: {
-            'userId': userId,
-            'firstName': user.firstname,
-            'lastName': user.lastname,
-          }, resources: resources
-        });
+        res.render("search", {user, resources: resources});
       })
       .catch(error => res.send(error));
   });
