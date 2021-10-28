@@ -46,6 +46,15 @@ $(function () {
   //Resource view like toggle
   $('#likeHeartButton').on('click', function () {
     console.log("liked/unliked");
+    console.log($(this).attr('value'));
+
+    // $.post('/resources',
+    //     data: { quantity: $(this).val(), proid: productId , price: price },
+    //     dataType: "JSON",
+    //     success: function (data) { alert("success"); },
+    //     error: function (err) { }
+    // });
+
   });
 
   //change event for view only resource rating

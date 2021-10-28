@@ -5,5 +5,5 @@ CREATE TABLE comments (
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   resource_id INTEGER REFERENCES resources(id) ON DELETE CASCADE,
   comment TEXT NOT NULL,
-  comment_date TIMESTAMP NOT NULL
+  comment_date TIMESTAMP NOT NULL default now()
 );

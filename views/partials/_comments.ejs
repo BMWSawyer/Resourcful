@@ -5,8 +5,8 @@
 
     <!-- Only display ability to add comments if you are logged in -->
     <% if(typeof user !=="undefined" ){ %>
-      <form class="url-input hstack gap-3">
-        <input type="text" class="form-control comment-field" placeholder="Join the conversation on this resource...">
+      <form class="url-input hstack gap-3" action="/api/resources/comment/<%= resource.id %>" method="POST">
+        <input type="text" class="form-control comment-field" name="comment" placeholder="Join the conversation on this resource...">
         <button class="btn btn-primary post-comment">Post</button>
       </form>
       <% } %>
@@ -16,10 +16,10 @@
           <% for (const comment of resource.comments) { %>
             <div class="d-flex flex-row comment-row m-t-0 border-bottom">
               <div class="comment-text">
-                <h6 class="font-medium"><%= `${comment.firstName} ${comment.lastName}`%></h6>
+                <h6 class="font-medium"><%= `${comment.first_name} ${comment.last_name}`%></h6>
                 <span class="d-block comment-text"><%=comment.comment%></span>
                 <span class="d-block date-time">
-                  <%= comment.date.substring(0, 10) %>
+                  <%= (comment.date.toString()).substring(0, 15) %>
                 </span>
               </div>
             </div>

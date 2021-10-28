@@ -12,11 +12,15 @@ const {
   rateAResource,
   addComment,
   getCommentsByResource,
-  camelCase,
   getAverageRatingByResource,
   getRatingByUser,
   getUserWithId,
-  getResourcesForUser
+  getResourcesForUser,
+  getResourceCategory,
+  updateResource,
+  getResourceCategoryByName,
+  getAllResources,
+  getAllGuestResources
 } = require('../database');
 
 module.exports = (db) => {
@@ -43,8 +47,8 @@ module.exports = (db) => {
           res.send({ error: "error" });
           return;
         }
-        // req.session.user_id = user.id;
-        res.send({ resource });
+
+        res.render("my-resources", { resource }); // -- NEED TO UPDATE THIS WITH INDIVDUAL RESOURCE PAGE
       })
       .catch(error => res.send(error));
   });
@@ -91,18 +95,64 @@ module.exports = (db) => {
         console.log("---")
         console.log(topics);
 
-        res.render("my-resources", {
-          user: {
-            'userId': userId,
-            'firstName': user.firstname,
-            'lastName': user.lastname,
-          },
-          topics: topics
-        });
+        res.render("my-resources", {user, topics: topics});
       })
       .catch(error => res.send(error));
   });
 
+  // Search resources route
+  router.get('/search', (req, res) => {
+    const userId = req.session.user_id;
+
+    //issue of logged in versus not logged in. If there is no user and it expects one the call break
+    if (userId) {
+      Promise.all([
+        getUserWithId(userId, db),
+        getAllResources(userId, db),
+      ])
+        .then(([user, resources]) => {
+          if (!resources) {
+            res.send({ error: "error no resources found" });
+            return;
+          }
+
+          res.render("search", {user, resources: resources});
+        })
+        .catch(error => res.send(error + "this page won't load******"));
+
+    } else {
+
+      getAllGuestResources(db)
+        .then((resources) => {
+          if (!resources) {
+            res.send({ error: "error no resources found" });
+            return;
+          }
+          res.render("search", { resources: resources });
+        })
+        .catch(error => res.send(error + "this page won't load******"));
+    }
+  });
+
+  router.get('/search/query/', (req, res) => {
+
+    const userId = req.session.user_id;
+    const topic = req.query.query;
+
+    Promise.all([
+      getUserWithId(userId, db),
+      searchResources(userId, topic, db)
+    ])
+      .then(([user, resources]) => {
+        if (!resources) {
+          res.send({ error: "error" });
+          return;
+        }
+
+        res.render("search", {user, resources: resources});
+      })
+      .catch(error => res.send(error));
+  });
 
   // View individual resource route
   router.get('/:resourceId', (req, res) => {
@@ -114,12 +164,16 @@ module.exports = (db) => {
       getIndividualResource(resourceId, db),
       getCommentsByResource(resourceId, db),
       getAverageRatingByResource(resourceId, db),
-      getRatingByUser(userId, resourceId, db)
+      getRatingByUser(userId, resourceId, db),
+      getResourceCategory(resourceId, db)
     ])
-      .then(([user, resource, comments, averageRating, resourceRating]) => {
+      .then(([user, resource, comments, averageRating, resourceRating, category]) => {
         resource.comments = comments;
-        resource.averageRating = averageRating;
+        console.log(resource.comments[0]);
+        resource.averageRating = parseFloat(averageRating.avg).toFixed(1);
+        console.log(averageRating);
         resource.resourceRating = resourceRating;
+        resource.category = category.category;
         console.log({ user, resource });
         res.render("resources", { user, resource });
       })
@@ -127,54 +181,12 @@ module.exports = (db) => {
 
   });
 
-  // Search resources route
-  router.get('/search', (req, res) => {
-
-    getAllResources(db)
-      .then(resources => {
-        if (!resources) {
-          res.send({ error: "error" });
-          return;
-        }
-
-        res.render("search", { resources: resources });
-      })
-      .catch(error => {
-        res.send(error);
-      });
-  });
-
-  router.get('/search/:query', (req, res) => {
-    const userId = req.session.user_id;
-    const user = getUserWithId(userId, db);
-    const topic = req.params.query;
-   // const averageRating = getAverageRatingByResource(resourceId, db); // THIS NEEDS TO BE FIXED - NO RESOURCE ID
-   // const resourceRating = getRatingByUser(userId, resourceId, db); // THIS NEEDS TO BE FIXED - NO RESOURCE ID
-
-
-    searchResources(topic, db)
-      .then(resources => {
-        if (!resources) {
-          res.send({ error: "error" });
-          return;
-        }
-
-        resources['resourceRating'] = resourceRating;
-        resources['averageRating'] = averageRating;
-
-        res.render("search", { user: {
-          'userId': userId,
-          'firstName': user.firstname,
-          'lastName': user.lastname,
-        }, resources: resources});
-      })
-      .catch(error => res.send(error));
-  });
-
   // Like a resource route
   router.post('/like/:resourceId', (req, res) => {
     const userId = req.session.user_id;
     const resourceId = req.params.resourceId;
+console.log(req.paramas);
+    console.log('like post triggered');
 
     likingAResource(userId, resourceId, db)
       .then(data => {
@@ -207,17 +219,15 @@ module.exports = (db) => {
   });
 
   // Comment on a resource route
-  router.post('/comment/resourceId', (req, res) => {
+  router.post('/comment/:resourceId', (req, res) => {
     const resourceId = req.params.resourceId;
     const userId = req.session.user_id;
     const text = req.body.comment;
-    const date = Date.now();
 
     const comment = {
       resourceId,
       userId,
-      text,
-      date
+      text
     };
 
     addComment(comment, db)
@@ -227,27 +237,55 @@ module.exports = (db) => {
           return;
         }
 
-        res.send(comment);
+        res.redirect(`/api/resources/${resourceId}`);
       })
       .catch(error => res.send(error));
   });
 
   // Update a resource route -- This is a stretch if we get to it
-  /*
-  router.post('/update', (req, res) => {
-    const {email, password} = req.body;
-    login(email, password)
-      .then(user => {
-        if (!user) {
-          res.send({error: "error"});
+
+  router.post('/update/:resourceId', (req, res) => {
+    const resourceId = req.params.resourceId;
+    const userId = req.session.user_id;
+
+    const title = req.body.title;
+    const category = req.body.category;
+    const description = req.body.description;
+    const rating = req.body.rating;
+    const url = req.body.url;
+
+    const resource = {
+      title,
+      category,
+      description,
+      rating,
+      url
+    };
+
+    Promise.all([
+      updateResource(resource, resourceId, db),
+      getResourceCategoryByName(resource.category, db),
+      rateAResource(userId, resourceId, resource.rating, db)
+    ])
+      .then(([resource, category, rating]) => {
+
+        if (!resource) {
+          res.send({ error: "error with resource" });
           return;
         }
-        req.session.user_id = user.id;
-        res.render("/my-resources", resources)
+        if (!category) {
+          res.send({ error: "this category doesn't exist" });
+          return;
+        }
+        if (!rating) {
+          res.send({ error: "rating failed" });
+          return;
+        }
+        res.redirect(`/api/resources/${resourceId}`);
       })
       .catch(error => res.send(error));
   });
-  */
+
 
   return router;
 };

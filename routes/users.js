@@ -10,7 +10,6 @@ const {
   getUserWithId,
   getUserWithEmail,
   updateUser,
-  camelCase
 } = require('../database');
 
 
@@ -44,7 +43,7 @@ module.exports = (db) => {
         }
 
         req.session.user_id = user.id;
-        res.render("my-resources")
+        res.render("/")
       })
       .catch(error => res.send(error));
   });
@@ -89,12 +88,7 @@ module.exports = (db) => {
           return;
         }
 
-        res.render("profile", { user: {
-          'userId': userId,
-          'firstName': user.firstname,
-          'lastName': user.lastname,
-          'email': user.email
-        }});
+        res.render("profile", {user});
       })
       .catch(error => res.send(error));
   });
@@ -117,7 +111,7 @@ module.exports = (db) => {
           res.send({ error: "error" });
           return;
         }
-        res.send(user)
+        res.render("profile", {user});
       })
       .catch(error => res.send(error));
   });
