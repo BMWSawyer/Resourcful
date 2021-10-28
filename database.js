@@ -101,6 +101,7 @@ const getAllGuestResources = function (db) {
  * @return {Promise<{}>} A promise to the resource.
  */
 const addResource = function (resource, db) {
+  //add first rating using S{resource.rating}
 //needs to add adding a category here
 
 let categoryInsert = `INSERT INTO categories (category)
