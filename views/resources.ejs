@@ -86,7 +86,7 @@
 
                 <!-- Display the edit resource view for resource owner -->
                 <!-- Add/update URL form -->
-                <form class="myResourceForm" action="/api/resources/update/<%= resource.id %>" method="POST">
+                <form class="myResourceForm" action="/resources/update/<%= resource.id %>" method="POST">
                   <div class="mb-3">
                     <label for="formTitleInput" class="form-label">Title</label>
                     <input type="text" class="form-control" name="title" id="formTitleInput" value="<%= resource.title %>">

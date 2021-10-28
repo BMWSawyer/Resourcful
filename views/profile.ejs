@@ -21,7 +21,7 @@
             <!-- Update Profile Form -->
             <!-- Get the userID and populate the fields of the form accordingly -->
             <div id="profile_form">
-              <form class="w-75 me-3 text" action="/api/users/profile/update" method="POST">
+              <form class="w-75 me-3 text" action="/users/profile/update" method="POST">
                 <input type="text" class="form-control" name="firstName" value="<%= `${user.firstname}` %>" aria-label="firstName">
                 <input type="text" class="form-control" name="lastName" value="<%= `${user.lastname}` %>" aria-label="lastName">
                 <input type="email" class="form-control" name="email" value="<%= `${user.email}` %>" aria-label="Email">

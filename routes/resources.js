@@ -246,7 +246,7 @@ console.log(req.paramas);
           return;
         }
 
-        res.redirect(`/api/resources/${resourceId}`);
+        res.redirect(`/resources/${resourceId}`);
       })
       .catch(error => res.send(error));
   });
@@ -290,7 +290,7 @@ console.log(req.paramas);
           res.send({ error: "rating failed" });
           return;
         }
-        res.redirect(`/api/resources/${resourceId}`);
+        res.redirect(`/resources/${resourceId}`);
       })
       .catch(error => res.send(error));
   });
