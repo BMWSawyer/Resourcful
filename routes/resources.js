@@ -73,17 +73,48 @@ module.exports = (db) => {
     console.log(resource);
     Promise.all([
       getUserWithId(userId, db),
-      addResource(resource, db)
+      addResource(resource, db),
+      getResourcesForUser(userId, db)
     ])
-      .then(([user, resource]) => {
-        if (!resource || !user) {
-          res.send({ error: "error" });
-          return;
+    .then(([user, resource, usersResources]) => {
+      if (!user || !resource || !usersResources) {
+        res.send({ error: "error" });
+        return;
+      }
+
+      const topics = [];
+
+      console.log(usersResources);
+
+      for (const resource of usersResources) {
+        let foundTopic = false;
+
+        for (const topic of topics) {
+          if (topic.name === resource.category) {
+            topic.resources.push(resource);
+            foundTopic = true;
+          }
         }
+
+        if (!foundTopic) {
+          topics.push({
+            'name': resource.category,
+            'resources': [resource]
+          });
+        }
+
+      }
+
+      console.log("---")
+      console.log(topics);
+
+      res.render("my-resources", { user, topics: topics });
+    })
+    .catch(error => res.send(error));
 //do we need to run the function to grab the new resource object in order to get the id to reload the page?
-        res.render("my-resources", { user, resource }); // -- NEED TO UPDATE THIS WITH INDIVDUAL RESOURCE PAGE
-      })
-      .catch(error => res.send(error));
+     //   res.render("my-resources", { user, resource }); // -- NEED TO UPDATE THIS WITH INDIVDUAL RESOURCE PAGE
+     // })
+     // .catch(error => res.send(error));
   });
 
   // My resources route
