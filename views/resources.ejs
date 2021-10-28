@@ -75,7 +75,7 @@
                     <form id="my-rating-form" action="/resources/rating/<%= resource.id %>" method="POST">
                       <div class="mb-2 url-input hstack gap-3">
                         <label for="my-resource-rating" class="form-label">Resource Rating</label>
-                        <input type="number" name = 'rating' id="my-resource-rating" min="1" max="5" value = <%= (resource.resourceRating.rating) ? resource.resourceRating.rating : '' %>>
+                        <input type="number" name = 'rating' id="my-resource-rating" min="1" max="5" value = <%= (resource.resourceRating) ? ((resource.resourceRating.rating) ? resource.resourceRating.rating : '') : '' %>>
                         <button type="submit" class="btn btn-success">Save Rating</button>
                       </div>
                     </form>
