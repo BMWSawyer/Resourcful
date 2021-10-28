@@ -20,7 +20,8 @@ const {
   updateResource,
   getResourceCategoryByName,
   getAllResources,
-  getAllGuestResources
+  getAllGuestResources,
+  guestSearch
 } = require('../database');
 
 module.exports = (db) => {
@@ -95,7 +96,7 @@ module.exports = (db) => {
         console.log("---")
         console.log(topics);
 
-        res.render("my-resources", {user, topics: topics});
+        res.render("my-resources", { user, topics: topics });
       })
       .catch(error => res.send(error));
   });
@@ -116,7 +117,7 @@ module.exports = (db) => {
             return;
           }
 
-          res.render("search", {user, resources: resources});
+          res.render("search", { user, resources: resources });
         })
         .catch(error => res.send(error + "this page won't load******"));
 
@@ -139,19 +140,34 @@ module.exports = (db) => {
     const userId = req.session.user_id;
     const topic = req.query.query;
 
-    Promise.all([
-      getUserWithId(userId, db),
-      searchResources(userId, topic, db)
-    ])
-      .then(([user, resources]) => {
-        if (!resources) {
-          res.send({ error: "error" });
-          return;
-        }
+    if (userId) {
+      Promise.all([
+        getUserWithId(userId, db),
+        searchResources(userId, topic, db)
+      ])
+        .then(([user, resources]) => {
+          if (!resources) {
+            res.send({ error: "error" });
+            return;
+          }
 
-        res.render("search", {user, resources: resources});
-      })
-      .catch(error => res.send(error));
+          res.render("search", { user, resources: resources });
+        })
+        .catch(error => res.send(error));
+
+  //guest search mode
+    } else {
+      guestSearch(topic, db)
+        .then((resources) => {
+          if (!resources) {
+            res.send({ error: "error" });
+            return;
+          }
+
+          res.render("search", { resources: resources });
+        })
+        .catch(error => res.send(error));
+    }
   });
 
   // View individual resource route
@@ -185,7 +201,7 @@ module.exports = (db) => {
   router.post('/like/:resourceId', (req, res) => {
     const userId = req.session.user_id;
     const resourceId = req.params.resourceId;
-console.log(req.paramas);
+    console.log(req.paramas);
     console.log('like post triggered');
 
     likingAResource(userId, resourceId, db)

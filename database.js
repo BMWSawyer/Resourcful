@@ -379,6 +379,32 @@ const searchResources = function (userId, topic, db) {
 }
 
 //
+// Guest search
+//
+const guestSearch = function (topic, db) {
+
+  const queryString = `
+  SELECT r.*, ar.avg_rating
+  FROM resources r
+  JOIN resource_ratings ON r.id = resource_ratings.id
+  JOIN (SELECT resource_id, avg(rating) AS avg_rating FROM resource_ratings GROUP BY resource_id) ar
+  ON ar.resource_id = r.id
+  JOIN resource_categories ON resource_categories.resource_id = r.id
+  JOIN categories ON categories.id = resource_categories.category_id
+  WHERE LOWER(r.title) LIKE LOWER('%${topic}%')
+  OR LOWER(categories.category) LIKE LOWER('%${topic}')
+  GROUP BY r.id, ar.avg_rating`
+
+  console.log(queryString);
+  return db.query(queryString)
+    .then(res => res.rows)
+    .catch(error => {
+      console.log("Error:", error)
+    });
+}
+
+
+//
 //  Change to camel case
 //
 const camelCase = (str) => {
@@ -441,5 +467,6 @@ module.exports = {
   getResourceCategory,
   updateResource,
   getResourceCategoryByName,
-  getAllGuestResources
+  getAllGuestResources,
+  guestSearch
 };
