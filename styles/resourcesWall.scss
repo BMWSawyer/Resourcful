@@ -10,6 +10,8 @@
   display: flex column;
   width: 17em;
   height: 10em;
+  border-style: none;
+  border-radius: 15px;
 }
 
 .resourceImg{
@@ -17,6 +19,8 @@
   height: 100%;
   object-fit: cover;
   object-position: 50% 50%;
+  border-style: none;
+  border-radius: 15px;
 }
 
 .resInfo{
