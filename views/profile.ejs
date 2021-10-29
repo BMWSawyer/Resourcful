@@ -9,7 +9,7 @@
     <%- include('partials/_header') %>
 
       <section id="profile_information">
-        <h4> Update Profile</h4>
+        <h3> Your Profile</h3>
 
         <!-- Error display -->
         <% if(typeof error !="undefined" ){ %>
@@ -20,6 +20,36 @@
 
             <!-- Update Profile Form -->
             <!-- Get the userID and populate the fields of the form accordingly -->
+            <div class="container">
+              <div class="title">Update information:</div>
+              <div class="content">
+                <form action="/users/profile/update" method="POST">
+                  <div class="user-details">
+                    <div class="input-box">
+                      <span class="details">First Name</span>
+                      <input name="firstName" type="text" value= <%= user.firstname %> required>
+                    </div>
+                    <div class="input-box">
+                      <span class="details">Last Name</span>
+                      <input name="lastName" type="text" value= <%= user.lastname %> required>
+                    </div>
+                    <div class="input-box">
+                      <span class="details">Email</span>
+                      <input name="email" type="text" value= <%= user.email %> required>
+                    </div>
+                    <!--
+                    <div class="input-box">
+                      <span class="details">Password</span>
+                      <input type="password" placeholder="Enter your password" required>
+                    </div>  -->
+                  </div>
+                  <div class="button">
+                    <input type="submit" value="Update profile">
+                  </div>
+                </form>
+              </div>
+            </div>
+            <!--
             <div id="profile_form">
               <form class="w-75 me-3 text" action="/users/profile/update" method="POST">
                 <input type="text" class="form-control" name="firstName" value="<%= `${user.firstname}` %>" aria-label="firstName">
@@ -28,6 +58,8 @@
                 <button type="submit" class="btn btn-primary">Save Profile Changes</button>
               </form>
             </div>
+              -->
+
       </section>
 
   </main>

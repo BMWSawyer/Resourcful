@@ -4,14 +4,15 @@
   <%- include('partials/_head') %>
 
 <body>
-  <main class="container">
+  <main class="container register">
 
     <%- include('partials/_header') %>
 
       <section id="registration">
-        <h4> Create Your Account</h4>
-        <p> ... and get started on organising your personal resources</p>
-
+        <div id="greeting">
+          <h4> Create Your Account</h4>
+          <p> ... and get started on organising your personal resources</p>
+        </div>
         <!-- Error display -->
         <% if(typeof error != "undefined"){ %>
           <p class="font-weight-bold" style = "margin-top: 10px; color: red"><%= error %></p>
@@ -19,6 +20,34 @@
 
         <!-- Register Forms -->
         <div class="container">
+          <div class="title">Registration</div>
+          <div class="content">
+            <form action="/users/register" method="POST">
+              <div class="user-details">
+                <div class="input-box">
+                  <span class="details">First Name</span>
+                  <input name="firstName" type="text" placeholder="Enter your name" required>
+                </div>
+                <div class="input-box">
+                  <span class="details">Last Name</span>
+                  <input name="lastName" type="text" placeholder="Enter your username" required>
+                </div>
+                <div class="input-box">
+                  <span class="details">Email</span>
+                  <input name="email" type="text" placeholder="Enter your email" required>
+                </div>
+                <div class="input-box">
+                  <span class="details">Password</span>
+                  <input name="password" type="password" placeholder="Enter your password" required>
+                </div>
+              </div>
+              <div class="button">
+                <input type="submit" value="Sign up">
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- <div class="container">
           <form class="w-75 me-3 text" action="/users/register" method="POST">
             <input type="text" class="form-control" name="firstName" placeholder="First Name" aria-label="firstName">
             <input type="text" class="form-control" name="lastName" placeholder="Last Name" aria-label="lastName">
@@ -26,7 +55,7 @@
             <input type="password" class="form-control" name="password" placeholder="Password" aria-label="Password">
             <button type="submit" class="btn btn-primary">Create Account</button>
           </form>
-        </div>
+        </div> -->
       </section>
 
   </main>
