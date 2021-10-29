@@ -28,6 +28,11 @@ display: flex;
 justify-content: space-between;
 }
 
+.resName{
+  width: 167px;
+  white-space: wrap;
+}
+
 .rating{
 float: right;
 vertical-align: top;
