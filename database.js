@@ -470,7 +470,7 @@ const getResourcesForUser = function (userId, db) {
   JOIN resource_ratings ON resources.id = resource_ratings.resource_id
   JOIN resource_categories ON resources.id = resource_categories.resource_id
   JOIN categories ON resource_categories.category_id = categories.id
-  WHERE resource_ratings.user_id = $1
+  WHERE (resource_ratings.user_id = $1 AND resource_ratings.liked = TRUE)
   OR resources.creator_id = $1
   GROUP BY resources.id, resource_ratings.liked, resource_ratings.rating, categories.category;
   `;
