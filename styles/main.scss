@@ -4,6 +4,24 @@
 @import 'updateprofile';
 @import 'comments';
 
+
+*{
+  // margin: 1;
+  // padding: 1;
+  // box-sizing: border-box;
+  // font-family: 'Poppins',sans-serif;
+}
+
+body{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background: linear-gradient(135deg, #223797, #db4104);
+}
+
+
 body {
   display: flex;
 
@@ -18,12 +36,12 @@ body {
   .LogoFont{
     font-size: large;
     align-self: center;
-    color: rgb(83, 83, 83);
+    color: rgb(30, 31, 87);
   }
   .logo{
-    font-size: x-large;
+    font-size: 2.5em;
     margin-right: 0.2em;
-    color: rgb(3, 35, 175);
+    color: rgb(30, 31, 87);
   }
   .userName{
     margin-right: 0.5em;
