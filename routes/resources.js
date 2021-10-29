@@ -38,7 +38,6 @@ module.exports = (db) => {
       comments: [],
     };
 
-
     getUserWithId(userId, db)
       .then(user => {
         if (!user) {
@@ -70,7 +69,15 @@ module.exports = (db) => {
       rating
     };
 
-      addResource(resource, db)
+    if (!category) {
+      return res.send("error: Please enter a category");
+    }
+
+    if (!rating) {
+      return res.send("error: Please rate your new resource");
+    }
+
+    addResource(resource, db)
       .then((addResource) => {
         res.redirect("/resources/my-resources");
       })
@@ -96,8 +103,6 @@ module.exports = (db) => {
 
         const topics = [];
 
-        console.log(usersResources);
-
         for (const resource of usersResources) {
 
           let foundTopic = false;
@@ -114,10 +119,7 @@ module.exports = (db) => {
               'resources': [resource]
             });
           }
-
         }
-        console.log("---")
-        console.log(topics);
 
         res.render("my-resources", { user, topics: topics });
       })
@@ -209,12 +211,9 @@ module.exports = (db) => {
       ])
         .then(([user, resource, comments, averageRating, resourceRating, category]) => {
           resource.comments = comments;
-          console.log(resource.comments[0]);
           resource.averageRating = parseFloat(averageRating.avg).toFixed(1);
-          console.log(averageRating);
           resource.resourceRating = resourceRating;
           resource.category = category.category;
-          console.log({ user, resource });
           res.render("resources", { user, resource });
         })
         .catch(error => res.send(error));
@@ -229,11 +228,8 @@ module.exports = (db) => {
       ])
         .then(([resource, comments, averageRating, category]) => {
           resource.comments = comments;
-          console.log(resource.comments[0]);
           resource.averageRating = parseFloat(averageRating.avg).toFixed(1);
-          console.log(averageRating);
           resource.category = category.category;
-          console.log({ resource });
           res.render("resources", { resource });
         })
         .catch(error => res.send(error));

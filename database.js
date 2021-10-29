@@ -122,8 +122,6 @@ const addResource = function (resource, db) {
       RETURNING *`;
 
   let resourceId;
-  //add first rating using S{resource.rating}
-  //needs to add adding a category here
 
   let resourceCategoryInsert = `INSERT INTO resource_categories (resource_id, category_id)
   VALUES ($1, $2)
@@ -139,16 +137,12 @@ const addResource = function (resource, db) {
       return db.query(insertCategory)
     })
     .then((category) => {
-      console.log(category.rows[0].id);
-      console.log(resourceId);
       return db.query(resourceCategoryInsert, [resourceId, category.rows[0].id])
     })
     .then((res) => {
-      console.log(res);
       return db.query(insertRating, [resourceId])
     })
     .then((rating) => {
-      console.log(rating);
       return (rating);
     })
     .catch((err) => {
