@@ -122,8 +122,6 @@ const addResource = function (resource, db) {
       RETURNING *`;
 
   let resourceId;
-  //add first rating using S{resource.rating}
-  //needs to add adding a category here
 
   let resourceCategoryInsert = `INSERT INTO resource_categories (resource_id, category_id)
   VALUES ($1, $2)
@@ -139,16 +137,12 @@ const addResource = function (resource, db) {
       return db.query(insertCategory)
     })
     .then((category) => {
-      console.log(category.rows[0].id);
-      console.log(resourceId);
       return db.query(resourceCategoryInsert, [resourceId, category.rows[0].id])
     })
     .then((res) => {
-      console.log(res);
       return db.query(insertRating, [resourceId])
     })
     .then((rating) => {
-      console.log(rating);
       return (rating);
     })
     .catch((err) => {
@@ -476,7 +470,7 @@ const getResourcesForUser = function (userId, db) {
   JOIN resource_ratings ON resources.id = resource_ratings.resource_id
   JOIN resource_categories ON resources.id = resource_categories.resource_id
   JOIN categories ON resource_categories.category_id = categories.id
-  WHERE resource_ratings.user_id = $1
+  WHERE (resource_ratings.user_id = $1 AND resource_ratings.liked = TRUE)
   OR resources.creator_id = $1
   GROUP BY resources.id, resource_ratings.liked, resource_ratings.rating, categories.category;
   `;
