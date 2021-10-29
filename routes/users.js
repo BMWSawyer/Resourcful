@@ -111,7 +111,7 @@ module.exports = (db) => {
           res.send({ error: "error" });
           return;
         }
-        res.render("profile", {user});
+        res.redirect("/users/profile");
       })
       .catch(error => res.send(error));
   });

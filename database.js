@@ -161,23 +161,22 @@ const updateUser = function (userData, userId, db) {
   console.log(userData);
 
   if (userData.firstName) {
-    queryParams.push(userData.first_name);
-    queryString += `start_date = $${queryParams.length}`;
+    queryParams.push(userData.firstName);
+    queryString += `first_name = $${queryParams.length}`;
   }
 
   if (userData.lastName) {
-    queryParams.push(userData.last_name);
-    queryString += `, last_name = $2`;
+    queryParams.push(userData.lastName);
+    queryString += `, last_name = $${queryParams.length}`;
   }
 
   if (userData.email) {
-    queryParams.push(userData.end_date);
-    queryString += `email = $1`;
+    queryParams.push(userData.email);
+    queryString += `, email = $${queryParams.length}`;
   }
 
   queryParams.push(userId);
   queryString += ` WHERE id = $${queryParams.length} RETURNING *;`
-
 
 
   return db.query(queryString, queryParams)

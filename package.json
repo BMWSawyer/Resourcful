@@ -17,6 +17,7 @@
     "bootstrap-icons": "^1.6.1",
     "chalk": "^2.4.2",
     "cookie-session": "^1.4.0",
+    "crypto": "^1.0.1",
     "dotenv": "^2.0.0",
     "ejs": "^2.6.2",
     "express": "^4.17.1",
@@ -24,6 +25,7 @@
     "morgan": "^1.9.1",
     "pg": "^8.5.0",
     "pg-native": "^3.0.0",
+    "salt": "^0.5.5",
     "sass": "^1.35.1"
   },
   "devDependencies": {
