@@ -20,35 +20,59 @@ const {
   updateResource,
   getResourceCategoryByName,
   getAllResources,
-  getAllGuestResources
+  getAllGuestResources,
+  guestSearch
 } = require('../database');
 
 module.exports = (db) => {
 
   // Add resource route
+  router.get("/new", (req, res) => {
+    const userId = req.session.user_id
+
+    const resource = {
+      title: req.query.title,
+      description: req.query.description,
+      resource_url: req.query.resourceUrl,
+      photo_url: req.query.photoUrl,
+      comments: [],
+    };
+
+
+    getUserWithId(userId, db)
+      .then(user => {
+        if (!user) {
+          res.send({ error: "error" });
+          return;
+        }
+        res.render("resources", { user, resource });
+      })
+      .catch(error => res.send(error));
+  });
+
   router.post('/new', (req, res) => {
+
     const userId = req.session.user_id
     const title = req.body.title;
     const description = req.body.description;
     const resource_url = req.body.resource_url;
-    const image = req.body.image;
+    const photo_url = req.body.photo_url;
+    const category = req.body.category;
+    const rating = req.body.rating;
 
     const resource = {
       userId,
       title,
       description,
       resource_url,
-      image
+      photo_url,
+      category,
+      rating
     };
 
-    addResource(resource, db)
-      .then(resource => {
-        if (!resource) {
-          res.send({ error: "error" });
-          return;
-        }
-
-        res.render("my-resources", { resource }); // -- NEED TO UPDATE THIS WITH INDIVDUAL RESOURCE PAGE
+      addResource(resource, db)
+      .then((addResource) => {
+        res.redirect("/resources/my-resources");
       })
       .catch(error => res.send(error));
   });
@@ -95,7 +119,7 @@ module.exports = (db) => {
         console.log("---")
         console.log(topics);
 
-        res.render("my-resources", {user, topics: topics});
+        res.render("my-resources", { user, topics: topics });
       })
       .catch(error => res.send(error));
   });
@@ -116,7 +140,7 @@ module.exports = (db) => {
             return;
           }
 
-          res.render("search", {user, resources: resources});
+          res.render("search", { user, resources: resources });
         })
         .catch(error => res.send(error + "this page won't load******"));
 
@@ -139,19 +163,34 @@ module.exports = (db) => {
     const userId = req.session.user_id;
     const topic = req.query.query;
 
-    Promise.all([
-      getUserWithId(userId, db),
-      searchResources(userId, topic, db)
-    ])
-      .then(([user, resources]) => {
-        if (!resources) {
-          res.send({ error: "error" });
-          return;
-        }
+    if (userId) {
+      Promise.all([
+        getUserWithId(userId, db),
+        searchResources(userId, topic, db)
+      ])
+        .then(([user, resources]) => {
+          if (!resources) {
+            res.send({ error: "error" });
+            return;
+          }
 
-        res.render("search", {user, resources: resources});
-      })
-      .catch(error => res.send(error));
+          res.render("search", { user, resources: resources });
+        })
+        .catch(error => res.send(error));
+
+      //guest search mode
+    } else {
+      guestSearch(topic, db)
+        .then((resources) => {
+          if (!resources) {
+            res.send({ error: "error" });
+            return;
+          }
+
+          res.render("search", { resources: resources });
+        })
+        .catch(error => res.send(error));
+    }
   });
 
   // View individual resource route
@@ -159,34 +198,53 @@ module.exports = (db) => {
     const userId = req.session.user_id;
     const resourceId = req.params.resourceId;
 
-    Promise.all([
-      getUserWithId(userId, db),
-      getIndividualResource(resourceId, db),
-      getCommentsByResource(resourceId, db),
-      getAverageRatingByResource(resourceId, db),
-      getRatingByUser(userId, resourceId, db),
-      getResourceCategory(resourceId, db)
-    ])
-      .then(([user, resource, comments, averageRating, resourceRating, category]) => {
-        resource.comments = comments;
-        console.log(resource.comments[0]);
-        resource.averageRating = parseFloat(averageRating.avg).toFixed(1);
-        console.log(averageRating);
-        resource.resourceRating = resourceRating;
-        resource.category = category.category;
-        console.log({ user, resource });
-        res.render("resources", { user, resource });
-      })
-      .catch(error => res.send(error));
+    if (userId) {
+      Promise.all([
+        getUserWithId(userId, db),
+        getIndividualResource(resourceId, db),
+        getCommentsByResource(resourceId, db),
+        getAverageRatingByResource(resourceId, db),
+        getRatingByUser(userId, resourceId, db),
+        getResourceCategory(resourceId, db)
+      ])
+        .then(([user, resource, comments, averageRating, resourceRating, category]) => {
+          resource.comments = comments;
+          console.log(resource.comments[0]);
+          resource.averageRating = parseFloat(averageRating.avg).toFixed(1);
+          console.log(averageRating);
+          resource.resourceRating = resourceRating;
+          resource.category = category.category;
+          console.log({ user, resource });
+          res.render("resources", { user, resource });
+        })
+        .catch(error => res.send(error));
+
+      //guest view
+    } else {
+      Promise.all([
+        getIndividualResource(resourceId, db),
+        getCommentsByResource(resourceId, db),
+        getAverageRatingByResource(resourceId, db),
+        getResourceCategory(resourceId, db)
+      ])
+        .then(([resource, comments, averageRating, category]) => {
+          resource.comments = comments;
+          console.log(resource.comments[0]);
+          resource.averageRating = parseFloat(averageRating.avg).toFixed(1);
+          console.log(averageRating);
+          resource.category = category.category;
+          console.log({ resource });
+          res.render("resources", { resource });
+        })
+        .catch(error => res.send(error));
+    }
 
   });
 
   // Like a resource route
   router.post('/like/:resourceId', (req, res) => {
     const userId = req.session.user_id;
-    const resourceId = req.params.resourceId;
-console.log(req.paramas);
-    console.log('like post triggered');
+    const resourceId = Number(req.params.resourceId);
 
     likingAResource(userId, resourceId, db)
       .then(data => {
@@ -194,8 +252,7 @@ console.log(req.paramas);
           res.send({ error: "error" });
           return;
         }
-
-        res.send(data)
+        res.redirect(`/resources/${resourceId}`);
       })
       .catch(error => res.send(error));
   });
@@ -204,7 +261,7 @@ console.log(req.paramas);
   router.post('/rating/:resourceId', (req, res) => {
     const userId = req.session.user_id;
     const resourceId = req.params.resourceId;
-    const rating = req.body.rating
+    const rating = Number(req.body.rating);
 
     rateAResource(userId, resourceId, rating, db)
       .then(data => {
@@ -212,8 +269,8 @@ console.log(req.paramas);
           res.send({ error: "error" });
           return;
         }
+        res.redirect(`/resources/${resourceId}`);
 
-        res.send(data)
       })
       .catch(error => res.send(error));
   });
@@ -237,7 +294,7 @@ console.log(req.paramas);
           return;
         }
 
-        res.redirect(`/api/resources/${resourceId}`);
+        res.redirect(`/resources/${resourceId}`);
       })
       .catch(error => res.send(error));
   });
@@ -281,7 +338,7 @@ console.log(req.paramas);
           res.send({ error: "rating failed" });
           return;
         }
-        res.redirect(`/api/resources/${resourceId}`);
+        res.redirect(`/resources/${resourceId}`);
       })
       .catch(error => res.send(error));
   });

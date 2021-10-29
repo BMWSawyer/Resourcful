@@ -9,7 +9,7 @@ const {
   addUser,
   getUserWithId,
   getUserWithEmail,
-  updateUser,
+  updateUser
 } = require('../database');
 
 
@@ -43,16 +43,16 @@ module.exports = (db) => {
         }
 
         req.session.user_id = user.id;
-        res.render("/")
+        res.redirect("/resources/my-resources")
       })
       .catch(error => res.send(error));
   });
 
 
   // Logout route
-  router.post("/logout", (req, res) => {
+  router.get("/logout", (req, res) => {
     req.session = null;
-    res.redirect("/");
+    res.redirect("/resources/search");
   });
 
 
@@ -71,7 +71,7 @@ module.exports = (db) => {
           res.send({ error: "error" });
           return;
         }
-        res.redirect("/");
+        res.redirect("/resources/search");
       })
       .catch(error => res.send(error));
   });

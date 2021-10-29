@@ -1,7 +1,7 @@
 INSERT INTO resources (creator_id, title, description, resource_url, photo_url)
 VALUES
-(1, 'YouTube', 'Video sharing platform', 'https://www.youtube.com/', 'https://unsplash.com/photos/niUkImZcSP8'),
-(2, 'Google', 'Search engine', 'https://www.google.com/', 'https://unsplash.com/photos/jz4ca36oJ_M'),
+(1, 'YouTube', 'Video sharing platform', 'https://www.youtube.com/', 'https://images.unsplash.com/photo-1521302200778-33500795e128?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80'),
+(2, 'Google', 'Search engine', 'https://www.google.com/', 'https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2427&q=80'),
 (2, 'Wikipedia Canada Article', 'All about Canada, this article cover the size, provinces and other details about Canada', 'https://en.wikipedia.org/wiki/Canada', 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Flag_of_Canada_%28Pantone%29.svg/1200px-Flag_of_Canada_%28Pantone%29.svg.png'),
 (2, 'Youtube Bootstrap', 'Learn Bootstrap in just 5 minutes', 'https://www.youtube.com/watch?v=yalxT0PEx8c', 'https://labs.tadigital.com/wp-content/uploads/2020/03/MicrosoftTeams-image.png'),
 (2, 'Chrome Dev Tools', 'This is Chromes official site to help you build Extensions, publish on the Chrome Web Store, optimize your website, and more.', 'https://developer.chrome.com/docs/', 'https://images.ctfassets.net/lzny33ho1g45/developer-tools-p-img/b3531d4b48255d0fec4d2102fc01111c/file.png?w=1520&fm=jpg&q=30&fit=thumb&h=760'),

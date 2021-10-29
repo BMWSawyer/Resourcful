@@ -101,22 +101,55 @@ const getAllGuestResources = function (db) {
  * @return {Promise<{}>} A promise to the resource.
  */
 const addResource = function (resource, db) {
+  const rating = resource.rating;
+  const category = resource.category;
 
-  return db
-    .query(
-      `INSERT INTO resources (creator_id, title, description, resource_url, image)
+  let queryParams = [
+    resource.userId,
+    resource.title,
+    resource.description,
+    resource.resource_url,
+    resource.photo_url,
+  ];
+
+  let insertResource =
+    `INSERT INTO resources (creator_id, title, description, resource_url, photo_url)
       VALUES ($1, $2, $3, $4, $5)
-      RETURNING *`,
-      [
-        resource.userId,
-        resource.title,
-        resource.description,
-        resource.resource_url,
-        resource.image
-      ]
-    )
-    .then((result) => {
-      return result.rows[0];
+      RETURNING *`;
+
+  let insertCategory = `INSERT INTO categories (category)
+      VALUES ('${category}')
+      RETURNING *`;
+
+  let resourceId;
+  //add first rating using S{resource.rating}
+  //needs to add adding a category here
+
+  let resourceCategoryInsert = `INSERT INTO resource_categories (resource_id, category_id)
+  VALUES ($1, $2)
+  RETURNING *`;
+
+  let insertRating = `INSERT INTO resource_ratings (user_id, resource_id, rating)
+  VALUES (${resource.userId}, $1, ${rating})
+  RETURNING *`
+
+  return db.query(insertResource, queryParams)
+    .then((resource) => {
+      resourceId = resource.rows[0].id;
+      return db.query(insertCategory)
+    })
+    .then((category) => {
+      console.log(category.rows[0].id);
+      console.log(resourceId);
+      return db.query(resourceCategoryInsert, [resourceId, category.rows[0].id])
+    })
+    .then((res) => {
+      console.log(res);
+      return db.query(insertRating, [resourceId])
+    })
+    .then((rating) => {
+      console.log(rating);
+      return (rating);
     })
     .catch((err) => {
       console.log(err.message);
@@ -293,43 +326,47 @@ const getCommentsByResource = function (resourceId, db) {
 //  Likes or Unlikes a resource
 //
 const likingAResource = function (userId, resourceId, db) {
-console.log('database liked');
-  let queryString = "";
+
+  const queryString = `
+  INSERT INTO resource_ratings (user_id, resource_id, liked)
+  VALUES (${userId}, ${resourceId}, TRUE)
+  ON CONFLICT (user_id, resource_id)
+  DO UPDATE SET liked = NOT resource_ratings.liked WHERE resource_ratings.user_id = ${userId} and resource_ratings.resource_id = ${resourceId}
+  RETURNING *`;
+
+  //let queryString = "";
   // INSERT INTO resource_ratings (user_id, resource_id, liked)
   // VALUES (1, 37, TRUE)
   // ON CONFLICT (user_id, resource_id, liked)
   // DO UPDATE SET liked = FALSE
   // WHERE resource_ratings.user_id = 1 and resource_ratings.resource_id = 37;
-
   // `;
 
-  const subQuery = db.query(`
-  SELECT liked
-  FROM resource_ratings
-  WHERE user_id = $${userId}
-  AND resource_id = $${resourceId}`);
+  // const subQuery = db.query(`
+  // SELECT liked
+  // FROM resource_ratings
+  // WHERE user_id = $${userId}
+  // AND resource_id = $${resourceId}`);
 
-  if (subQuery) {
-    queryString += `UPDATE resource_ratings SET `;
+  // if (subQuery) {
+  //   queryString += `UPDATE resource_ratings SET `;
 
-    if (subQuery === TRUE) {
-      queryString += `liked = FALSE`;
-    } else {
-      queryString += `liked = TRUE`;
-    }
+  //   if (subQuery === TRUE) {
+  //     queryString += `liked = FALSE`;
+  //   } else {
+  //     queryString += `liked = TRUE`;
+  //   }
 
-    queryString += ` WHERE resource_ratings.user_id = ${userId} AND resource_ratings.resource_id = ${resourceId}  RETURNING *`;
+  //   queryString += ` WHERE resource_ratings.user_id = ${userId} AND resource_ratings.resource_id = ${resourceId}  RETURNING *`;
 
-  } else {
-    queryString += `
-    INSERT INTO resource_ratings (user_id, resource_id, liked)
-    VALUES (${userId}, ${resourceId}, TRUE)
-    RETURNING *`;
-  }
+  // } else {
+  //   queryString += `
+  //   INSERT INTO resource_ratings (user_id, resource_id, liked)
+  //   VALUES (${userId}, ${resourceId}, TRUE)
+  //   RETURNING *`;
+  // }
 
-//queryString += ` WHERE user_id = $${userId} AND resource_id = $${resourceId} RETURNING *;`
-
-  console.log(queryString);
+  //queryString += ` WHERE user_id = $${userId} AND resource_id = $${resourceId} RETURNING *;`
 
   return db.query(queryString)
     .then((res) => res.rows[0])
@@ -345,8 +382,9 @@ const rateAResource = function (userId, resourceId, rating, db) {
   const queryString = `
   INSERT INTO resource_ratings (user_id, resource_id, rating)
   VALUES ($1, $2, $3)
-  ON CONFLICT (user_id, resource_id, rating)
-  DO UPDATE SET rating = $3 WHERE resource_ratings.user_id = $1 and resource_ratings.resource_id = $2`;
+  ON CONFLICT (user_id, resource_id)
+  DO UPDATE SET rating = $3 WHERE resource_ratings.user_id = $1 and resource_ratings.resource_id = $2
+  RETURNING *`;
 
   const queryParams = [userId, resourceId, rating];
 
@@ -377,6 +415,32 @@ const searchResources = function (userId, topic, db) {
       console.log("Error:", error)
     });
 }
+
+//
+// Guest search
+//
+const guestSearch = function (topic, db) {
+
+  const queryString = `
+  SELECT r.*, ar.avg_rating
+  FROM resources r
+  JOIN resource_ratings ON r.id = resource_ratings.id
+  JOIN (SELECT resource_id, avg(rating) AS avg_rating FROM resource_ratings GROUP BY resource_id) ar
+  ON ar.resource_id = r.id
+  JOIN resource_categories ON resource_categories.resource_id = r.id
+  JOIN categories ON categories.id = resource_categories.category_id
+  WHERE LOWER(r.title) LIKE LOWER('%${topic}%')
+  OR LOWER(categories.category) LIKE LOWER('%${topic}')
+  GROUP BY r.id, ar.avg_rating`
+
+  console.log(queryString);
+  return db.query(queryString)
+    .then(res => res.rows)
+    .catch(error => {
+      console.log("Error:", error)
+    });
+}
+
 
 //
 //  Change to camel case
@@ -441,5 +505,6 @@ module.exports = {
   getResourceCategory,
   updateResource,
   getResourceCategoryByName,
-  getAllGuestResources
+  getAllGuestResources,
+  guestSearch
 };
